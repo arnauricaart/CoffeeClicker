@@ -1,0 +1,9 @@
+{
+  "database": {
+    "port": 2390847,
+    "host": "localhost",
+    "name": "CoffeeClickerDB",
+    "user": "Pedro",
+    "password": "I<3CoffeeClicker"
+  }
+}
