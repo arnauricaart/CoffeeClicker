@@ -1,12 +1,12 @@
-import Persitence.ConfigJSON;
 import Persitence.ConfigJSONDAO;
+import Persitence.ConfigDAO;
 
 public class Main {
     public static void main(String[] args) {
 
         //////////////CODIGO DE PRUEBA PARA EL FIXERO DE CONFIGURACION////////////////
         //(Quitar los includes y este codigo cuando se valide el funcionamiento)
-        final ConfigJSONDAO configJSONDAO = new ConfigJSON();
+        final ConfigDAO configJSONDAO = new ConfigJSONDAO();
 
         int port = configJSONDAO.getDatabasePort();
         String serverIP = configJSONDAO.getDatabaseHost();
