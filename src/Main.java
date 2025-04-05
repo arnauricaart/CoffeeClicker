@@ -1,5 +1,7 @@
 import Persitence.ConfigJSONDAO;
 import Persitence.ConfigDAO;
+import presentation.controllers.MenuController;
+import presentation.views.MenuGUI;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,6 +22,12 @@ public class Main {
         System.out.println(user);
         System.out.println(password);
         ////////////////////////////////////////////////////////////////////////////
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            MenuGUI menuView = new MenuGUI();
+            MenuController menuController = new MenuController(menuView);
+            menuController.initController();
+        });
 
 
 
