@@ -1,13 +1,12 @@
 package guis;
 import constants.CommonCostants;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
-public class form extends JFrame{
+public class Form extends JFrame{
     //constructor
 
-    public form(String title){
+    public Form(String title){
 
         super(title);
         setSize(1080,800);
