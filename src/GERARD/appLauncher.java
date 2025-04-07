@@ -1,19 +1,16 @@
-import guis.LoginFormGUI;
-import guis.RegistreFormGUI;
-import bbdd.MyJDBC;
+import controllers.LoginController;
+import model.UserModel;
+import views.LoginView;
+
 import javax.swing.*;
 
 public class appLauncher {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               new LoginFormGUI().setVisible(true);
-               //System.out.println(MyJDBC.checkUser("marc tassini"));
-                // System.out.println(MyJDBC.register("username1234", "password1234"));
-                //System.out.println(MyJDBC.validateLogin("username1234", "password1234"));
-
-            }
+        SwingUtilities.invokeLater(() -> {
+            UserModel model = new UserModel();
+            LoginView loginView = new LoginView();
+            new LoginController(loginView, model);
+            loginView.setVisible(true);
         });
     }
 }

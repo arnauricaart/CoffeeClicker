@@ -3,7 +3,7 @@ package constants;
 import java.awt.*;
 
 
-public class CommonCostants {
+public class CommonConstants {
     public static final Color PRIMARY_COLOR = Color.decode("#4B382A");
     public static final Color SECONDARY_COLOR = Color.decode("#D7B899");
     public static final Color TEXT_COLOR = Color.decode("#F5EDE1");
