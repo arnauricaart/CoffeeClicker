@@ -1,3 +1,5 @@
+package ARNAU;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -69,7 +71,7 @@ public class CoffeeMain {
         window.add(coffeePanel);
 
         // Cargar y redimensionar el ícono de la imagen
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/coffee.png"));
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/res/coffee.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
