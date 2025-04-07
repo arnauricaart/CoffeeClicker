@@ -2,6 +2,7 @@ package guis;
 
 import bbdd.MyJDBC;
 import constants.CommonCostants;
+import guis.Form;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class RegistreFormGUI extends form {
+public class RegistreFormGUI extends Form {
 
     public RegistreFormGUI() {
         super("Register");
@@ -115,7 +116,7 @@ public class RegistreFormGUI extends form {
                     if(MyJDBC.register(username,email,password)){
                         RegistreFormGUI.this.dispose();
                         //per tornar al login gui
-                        LoginFormGUI loginFormGUI = new LoginFormGUI();
+                        guis.LoginFormGUI loginFormGUI = new guis.LoginFormGUI();
                         loginFormGUI.setVisible(true);
 
                         JOptionPane.showMessageDialog(loginFormGUI, "Register account Successfully!!");
@@ -144,7 +145,7 @@ public class RegistreFormGUI extends form {
             public void mouseClicked(MouseEvent e) {
                 RegistreFormGUI.this.dispose();
 
-                new LoginFormGUI().setVisible(true);
+                new guis.LoginFormGUI().setVisible(true);
 
 
             }
