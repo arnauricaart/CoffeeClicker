@@ -4,9 +4,10 @@ import java.awt.*;
 
 
 public class CommonConstants {
-    public static final Color PRIMARY_COLOR = Color.decode("#4B382A");
-    public static final Color SECONDARY_COLOR = Color.decode("#D7B899");
-    public static final Color TEXT_COLOR = Color.decode("#F5EDE1");
+    public static final Color PRIMARY_COLOR = Color.decode("#FFFFFF");
+    public static final Color SECONDARY_COLOR = Color.decode("#D9D9D9");
+    public static final Color BUTTON_COLOR = Color.decode("#9E6B57");
+    public static final Color TEXT_COLOR = Color.decode("#000000");
 
     //SQL credecials
 
