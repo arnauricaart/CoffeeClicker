@@ -29,8 +29,6 @@ public class Main {
             menuController.initController();
         });
 
-
-
     }
 
 }
