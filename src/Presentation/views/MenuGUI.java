@@ -13,6 +13,7 @@ public class MenuGUI extends JFrame {
     private JButton statisticsButton;
     private JButton logoutButton;
     private JButton deleteAccountButton;
+    private JButton continueGameButton;
 
     public MenuGUI() {
         setTitle("Coffee Clicker");
@@ -49,19 +50,22 @@ public class MenuGUI extends JFrame {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(80, 40, 80, 40));
 
-        JLabel titleLabel = new JLabel("WELCOME TO COFFE CLICKER", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("WELCOME TO COFFEE CLICKER", JLabel.CENTER);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(Color.DARK_GRAY);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
         centerPanel.add(titleLabel);
 
-        newGameButton = createStyledButton("NEW / CONTINUE GAME");
+        newGameButton = createStyledButton("NEW GAME");
         statisticsButton = createStyledButton("STATISTICS OF GAME");
         logoutButton = createStyledButton("LOGOUT");
         deleteAccountButton = createStyledButton("DELETE ACCOUNT");
+        continueGameButton = createStyledButton("CONTINUE GAME");
 
         centerPanel.add(newGameButton);
+        centerPanel.add(Box.createVerticalStrut(15));
+        centerPanel.add(continueGameButton);
         centerPanel.add(Box.createVerticalStrut(15));
         centerPanel.add(statisticsButton);
 
@@ -71,6 +75,7 @@ public class MenuGUI extends JFrame {
         centerPanel.add(logoutButton);
         centerPanel.add(Box.createVerticalStrut(15));
         centerPanel.add(deleteAccountButton);
+
 
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
@@ -136,4 +141,8 @@ public class MenuGUI extends JFrame {
     public void setDeleteAccountButtonListener(java.awt.event.ActionListener l) {
         deleteAccountButton.addActionListener(l);
     }
+    public void setContinueGameButtonListener(java.awt.event.ActionListener l) {
+        continueGameButton.addActionListener(l);
+    }
+
 }

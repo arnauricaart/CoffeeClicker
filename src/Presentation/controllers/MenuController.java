@@ -14,6 +14,8 @@ public class MenuController {
         menuView.setStatisticsButtonListener(e -> showStatistics());
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
+        menuView.setContinueGameButtonListener(e -> continueGame());
+
     }
 
     private void startNewGame() {
@@ -31,5 +33,9 @@ public class MenuController {
 
     private void deleteAccount() {
         // Lógica para eliminar la cuenta
+    }
+
+    private void continueGame() {
+
     }
 }
