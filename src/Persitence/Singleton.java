@@ -9,10 +9,11 @@ public final class Singleton {
     private Connection conn;
 
     private Singleton() {
-        String url = "jdbc:mysql://localhost:3306/aitorgarcia";
+        ConfigDAO config = new ConfigJSONDAO();
+        String url = "jdbc:mysql://" + config.getDatabaseHost() + ":" + config.getDatabasePort() + "/" + config.getDatabaseName();
         String driver = "com.mysql.cj.jdbc.Driver";
-        String usuario = "root";
-        String password = "";
+        String usuario = config.getDatabaseUser();
+        String password = config.getDatabasePassword();
         try{
             Class.forName(driver);
             this.conn = DriverManager.getConnection(url, usuario, password);
@@ -37,6 +38,7 @@ public final class Singleton {
     }
 
     public Connection getConn(){
+
         return this.conn;
     }
 

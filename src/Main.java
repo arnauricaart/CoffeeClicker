@@ -10,9 +10,9 @@ public class Main {
 
         //////////////CODIGO DE PRUEBA PARA EL FIXERO DE CONFIGURACION////////////////
         //(Quitar los includes y este codigo cuando se valide el funcionamiento)
-        final ConfigDAO configJSONDAO = new ConfigJSONDAO();
+        //final ConfigDAO configJSONDAO = new ConfigJSONDAO();
 
-        int port = configJSONDAO.getDatabasePort();
+       /* int port = configJSONDAO.getDatabasePort();
         String serverIP = configJSONDAO.getDatabaseHost();
         String name = configJSONDAO.getDatabaseName();
         String user = configJSONDAO.getDatabaseUser();;
@@ -24,7 +24,7 @@ public class Main {
         System.out.println(user);
         System.out.println(password);
         ////////////////////////////////////////////////////////////////////////////
-
+*/
         SwingUtilities.invokeLater(() -> {
             new LoginController().start();
         });
