@@ -1,11 +1,11 @@
 package Presentation.views;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 
-import constants.CommonConstants;
-
-public class RegisterView extends BaseForm {
+public class RegisterView extends JFrame {
     private JTextField usernameField;
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -14,73 +14,69 @@ public class RegisterView extends BaseForm {
     private JLabel goToLogin;
 
     public RegisterView() {
-        super("Register");
-        initComponents();
-    }
-
-    private void initComponents() {
-        int formWidth = 400;
-        int fieldWidth = 400;
-        int fieldHeight = 40;
-        int buttonWidth = 250;
-        int buttonHeight = 50;
-        int centerX = (1280 - formWidth) / 2;
-        int topY = 80; // margen superior ajustado para centrar verticalmente mejor
+        setTitle("Register");
+        setSize(1280, 720);
+        setLayout(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        getContentPane().setBackground(Color.decode("#FFFFFF"));
 
         JLabel title = new JLabel("REGISTER", SwingConstants.CENTER);
         title.setFont(new Font("Dialog", Font.BOLD, 36));
-        title.setBounds(centerX, topY, formWidth, 50);
+        title.setBounds(440, 60, 400, 50);
+        title.setForeground(Color.decode("#000000"));
         add(title);
 
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(centerX, topY + 70, formWidth, 30);
+        userLabel.setBounds(440, 120, 400, 30);
         userLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         add(userLabel);
 
         usernameField = new JTextField();
-        usernameField.setBounds(centerX, topY + 100, fieldWidth, fieldHeight);
-        usernameField.setBackground(CommonConstants.SECONDARY_COLOR);
+        usernameField.setBounds(440, 150, 400, 40);
+        usernameField.setBackground(Color.decode("#D9D9D9"));
         add(usernameField);
 
         JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setBounds(centerX, topY + 150, formWidth, 30);
+        emailLabel.setBounds(440, 200, 400, 30);
         emailLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         add(emailLabel);
 
         emailField = new JTextField();
-        emailField.setBounds(centerX, topY + 180, fieldWidth, fieldHeight);
-        emailField.setBackground(CommonConstants.SECONDARY_COLOR);
+        emailField.setBounds(440, 230, 400, 40);
+        emailField.setBackground(Color.decode("#D9D9D9"));
         add(emailField);
 
         JLabel passLabel = new JLabel("Password:");
-        passLabel.setBounds(centerX, topY + 230, formWidth, 30);
+        passLabel.setBounds(440, 280, 400, 30);
         passLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         add(passLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(centerX, topY + 260, fieldWidth, fieldHeight);
-        passwordField.setBackground(CommonConstants.SECONDARY_COLOR);
+        passwordField.setBounds(440, 310, 400, 40);
+        passwordField.setBackground(Color.decode("#D9D9D9"));
         add(passwordField);
 
         JLabel repassLabel = new JLabel("Confirm Password:");
-        repassLabel.setBounds(centerX, topY + 310, formWidth, 30);
+        repassLabel.setBounds(440, 360, 400, 30);
         repassLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         add(repassLabel);
 
         repasswordField = new JPasswordField();
-        repasswordField.setBounds(centerX, topY + 340, fieldWidth, fieldHeight);
-        repasswordField.setBackground(CommonConstants.SECONDARY_COLOR);
+        repasswordField.setBounds(440, 390, 400, 40);
+        repasswordField.setBackground(Color.decode("#D9D9D9"));
         add(repasswordField);
 
         registerButton = new JButton("Register");
-        registerButton.setBounds(centerX + (fieldWidth - buttonWidth) / 2, topY + 400, buttonWidth, buttonHeight);
-        registerButton.setBackground(CommonConstants.BUTTON_COLOR);
-        registerButton.setForeground(CommonConstants.PRIMARY_COLOR);
+        registerButton.setBounds(515, 450, 250, 50);
+        registerButton.setBackground(Color.decode("#9E6B57"));
+        registerButton.setForeground(Color.WHITE);
         add(registerButton);
 
         goToLogin = new JLabel("Already registered? Click here", SwingConstants.CENTER);
-        goToLogin.setBounds(centerX + (fieldWidth - buttonWidth) / 2, topY + 460, buttonWidth, 30);
-        goToLogin.setForeground(CommonConstants.TEXT_COLOR);
+        goToLogin.setBounds(515, 510, 250, 30);
+        goToLogin.setForeground(Color.decode("#000000"));
         goToLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(goToLogin);
     }
@@ -91,7 +87,7 @@ public class RegisterView extends BaseForm {
     public String getRepassword() { return new String(repasswordField.getPassword()); }
 
     public void setRegisterButtonListener(ActionListener al) { registerButton.addActionListener(al); }
-    public void setLoginLabelListener(java.awt.event.MouseAdapter ma) { goToLogin.addMouseListener(ma); }
+    public void setLoginLabelListener(MouseAdapter ma) { goToLogin.addMouseListener(ma); }
 
     public void showRegisterResultMessage(boolean success) {
         JOptionPane.showMessageDialog(this, success ? "Register successful" : "Register failed (username may exist)");

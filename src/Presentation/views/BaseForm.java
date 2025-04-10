@@ -1,7 +1,8 @@
 package Presentation.views;
 
-import constants.CommonConstants;
+
 import javax.swing.*;
+import java.awt.*;
 
 public class BaseForm extends JFrame {
     public BaseForm(String title) {
@@ -11,6 +12,6 @@ public class BaseForm extends JFrame {
         setLayout(null);
         setLocationRelativeTo(null);
         setResizable(false);
-        getContentPane().setBackground(CommonConstants.PRIMARY_COLOR);
+        getContentPane().setBackground(Color.decode("#FFFFFF"));
     }
 }
