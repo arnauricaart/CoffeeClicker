@@ -1,5 +1,4 @@
-package views;
-import views.BaseForm;
+package Presentation.views;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;

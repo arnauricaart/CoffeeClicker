@@ -1,20 +1,24 @@
-package controllers;
+package Presentation.controllers;
 
-import model.UserModel;
-import views.LoginView;
-import views.RegisterView;
+import Business.UserManager;
+import Presentation.views.LoginView;
+import Presentation.views.RegisterView;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class RegisterController {
     private RegisterView view;
-    private UserModel model;
+    private UserManager model;
 
-    public RegisterController(RegisterView view, UserModel model) {
-        this.view = view;
+    public RegisterController(UserManager model) {
         this.model = model;
+    }
+
+    public void start() {
+        view = new RegisterView();
         initController();
+        view.setVisible(true);
     }
 
     private void initController() {
@@ -23,9 +27,8 @@ public class RegisterController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 view.dispose();
-                LoginView loginView = new LoginView();
-                new controllers.LoginController(loginView, model);
-                loginView.setVisible(true);
+                LoginController loginController = new LoginController();
+                loginController.start();
             }
         });
     }
@@ -43,9 +46,8 @@ public class RegisterController {
 
         if (success) {
             view.dispose();
-            LoginView loginView = new LoginView();
-            new controllers.LoginController(loginView, model);
-            loginView.setVisible(true);
+            LoginController loginController = new LoginController();
+            loginController.start();
         }
     }
 }

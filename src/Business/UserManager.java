@@ -1,8 +1,8 @@
-package model;
+package Business;
 import constants.CommonConstants;
 import java.sql.*;
 
-public class UserModel {
+public class UserManager {
 
     public boolean register(String username, String email, String password) {
         try {
