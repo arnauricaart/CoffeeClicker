@@ -11,5 +11,6 @@
     <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="library" name="mysql-connector-j-9.2" level="project" />
     <orderEntry type="library" name="gson-2.10" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-9.2.0" level="project" />
   </component>
 </module>

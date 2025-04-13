@@ -8,6 +8,7 @@ public class MenuController {
     private MenuGUI menuView;
     private NewGameView newGameView;
     private ContinueGameView continueGameView;
+    private RemoveAccountView removeAccountView;
 
 
     public MenuController(MenuGUI menuView) {
@@ -49,6 +50,10 @@ public class MenuController {
 
     private void deleteAccount() {
         // Lógica para eliminar la cuenta
+        removeAccountView = new RemoveAccountView();
+        removeAccountView.setRemoveAccButtonListener(e -> removeAccountFromDatabase());
+        removeAccountView.setVisible(true);
+
     }
 
     private void selectGameToContinue() {
@@ -60,5 +65,8 @@ public class MenuController {
         String name = newGameView.getNewGameName();
         System.out.println("Name: " + name);
         //TODO cridar al joc
+    }
+    private void removeAccountFromDatabase() {
+        return;
     }
 }
