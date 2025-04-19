@@ -37,7 +37,9 @@ public class LoginController {
         String password = view.getPassword();
 
         boolean success = model.validateLogin(usernameOrEmail, password);
-        view.showLoginResultMessage(success);
+        if(!success) {
+            view.showLoginResultMessage(success);
+        }
 
         if (success) {
             view.dispose();

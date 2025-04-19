@@ -56,6 +56,7 @@ public class MenuController {
         // Lógica para eliminar la cuenta
         removeAccountView = new RemoveAccountView();
         removeAccountView.setRemoveAccButtonListener(e -> removeAccountFromDatabase());
+        removeAccountView.setCancelButtonListener(e -> removeAccountView.dispose());
         removeAccountView.setVisible(true);
 
     }
