@@ -57,5 +57,34 @@ public class GameDBDAO {
         ResultSet res = SQL_CRUD.Select(query,values,tipos);
         return res;
     }
+    public boolean removeGame(int gameID){
+        System.out.println("Remove user");
+        String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida =?";
+        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+
+        values.add(Integer.toString(gameID)); types.add("int");
+
+
+        int result = SQL_CRUD.CUD(queryPartidaGenerador, values, types);
+
+        String queryStats = "DELETE FROM stats WHERE IdPartida =?";
+        values = new ArrayList<>();
+        types = new ArrayList<>();
+
+        values.add(Integer.toString(gameID)); types.add("int");
+
+        result = SQL_CRUD.CUD(queryStats, values, types);
+
+        String queryPartida = "DELETE FROM partida WHERE idPartida=?";
+        values = new ArrayList<>();
+        types = new ArrayList<>();
+
+        values.add(Integer.toString(gameID)); types.add("int");
+
+        result = SQL_CRUD.CUD(queryPartida, values, types);
+        return result > 0;
+    }
 
 }
