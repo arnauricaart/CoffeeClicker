@@ -33,9 +33,10 @@ public class MenuController {
     }
 
     private void startNewGame() {
-        // Lógica para iniciar o continuar el juego
+
         newGameView = new NewGameView();
         newGameView.setNewGameButtonListener(e -> newGame());
+        newGameView.setCancelButtonListener(e -> newGameView.dispose());
         newGameView.setVisible(true);
     }
 

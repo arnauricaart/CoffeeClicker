@@ -74,15 +74,15 @@ public class ContinueGameView extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 10));
 
-        loadButton = new JButton("Cargar Partida");
-        deleteButton = new JButton("Eliminar Partida");
+        loadButton = new JButton("Continue game");
+        deleteButton = new JButton("Remove game");
 
         // Acción de cargar partida (igual que doble clic)
         loadButton.addActionListener(e -> {
             if (gameTable.getSelectedRow() != -1) {
                 loadSelectedGame();
             } else {
-                JOptionPane.showMessageDialog(this, "Selecciona una partida primero.");
+                JOptionPane.showMessageDialog(this, "Select a game first.");
             }
         });
 
@@ -101,7 +101,7 @@ public class ContinueGameView extends JFrame {
                 // Quitar del modelo de tabla
                 ((DefaultTableModel) gameTable.getModel()).removeRow(selectedRow);
             } else {
-                JOptionPane.showMessageDialog(this, "Selecciona una partida primero.");
+                JOptionPane.showMessageDialog(this, "Select a game first.");
             }
         });
 
