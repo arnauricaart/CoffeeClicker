@@ -1,4 +1,4 @@
-package Presentation.views;
+package Business;
 //TODO ha d'anar a business o DAO
 // Classe de dades temporal per representar una partida
 public class GameData {

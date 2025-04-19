@@ -1,4 +1,6 @@
 package Presentation.controllers;
+import Business.GameData;
+import Persitence.GameDBDAO;
 import Persitence.UserDAO;
 import Presentation.views.*;
 
@@ -11,6 +13,7 @@ public class MenuController {
     private ContinueGameView continueGameView;
     private RemoveAccountView removeAccountView;
     private UserDAO userDAO;
+    private GameDBDAO gameDBDAO;
     private String usernameOrEmail;
 
 
@@ -26,6 +29,7 @@ public class MenuController {
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
         menuView.setContinueGameButtonListener(e -> selectGameToContinue());
         userDAO = new UserDAO();
+        gameDBDAO = new GameDBDAO();
     }
 
     private void startNewGame() {
@@ -62,7 +66,7 @@ public class MenuController {
     }
 
     private void selectGameToContinue() {
-        continueGameView = new ContinueGameView(List.of(new GameData(1, 3), new GameData(2, 4)));
+        continueGameView = new ContinueGameView(gameDBDAO.getGamesNotFinishedByUser(usernameOrEmail));
         //continueGameView.setNewGameButtonListener(e -> continueGame());
         continueGameView.setVisible(true);
     }

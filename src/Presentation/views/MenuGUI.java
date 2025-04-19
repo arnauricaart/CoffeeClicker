@@ -61,7 +61,7 @@ public class MenuGUI extends JFrame {
         statisticsButton = createStyledButton("STATISTICS OF GAME");
         logoutButton = createStyledButton("LOGOUT");
         deleteAccountButton = createStyledButton("DELETE ACCOUNT");
-        continueGameButton = createStyledButton("CONTINUE GAME");
+        continueGameButton = createStyledButton("GAMES");
 
         centerPanel.add(newGameButton);
         centerPanel.add(Box.createVerticalStrut(15));
