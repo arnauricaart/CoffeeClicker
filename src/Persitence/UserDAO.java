@@ -6,6 +6,49 @@ import java.util.ArrayList;
 
 public class UserDAO {
 
+    public boolean removeUserAndData(String email){
+        System.out.println("Remove user");
+        String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT p.IdPartida FROM partida p JOIN users u ON p.correo = u.correo WHERE u.correo = ? OR u.nombre = ?)";
+        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+        values.add(email); types.add("String");
+        values.add(email);    types.add("String");
+
+        int result = SQL_CRUD.CUD(queryPartidaGenerador, values, types);
+
+        String queryStats = "DELETE FROM stats WHERE IdPartida IN (SELECT p.IdPartida FROM partida p JOIN users u ON p.correo = u.correo WHERE u.correo = ? OR u.nombre = ?)";
+        values = new ArrayList<>();
+        types = new ArrayList<>();
+
+        values.add(email); types.add("String");
+        values.add(email);    types.add("String");
+
+        result = SQL_CRUD.CUD(queryStats, values, types);
+
+        String queryPartida = "DELETE FROM partida WHERE correo IN (SELECT correo FROM users WHERE correo = ? OR nombre = ?)";
+        values = new ArrayList<>();
+        types = new ArrayList<>();
+
+        values.add(email); types.add("String");
+        values.add(email);    types.add("String");
+
+        result = SQL_CRUD.CUD(queryPartida, values, types);
+
+        String queryUsers = "DELETE FROM users WHERE correo = ? OR nombre = ?";
+        values = new ArrayList<>();
+        types = new ArrayList<>();
+
+        values.add(email); types.add("String");
+        values.add(email);    types.add("String");
+
+        result = SQL_CRUD.CUD(queryUsers, values, types);
+        if(result <= 0){
+            System.out.println("error user");
+        }
+        return result > 0;
+    }
+
     public boolean registerUser(String username, String email, String password) {
         if (checkUserExists(username)) return false;
 

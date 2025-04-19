@@ -8,8 +8,8 @@ public class RemoveAccountView extends BaseForm {
     private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9");
     private static final Color BUTTON_COLOR = Color.decode("#9E6B57");
     private static final Color PRIMARY_COLOR = Color.WHITE;
-    private JTextField password;
     private JButton removeButton;
+    private JPasswordField passwordField;
 
 
     public RemoveAccountView() {
@@ -38,7 +38,7 @@ public class RemoveAccountView extends BaseForm {
         add(userLabel);
 
 
-        JPasswordField passwordField = new JPasswordField();
+        passwordField = new JPasswordField();
         passwordField.setBounds(440, 280, 400, 40);
         passwordField.setBackground(Color.decode("#D9D9D9"));
         add(passwordField);
@@ -53,5 +53,10 @@ public class RemoveAccountView extends BaseForm {
     }
 
     public void setRemoveAccButtonListener(ActionListener al) { removeButton.addActionListener(al); }
+    public String getPassword() { return new String(passwordField.getPassword()); }
 
+    public void showRemoveUserMessage(boolean success) {
+        JOptionPane.showMessageDialog(this, success ? "User removed" : "Invalid password");
+
+    }
 }

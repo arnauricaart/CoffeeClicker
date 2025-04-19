@@ -25,7 +25,7 @@ public class SQL_CRUD {
                 }
             }
             res = pst.executeQuery();
-            System.out.println(res);
+            System.out.println(query);
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -37,6 +37,7 @@ public class SQL_CRUD {
         Singleton s1 = Singleton.getInstance();
         int res;
         try {
+            System.out.println(query);
             pst = s1.getConn().prepareStatement(query);
             for (int i = 0; i < values.size(); i++){
                 if (tipos.get(i).equals("String")){

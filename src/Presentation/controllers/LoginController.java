@@ -33,16 +33,16 @@ public class LoginController {
     }
 
     private void login() {
-        String input = view.getUsername();
+        String usernameOrEmail = view.getUsername();
         String password = view.getPassword();
 
-        boolean success = model.validateLogin(input, password);
+        boolean success = model.validateLogin(usernameOrEmail, password);
         view.showLoginResultMessage(success);
 
         if (success) {
             view.dispose();
             MenuGUI menuView = new MenuGUI();
-            MenuController menuController = new MenuController(menuView);
+            MenuController menuController = new MenuController(menuView, usernameOrEmail);
             menuController.initController();
         }
     }

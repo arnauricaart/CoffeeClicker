@@ -1,4 +1,5 @@
 package Presentation.controllers;
+import Persitence.UserDAO;
 import Presentation.views.*;
 
 import java.util.List;
@@ -9,10 +10,13 @@ public class MenuController {
     private NewGameView newGameView;
     private ContinueGameView continueGameView;
     private RemoveAccountView removeAccountView;
+    private UserDAO userDAO;
+    private String usernameOrEmail;
 
 
-    public MenuController(MenuGUI menuView) {
+    public MenuController(MenuGUI menuView, String usernameOrEmail) {
         this.menuView = menuView;
+        this.usernameOrEmail = usernameOrEmail;
     }
 
     public void initController() {
@@ -21,7 +25,7 @@ public class MenuController {
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
         menuView.setContinueGameButtonListener(e -> selectGameToContinue());
-
+        userDAO = new UserDAO();
     }
 
     private void startNewGame() {
@@ -67,6 +71,18 @@ public class MenuController {
         //TODO cridar al joc
     }
     private void removeAccountFromDatabase() {
+        if(userDAO.validateLogin(this.usernameOrEmail, removeAccountView.getPassword())){
+            userDAO.removeUserAndData(this.usernameOrEmail);
+            removeAccountView.showRemoveUserMessage(true);
+            removeAccountView.dispose();
+            menuView.dispose();
+            LoginController loginController = new LoginController();
+            loginController.start();
+        } else{
+            removeAccountView.showRemoveUserMessage(false);
+        }
+
+
         return;
     }
 }
