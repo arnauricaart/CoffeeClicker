@@ -36,15 +36,15 @@ public class LoginController {
         String usernameOrEmail = view.getUsername();
         String password = view.getPassword();
 
-        boolean success = model.validateLogin(usernameOrEmail, password);
-        if(!success) {
-            view.showLoginResultMessage(success);
+        String correo = model.getCorreoFromLogin(usernameOrEmail, password);
+        if(correo == null) {
+            view.showLoginErrorMessage();
         }
 
-        if (success) {
+        if (correo != null) {
             view.dispose();
             MenuGUI menuView = new MenuGUI();
-            MenuController menuController = new MenuController(menuView, usernameOrEmail);
+            MenuController menuController = new MenuController(menuView, correo);
             menuController.initController();
         }
     }

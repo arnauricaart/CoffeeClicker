@@ -2,8 +2,11 @@ package Persitence;
 
 import Business.GameData;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +15,12 @@ public class GameDBDAO {
 
     }
 
-    public List<GameData> getGamesNotFinishedByUser(String userID){
-        String query = "SELECT p.* FROM partida p JOIN users u ON p.correo = u.correo WHERE (u.correo =? OR u.nombre =?) AND Terminada = 0";
+    public List<GameData> getGamesNotFinishedByUser(String correo){
+        String query = "SELECT * FROM partida  WHERE correo =? AND Terminada = 0";
         ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> tipos = new ArrayList<String>();
 
-        values.add(userID);
-        tipos.add("String");
-
-        values.add(userID);
+        values.add(correo);
         tipos.add("String");
 
         ResultSet res = SQL_CRUD.Select(query,values,tipos);
@@ -28,7 +28,10 @@ public class GameDBDAO {
         while(true){
             try {
                 if (!res.next()) break;
-                games.add(new GameData(res.getInt("IdPartida"), res.getInt("Cafes")));
+                Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String formatedDate = formato.format(ultimoAcceso);
+                games.add(new GameData(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -88,4 +91,14 @@ public class GameDBDAO {
     }
 
 
+    public void insertGame(String nombre, String correo) {
+        String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso) VALUES(?,0,?,0,Now())";
+        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+        values.add(nombre); types.add("String");
+        values.add(correo); types.add("String");
+
+        int result = SQL_CRUD.CUD(query, values, types);
+    }
 }

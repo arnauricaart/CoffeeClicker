@@ -13,7 +13,7 @@ public class UserManager {
         return userDAO.registerUser(username, email, password);
     }
 
-    public boolean validateLogin(String input, String password) {
-        return userDAO.validateLogin(input, password);
+    public String getCorreoFromLogin(String input, String password) {
+        return userDAO.getCorreoFromLogin(input, password);
     }
 }

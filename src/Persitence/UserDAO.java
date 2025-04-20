@@ -8,39 +8,35 @@ public class UserDAO {
 
     public boolean removeUserAndData(String email){
         System.out.println("Remove user");
-        String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT p.IdPartida FROM partida p JOIN users u ON p.correo = u.correo WHERE u.correo = ? OR u.nombre = ?)";
+        String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT IdPartida FROM partida WHERE correo = ?)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
         values.add(email); types.add("String");
-        values.add(email);    types.add("String");
 
         int result = SQL_CRUD.CUD(queryPartidaGenerador, values, types);
 
-        String queryStats = "DELETE FROM stats WHERE IdPartida IN (SELECT p.IdPartida FROM partida p JOIN users u ON p.correo = u.correo WHERE u.correo = ? OR u.nombre = ?)";
+        String queryStats = "DELETE FROM stats WHERE IdPartida IN (SELECT IdPartida FROM partida WHERE correo = ?)";
         values = new ArrayList<>();
         types = new ArrayList<>();
 
         values.add(email); types.add("String");
-        values.add(email);    types.add("String");
 
         result = SQL_CRUD.CUD(queryStats, values, types);
 
-        String queryPartida = "DELETE FROM partida WHERE correo IN (SELECT correo FROM users WHERE correo = ? OR nombre = ?)";
+        String queryPartida = "DELETE FROM partida WHERE correo =?";
         values = new ArrayList<>();
         types = new ArrayList<>();
 
         values.add(email); types.add("String");
-        values.add(email);    types.add("String");
 
         result = SQL_CRUD.CUD(queryPartida, values, types);
 
-        String queryUsers = "DELETE FROM users WHERE correo = ? OR nombre = ?";
+        String queryUsers = "DELETE FROM users WHERE correo = ?";
         values = new ArrayList<>();
         types = new ArrayList<>();
 
         values.add(email); types.add("String");
-        values.add(email);    types.add("String");
 
         result = SQL_CRUD.CUD(queryUsers, values, types);
         if(result <= 0){
@@ -80,8 +76,8 @@ public class UserDAO {
         return true;
     }
 
-    public boolean validateLogin(String userOrEmail, String password) {
-        String query = "SELECT * FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";
+    public String getCorreoFromLogin(String userOrEmail, String password) {
+        String query = "SELECT Correo FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
@@ -91,10 +87,12 @@ public class UserDAO {
 
         ResultSet rs = SQL_CRUD.Select(query, values, types);
         try {
-            return rs.next();
+            if(rs.next()){
+                return rs.getString("Correo");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }

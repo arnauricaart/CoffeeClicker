@@ -1,10 +1,8 @@
 package Presentation.controllers;
-import Business.GameData;
+import Persitence.ConstraintException;
 import Persitence.GameDBDAO;
 import Persitence.UserDAO;
 import Presentation.views.*;
-
-import java.util.List;
 
 
 public class MenuController {
@@ -14,12 +12,12 @@ public class MenuController {
     private RemoveAccountView removeAccountView;
     private UserDAO userDAO;
     private GameDBDAO gameDBDAO;
-    private String usernameOrEmail;
+    private String correo;
 
 
-    public MenuController(MenuGUI menuView, String usernameOrEmail) {
+    public MenuController(MenuGUI menuView, String correo) {
         this.menuView = menuView;
-        this.usernameOrEmail = usernameOrEmail;
+        this.correo = correo;
     }
 
     public void initController() {
@@ -67,18 +65,28 @@ public class MenuController {
     }
 
     private void selectGameToContinue() {
-        continueGameView = new ContinueGameView(gameDBDAO.getGamesNotFinishedByUser(usernameOrEmail));
-        //continueGameView.setNewGameButtonListener(e -> continueGame());
+        continueGameView = new ContinueGameView(gameDBDAO.getGamesNotFinishedByUser(correo));
+        continueGameView.addDeleteActionListener(e -> gameDBDAO.removeGame(continueGameView.getCurrentPartida()));
         continueGameView.setVisible(true);
     }
     private void newGame() {
         String name = newGameView.getNewGameName();
+        try{
+            gameDBDAO.insertGame(name, correo);
+        } catch (ConstraintException e){
+            if(e.getMessage().contains("partida_nombre_uk")){
+                newGameView.showDuplicateGameMessage();
+                return;
+            }
+        }
+
         System.out.println("Name: " + name);
         //TODO cridar al joc
     }
     private void removeAccountFromDatabase() {
-        if(userDAO.validateLogin(this.usernameOrEmail, removeAccountView.getPassword())){
-            userDAO.removeUserAndData(this.usernameOrEmail);
+        String correo = userDAO.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
+        if(correo != null) {
+            userDAO.removeUserAndData(this.correo);
             removeAccountView.showRemoveUserMessage(true);
             removeAccountView.dispose();
             menuView.dispose();

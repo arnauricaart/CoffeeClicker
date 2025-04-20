@@ -73,4 +73,7 @@ public class NewGameView extends BaseForm {
     public void setCancelButtonListener(ActionListener al) {
         cancelButton.addActionListener(al);
     }
+    public void showDuplicateGameMessage() {
+        JOptionPane.showMessageDialog(this, "This game already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }

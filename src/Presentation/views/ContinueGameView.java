@@ -5,7 +5,10 @@ import Business.GameData;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -23,7 +26,7 @@ public class ContinueGameView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"Game ID", "Coffees"};
+        String[] columnNames = {"IdPartida", "Name", "Coffees", "Last Access"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -32,7 +35,7 @@ public class ContinueGameView extends JFrame {
         };
 
         for (GameData game : games) {
-            Object[] row = {game.getId(), game.getCoffees()};
+            Object[] row = {game.getId(), game.getNombre(), game.getCoffees(), game.getUltimoAcceso()};
             tableModel.addRow(row);
         }
 
@@ -42,20 +45,14 @@ public class ContinueGameView extends JFrame {
         gameTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
         gameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        gameTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? new Color(230, 230, 230) : Color.WHITE);
-                } else {
-                    c.setBackground(new Color(184, 207, 229));
-                }
-                return c;
-            }
-        });
+        gameTable.getColumnModel().getColumn(1).setCellRenderer(new AlternatingColorRenderer(JLabel.LEFT));
+        gameTable.getColumnModel().getColumn(2).setCellRenderer(new AlternatingColorRenderer(JLabel.CENTER));
+        gameTable.getColumnModel().getColumn(3).setCellRenderer(new AlternatingColorRenderer(JLabel.RIGHT));
+
+        TableColumnModel columnModel = gameTable.getColumnModel();
+        TableColumn hiddenColumn = columnModel.getColumn(0);
+        columnModel.removeColumn(hiddenColumn);
+
 
         // Acción de doble clic para cargar partida
         gameTable.addMouseListener(new MouseAdapter() {
@@ -90,11 +87,11 @@ public class ContinueGameView extends JFrame {
         deleteButton.addActionListener(e -> {
             if (gameTable.getSelectedRow() != -1) {
                 int selectedRow = gameTable.getSelectedRow();
-                int gameId = (int) gameTable.getValueAt(selectedRow, 0);
+                String gameName = (String)gameTable.getValueAt(selectedRow, 0);
 
                 // Aquí deberías llamar al controlador para eliminar la partida
                 JOptionPane.showMessageDialog(this,
-                        "Partida con ID " + gameId + " eliminada.",
+                        "Partida con ID " + gameName + " eliminada.",
                         "Eliminar Partida",
                         JOptionPane.INFORMATION_MESSAGE);
 
@@ -123,4 +120,38 @@ public class ContinueGameView extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
+    public void addDeleteActionListener(ActionListener l) {
+        deleteButton.addActionListener(l);
+    }
+    public int getCurrentPartida(){
+        int selectedRow = gameTable.getSelectedRow();
+        if (selectedRow != -1) {
+            int modelRow= gameTable.convertRowIndexToModel(selectedRow);
+            Integer hiddenValue = (Integer) gameTable.getModel().getValueAt(modelRow, 0);
+            return hiddenValue;
+        }
+        return -1;
+    }
+
+    private static class AlternatingColorRenderer extends DefaultTableCellRenderer {
+        private final int alignment;
+
+        public AlternatingColorRenderer(int alignment) {
+            this.alignment = alignment;
+            setHorizontalAlignment(alignment);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                       boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (!isSelected) {
+                c.setBackground(row % 2 == 0 ? new Color(230, 230, 230) : Color.WHITE);
+            } else {
+                c.setBackground(new Color(184, 207, 229));
+            }
+            return c;
+        }
+    }
+
 }

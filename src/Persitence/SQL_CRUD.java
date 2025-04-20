@@ -3,6 +3,7 @@ import Persitence.Singleton;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class SQL_CRUD {
@@ -49,6 +50,8 @@ public class SQL_CRUD {
                 }
             }
             res = pst.executeUpdate();
+        }catch (SQLIntegrityConstraintViolationException e){
+            throw new ConstraintException(e);
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
