@@ -9,7 +9,7 @@ public class EndGameStatsGUI extends JFrame {
     private GameSelectionListener listener;
     private JButton backButton;
 
-    public EndGameStatsGUI(List<Game> partidasFinalizadas) {
+    public EndGameStatsGUI(List<Game_Provisional> partidasFinalizadas) {
         setTitle("Partidas Finalizadas Graficas");
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -26,7 +26,7 @@ public class EndGameStatsGUI extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        for (Game partida : partidasFinalizadas) {
+        for (Game_Provisional partida : partidasFinalizadas) {
             JButton btn = new JButton(partida.getName());
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMaximumSize(new Dimension(300, 40));

@@ -2,6 +2,7 @@ package MARIA;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +24,10 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         view.cursorButton.addActionListener(this);
         view.grandpaButton.addActionListener(this);
 
-        view.cursorButton.addMouseListener(this);
-        view.grandpaButton.addMouseListener(this);
-        view.mysteryButton.addMouseListener(this);
-
-        view.pauseButton.addActionListener(e -> togglePause());
+        view.addCursorButtonMouseListener(this);
+        view.addCursorButtonMouseListener(this);
+        view.addMysteryButtonMouseListener(this);
+        view.addPauseButtonListener(e -> togglePause());
 
         updateLabels();
         run();
@@ -40,9 +40,9 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
-            view.counterLabel.setText(model.getCoffeeCounter() + " coffees");
-            view.perSecLabel.setText("per second: " + String.format("%.1f", model.getPerSecond()));
-            view.cursorButton.setText("Cursor (" + model.getCursorNumber() + ")");
+            view.setCounterLableText(model.getCoffeeCounter() + " coffees");
+            view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
+            view.setCursorButtonText("Cursor (" + model.getCursorNumber() + ")");
             if (model.isGrandpaUnlocked()) {
                 view.grandpaButton.setText("Grandpa (" + model.getGrandpaNumber() + ")");
             }
@@ -99,7 +99,7 @@ public class GameController implements ActionListener, MouseListener, Runnable {
             updateLabels();
         }
 
-        if (source == view.cursorButton) {
+        if (source.equals("CURSORBUTTON")) {
             if (model.canBuyCursor()) {
                 model.buyCursor();
                 playSound("res/ding.wav");

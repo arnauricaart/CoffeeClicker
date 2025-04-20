@@ -8,9 +8,9 @@ public class ControllerEndGameStats implements GameSelectionListener {
 
     private EndGameStatsGUI gui;
 
-    public ControllerEndGameStats(List<Game> partidas) {
-        List<Game> finalizadas = partidas.stream()
-                .filter(Game::hasEnded)
+    public ControllerEndGameStats(List<Game_Provisional> partidas) {
+        List<Game_Provisional> finalizadas = partidas.stream()
+                .filter(Game_Provisional::hasEnded)
                 .collect(Collectors.toList());
 
         gui = new EndGameStatsGUI(finalizadas);
@@ -25,7 +25,7 @@ public class ControllerEndGameStats implements GameSelectionListener {
     }
 
     @Override
-    public void onGameSelected(Game game) {
+    public void onGameSelected(Game_Provisional game) {
         // Convertimos datos para la gráfica (int -> float)
         List<Integer> cafes = game.getCoffeePerMinute().stream()
                 .map(Float::intValue)

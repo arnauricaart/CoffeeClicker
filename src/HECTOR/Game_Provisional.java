@@ -3,7 +3,7 @@ package HECTOR;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game_Provisional {
 
     private int gameID;
     private String name;
@@ -22,7 +22,7 @@ public class Game {
     private List<Float> coffeePerMinute;
 
     // Constructor
-    public Game(int gameID) {
+    public Game_Provisional(int gameID) {
         this.gameID = gameID;
         this.name = "Partida " + gameID;
         this.coffee = 0;

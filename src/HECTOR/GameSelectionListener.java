@@ -1,5 +1,5 @@
 package HECTOR;
 
 public interface GameSelectionListener {
-    void onGameSelected(Game game);
+    void onGameSelected(Game_Provisional game);
 }
