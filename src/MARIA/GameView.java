@@ -3,14 +3,69 @@ package MARIA;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 public class GameView {
 
-    JFrame window; // HAY QUE AÑADIR PRIVATE AQUÍ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    JLabel counterLabel, perSecLabel;
-    JButton coffeeButton, cursorButton, grandpaButton, mysteryButton, pauseButton;
-    JTextArea messageText;
-    Font font1, font2;
+    private JFrame window; // HAY QUE AÑADIR PRIVATE AQUÍ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private JLabel counterLabel, perSecLabel;
+    private JButton coffeeButton, cursorButton, grandpaButton, mysteryButton, pauseButton;
+    private JTextArea messageText;
+    private Font font1, font2;
+
+    public void setMessageText(String message) {
+        this.messageText.setText(message);
+    }
+
+    public void setPauseButtonText(String message) {
+        this.pauseButton.setText(message);
+    }
+
+    public void setCounterLableText(String message) {
+        this.counterLabel.setText(message);
+    }
+
+    public void setPerSecLabelText(String message) {
+        this.perSecLabel.setText(message);
+    }
+
+    public void setCursorButtonText(String message) {
+        this.cursorButton.setText(message);
+    }
+    public void setGrandpaButtonText(String message) {
+        this.grandpaButton.setText(message);
+    }
+
+
+    public void addCursorButtonMouseListener(MouseListener mouseListener){
+        cursorButton.addMouseListener(mouseListener);
+    }
+
+    public void addGrandpaButtonMouseListener(MouseListener mouseListener){
+        grandpaButton.addMouseListener(mouseListener);
+    }
+
+    public void addCoffeeButtonListener(ActionListener listener){
+        coffeeButton.addActionListener(listener);
+    }
+
+    public void addCursorButtonListener(ActionListener listener){
+        cursorButton.addActionListener(listener);
+    }
+
+    public void addGrandpaButtonListener(ActionListener listener){
+        grandpaButton.addActionListener(listener);
+    }
+
+
+    public void addMysteryButtonMouseListener(ActionListener listener){
+        mysteryButton.addActionListener(listener);
+    }
+
+    public void addPauseButtonListener(ActionListener listener) {
+        pauseButton.addActionListener(listener);
+    }
 
     public GameView() {
         createFont();
@@ -34,7 +89,7 @@ public class GameView {
         coffeePanel.setBackground(Color.black);
         window.add(coffeePanel);
 
-        ImageIcon originalIcon = new ImageIcon("data/coffee.png");
+        ImageIcon originalIcon = new ImageIcon("res/coffee.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
@@ -108,6 +163,12 @@ public class GameView {
         messageText.setWrapStyleWord(true);
         messageText.setEditable(false);
         messagePanel.add(messageText);
+
+        coffeeButton.setActionCommand("COFFEEBUTTON");
+        cursorButton.setActionCommand("CURSORBUTTON");
+        grandpaButton.setActionCommand("GRANDPABUTTON");
+        pauseButton.setActionCommand("PAUSEBUTTON");
+        mysteryButton.setName("MYSTERYBUTTON");
 
         window.setVisible(true);
     }

@@ -20,9 +20,9 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         this.model = model;
         this.view = view;
 
-        view.coffeeButton.addActionListener(this);
-        view.cursorButton.addActionListener(this);
-        view.grandpaButton.addActionListener(this);
+        view.addCoffeeButtonListener(this);
+        view.addCursorButtonListener(this);
+        view.addGrandpaButtonListener(this);
 
         view.addCursorButtonMouseListener(this);
         view.addCursorButtonMouseListener(this);
@@ -35,8 +35,9 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
     private void togglePause() {
         paused = !paused;
-        view.pauseButton.setText(paused ? "Resume" : "Pause");
+        view.setPauseButtonText(paused ? "Resume" : "Pause");
     }
+
 
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
@@ -44,7 +45,7 @@ public class GameController implements ActionListener, MouseListener, Runnable {
             view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
             view.setCursorButtonText("Cursor (" + model.getCursorNumber() + ")");
             if (model.isGrandpaUnlocked()) {
-                view.grandpaButton.setText("Grandpa (" + model.getGrandpaNumber() + ")");
+                view.setGrandpaButtonText("Grandpa (" + model.getGrandpaNumber() + ")");
             }
         });
     }
@@ -89,9 +90,9 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
+        Object source = e.getActionCommand();
 
-        if (source == view.coffeeButton) {
+        if (source.equals("COFFEEBUTTON")) {
             model.addCoffee(1);
             if (model.canUnlockGrandpa()) {
                 model.unlockGrandpa();
@@ -104,17 +105,25 @@ public class GameController implements ActionListener, MouseListener, Runnable {
                 model.buyCursor();
                 playSound("res/ding.wav");
             } else {
-                view.messageText.setText("You need more coffees!");
+                view.setMessageText("You need more coffees!");
                 playSound("res/error.wav");
             }
             updateLabels();
         }
 
-        if (source == view.grandpaButton) {
+        if (source.equals("GRANDPABUTTON")) {
             if (!model.isGrandpaUnlocked()) {
-                view.messageText.setText("This item is currently locked!");
+                view.setMessageText("This item is currently locked!");
                 playSound("res/error.wav");
                 return;
+            }else{
+                if (model.canBuyGrandpa()) {
+                    model.buyGrandpa();
+                    playSound("res/ding.wav");
+                }else{
+                    view.setMessageText("You need more coffees!");
+                    playSound("res/error.wav");
+                }
             }
         }
     }
@@ -122,24 +131,23 @@ public class GameController implements ActionListener, MouseListener, Runnable {
     @Override
     public void mouseEntered(MouseEvent e) {
         Object src = e.getSource();
+        String name = ((Component) e.getSource()).getName();
 
-        if (src == view.cursorButton) {
-            view.messageText.setText("Cursor\n[price: " + model.getCursorPrice() + "]\nAutoclicks once every 10 seconds.");
-        } else if (src == view.grandpaButton) {
+        if (src.equals("CURSORBUTTON")) {
+            view.setMessageText("Cursor\n[price: " + model.getCursorPrice() + "]\nAutoclicks once every 10 seconds.");
+        } else if (src.equals("GRANDPABUTTON")) {
             if (!model.isGrandpaUnlocked()) {
-                view.messageText.setText("This item is currently locked!");
+                view.setMessageText("This item is currently locked!");
             } else {
-                view.messageText.setText("Grandpa\n[price: " + model.getGrandpaPrice() + "]\nProduces 1 coffee per second.");
+                view.setMessageText("Grandpa\n[price: " + model.getGrandpaPrice() + "]\nProduces 1 coffee per second.");
             }
-        } else if (src == view.mysteryButton) {
-            view.messageText.setText("This item is currently locked!");
+        } else if (src.equals("MYSTERYBUTTON")) {
+            view.setMessageText("This item is currently locked!");
         }
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
-        view.messageText.setText("");
-    }
+    public void mouseExited(MouseEvent e) {view.setMessageText("");}
 
     @Override public void mouseClicked(MouseEvent e) {}
     @Override public void mousePressed(MouseEvent e) {}

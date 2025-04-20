@@ -1,4 +1,5 @@
 package MARIA;
+import Business.Game;
 
 public class GameManager {
     private double coffeeCounter;
@@ -17,6 +18,7 @@ public class GameManager {
         perSecond = 0.0;
     }
 
+    // cambiar
     public void addCoffee(double amount) {
         coffeeCounter += amount;
     }
@@ -31,6 +33,7 @@ public class GameManager {
         perSecond += 0.2;
     }
 
+    // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getCursorPrice() {
         return (int) Math.round(cursorPriceBase * Math.pow(1.07, cursorNumber));
     }
@@ -46,6 +49,7 @@ public class GameManager {
         grandpaUnlocked = true;
     }
 
+    // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getGrandpaPrice() {
         return (int) Math.round(grandpaPriceBase * Math.pow(1.15, grandpaNumber));
     }
