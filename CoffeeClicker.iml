@@ -13,5 +13,6 @@
     <orderEntry type="library" name="gson-2.10" level="project" />
     <orderEntry type="library" name="mysql-connector-j-9.2.0" level="project" />
     <orderEntry type="library" name="guicedee.services.jfreechart" level="project" />
+    <orderEntry type="library" name="jfree.jfreechart" level="project" />
   </component>
 </module>
