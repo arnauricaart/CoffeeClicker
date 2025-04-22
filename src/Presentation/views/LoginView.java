@@ -64,6 +64,6 @@ public class LoginView extends JFrame {
     public void setLoginButtonListener(ActionListener al) { loginButton.addActionListener(al); }
     public void setRegisterLabelListener(MouseAdapter ma) { goToRegister.addMouseListener(ma); }
     public void showLoginErrorMessage() {
-        JOptionPane.showMessageDialog(this, "Login failed");
+        JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
