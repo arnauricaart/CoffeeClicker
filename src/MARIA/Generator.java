@@ -1,6 +1,6 @@
 package MARIA;
 
-public class Generator {
+public abstract class Generator {
     private String name;
     private float basePrice;
     private float production;

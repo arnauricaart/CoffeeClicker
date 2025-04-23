@@ -3,19 +3,28 @@ import Business.Game;
 
 public class GameManager {
     private double coffeeCounter;
-    private int cursorNumber;
-    private int grandpaNumber;
-    private boolean grandpaUnlocked;
-    private final int cursorPriceBase = 10;
-    private final int grandpaPriceBase = 150;
+    private int coffeeMachineNumber;
+    private int baristaNumber;
+    private int cafeNumber;
+    private boolean baristaUnlocked;
+    private boolean cafeUnlocked;
+    private final int coffeeMachinePriceBase = 10;
+    private final int baristaPriceBase = 150;
+    private final int cafePriceBase = 150;
     private double perSecond;
+    
+    // Provisional, se tendrá que cambiar. Game ID inventado
+    private Game game = new Game(12);
 
-    public GameManager() {
+    public GameManager(int ID) {
         coffeeCounter = 0;
-        cursorNumber = 0;
-        grandpaNumber = 0;
-        grandpaUnlocked = false;
+        coffeeMachineNumber = 0;
+        baristaNumber = 0;
+        cafeNumber = 0;
+        baristaUnlocked = false;
+        cafeUnlocked = false;
         perSecond = 0.0;
+        // gameDAO.getGameByID();
     }
 
     // cambiar
@@ -23,53 +32,81 @@ public class GameManager {
         coffeeCounter += amount;
     }
 
-    public boolean canBuyCursor() {
-        return coffeeCounter >= getCursorPrice();
+    public boolean canBuyCoffeeMachine() {
+        return coffeeCounter >= getCoffeeMachinePrice();
     }
 
-    public void buyCursor() {
-        coffeeCounter -= getCursorPrice();
-        cursorNumber++;
+
+    public void buyCoffeeMachine() {
+        coffeeCounter -= getCoffeeMachinePrice();
+        coffeeMachineNumber++;
         perSecond += 0.2;
     }
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
-    public int getCursorPrice() {
-        return (int) Math.round(cursorPriceBase * Math.pow(1.07, cursorNumber));
+    public int getCoffeeMachinePrice() {
+        return (int) Math.round(coffeeMachinePriceBase * Math.pow(1.07, coffeeMachineNumber));
     }
 
-    public boolean canBuyGrandpa() {
-        return coffeeCounter >= getGrandpaPrice();
+    public boolean canBuyBarista() {
+        return coffeeCounter >= getBaristaPrice();
     }
 
-    public void buyGrandpa() {
-        coffeeCounter -= getGrandpaPrice();
-        grandpaNumber++;
+    public void buyBarista() {
+        coffeeCounter -= getBaristaPrice();
+        baristaNumber++;
         perSecond += 0.5;
-        grandpaUnlocked = true;
+        baristaUnlocked = true;
     }
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
-    public int getGrandpaPrice() {
-        return (int) Math.round(grandpaPriceBase * Math.pow(1.15, grandpaNumber));
+    public int getBaristaPrice() {
+        return (int) Math.round(baristaPriceBase * Math.pow(1.15, baristaNumber));
     }
 
-    public boolean canUnlockGrandpa() {
-        return coffeeCounter >= grandpaPriceBase && !grandpaUnlocked;
+    public boolean canUnlockBarista() {
+        return coffeeCounter >= baristaPriceBase && !baristaUnlocked;
+    }
+
+    public boolean canBuyCafe(){
+        return coffeeCounter >= getCafePrice();
+    }
+
+    public void buyCafe() {
+        coffeeCounter -= getCafePrice();
+        cafeNumber++;
+        perSecond += 1.0;
+    }
+
+    public int getCafePrice() {
+        return (int) Math.round(cafePriceBase * Math.pow(1.07, cafeNumber));
     }
 
     public int getCoffeeCounter() { return (int) coffeeCounter; }
-    public int getCursorNumber() { return cursorNumber; }
-    public int getGrandpaNumber() { return grandpaNumber; }
+    public int getCoffeeMachineNumber() { return coffeeMachineNumber; }
+    public int getBaristaNumber() { return baristaNumber; }
+    public int getCafeNumber() { return cafeNumber; }
     public double getPerSecond() { return perSecond; }
-    public boolean isGrandpaUnlocked() { return grandpaUnlocked; }
 
-    public void unlockGrandpa() {
-        grandpaUnlocked = true;
+    public boolean isBaristaUnlocked() { return baristaUnlocked; }
+
+    public void unlockBarista() {
+        baristaUnlocked = true;
+    }
+
+    public boolean isCafeUnlocked() { return cafeUnlocked; }
+
+    public boolean canUnlockCafe() {
+        return coffeeCounter >= cafePriceBase && !cafeUnlocked;
+    }
+
+    public void unlockCafe(){
+        cafeUnlocked = true;
     }
 
     public void updatePerSecond() {
-        perSecond = cursorNumber * 0.2 + grandpaNumber * 0.5;
+        perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
+        // tener en cuenta los upgrades. Añadir cafe y sus num upgrades
     }
 }
 

@@ -10,7 +10,7 @@ public class GameView {
 
     private JFrame window; // HAY QUE AÑADIR PRIVATE AQUÍ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private JLabel counterLabel, perSecLabel;
-    private JButton coffeeButton, cursorButton, grandpaButton, mysteryButton, pauseButton;
+    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton, pauseButton;
     private JTextArea messageText;
     private Font font1, font2;
 
@@ -30,37 +30,44 @@ public class GameView {
         this.perSecLabel.setText(message);
     }
 
-    public void setCursorButtonText(String message) {
-        this.cursorButton.setText(message);
-    }
-    public void setGrandpaButtonText(String message) {
-        this.grandpaButton.setText(message);
+    public void setCoffeeMachineButtonText(String message) {
+        this.coffeeMachineButton.setText(message);
     }
 
-
-    public void addCursorButtonMouseListener(MouseListener mouseListener){
-        cursorButton.addMouseListener(mouseListener);
+    public void setBaristaButtonText(String message) {
+        this.baristaButton.setText(message);
     }
 
-    public void addGrandpaButtonMouseListener(MouseListener mouseListener){
-        grandpaButton.addMouseListener(mouseListener);
+    public void setCafeButtonText(String message) {
+        this.cafeButton.setText(message);
+    }
+
+    public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener){
+        coffeeMachineButton.addMouseListener(mouseListener);
+    }
+
+    public void addCafeButtonMouseListener(MouseListener mouseListener){
+        cafeButton.addMouseListener(mouseListener);
+    }
+
+    public void addBaristaButtonMouseListener(MouseListener mouseListener){
+        baristaButton.addMouseListener(mouseListener);
     }
 
     public void addCoffeeButtonListener(ActionListener listener){
         coffeeButton.addActionListener(listener);
     }
 
-    public void addCursorButtonListener(ActionListener listener){
-        cursorButton.addActionListener(listener);
+    public void addCoffeeMachineButtonListener(ActionListener listener){
+        coffeeMachineButton.addActionListener(listener);
     }
 
-    public void addGrandpaButtonListener(ActionListener listener){
-        grandpaButton.addActionListener(listener);
+    public void addBaristaButtonListener(ActionListener listener){
+        baristaButton.addActionListener(listener);
     }
 
-
-    public void addMysteryButtonMouseListener(ActionListener listener){
-        mysteryButton.addActionListener(listener);
+    public void addCafeButtonListener(ActionListener listener){
+        cafeButton.addActionListener(listener);
     }
 
     public void addPauseButtonListener(ActionListener listener) {
@@ -131,20 +138,20 @@ public class GameView {
         itemPanel.setBackground(Color.black);
         window.add(itemPanel);
 
-        cursorButton = new JButton("Cursor (0)");
-        cursorButton.setFont(font1);
-        cursorButton.setFocusPainted(false);
-        itemPanel.add(cursorButton);
+        coffeeMachineButton = new JButton("Cursor (0)");
+        coffeeMachineButton.setFont(font1);
+        coffeeMachineButton.setFocusPainted(false);
+        itemPanel.add(coffeeMachineButton);
 
-        grandpaButton = new JButton("?");
-        grandpaButton.setFont(font1);
-        grandpaButton.setFocusPainted(false);
-        itemPanel.add(grandpaButton);
+        baristaButton = new JButton("?");
+        baristaButton.setFont(font1);
+        baristaButton.setFocusPainted(false);
+        itemPanel.add(baristaButton);
 
-        mysteryButton = new JButton("?");
-        mysteryButton.setFont(font1);
-        mysteryButton.setFocusPainted(false);
-        itemPanel.add(mysteryButton);
+        cafeButton = new JButton("?");
+        cafeButton.setFont(font1);
+        cafeButton.setFocusPainted(false);
+        itemPanel.add(cafeButton);
 
         pauseButton = new JButton("Pause");
         itemPanel.add(pauseButton);
@@ -165,10 +172,16 @@ public class GameView {
         messagePanel.add(messageText);
 
         coffeeButton.setActionCommand("COFFEEBUTTON");
-        cursorButton.setActionCommand("CURSORBUTTON");
-        grandpaButton.setActionCommand("GRANDPABUTTON");
+        coffeeMachineButton.setActionCommand("COFFEEMACHINEBUTTON");
+        baristaButton.setActionCommand("BARISTABUTTON");
         pauseButton.setActionCommand("PAUSEBUTTON");
-        mysteryButton.setName("MYSTERYBUTTON");
+        cafeButton.setActionCommand("CAFEBUTTON");
+
+        coffeeMachineButton.setName("COFFEEMACHINEBUTTON");
+        baristaButton.setName("BARISTABUTTON");
+        cafeButton.setName("CAFEBUTTON");
+
+
 
         window.setVisible(true);
     }

@@ -21,12 +21,13 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         this.view = view;
 
         view.addCoffeeButtonListener(this);
-        view.addCursorButtonListener(this);
-        view.addGrandpaButtonListener(this);
+        view.addCoffeeMachineButtonListener(this);
+        view.addBaristaButtonListener(this);
+        view.addCafeButtonListener(this);
 
-        view.addCursorButtonMouseListener(this);
-        view.addCursorButtonMouseListener(this);
-        view.addMysteryButtonMouseListener(this);
+        view.addCoffeeMachineButtonMouseListener(this);
+        view.addBaristaButtonMouseListener(this);
+        view.addCafeButtonMouseListener(this);
         view.addPauseButtonListener(e -> togglePause());
 
         updateLabels();
@@ -43,13 +44,17 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         SwingUtilities.invokeLater(() -> {
             view.setCounterLableText(model.getCoffeeCounter() + " coffees");
             view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
-            view.setCursorButtonText("Cursor (" + model.getCursorNumber() + ")");
-            if (model.isGrandpaUnlocked()) {
-                view.setGrandpaButtonText("Grandpa (" + model.getGrandpaNumber() + ")");
+            view.setCoffeeMachineButtonText("Coffee Machine (" + model.getCoffeeMachineNumber() + ")");
+            if (model.isBaristaUnlocked()) {
+                view.setBaristaButtonText("Barista (" + model.getBaristaNumber() + ")");
+            }
+            if (model.isCafeUnlocked()) {
+                view.setCafeButtonText("Cafe (" + model.getCafeNumber() + ")");
             }
         });
     }
 
+    // cambiar a clase Generator
     @Override
     public void run() {
         autoCoffeeThread = new Thread(() -> {
@@ -63,8 +68,12 @@ public class GameController implements ActionListener, MouseListener, Runnable {
                 if (!paused) {
                     model.addCoffee(model.getPerSecond());
 
-                    if (model.canUnlockGrandpa()) {
-                        model.unlockGrandpa();
+                    if (model.canUnlockBarista()) {
+                        model.unlockBarista();
+                    }
+
+                    if (model.canUnlockCafe()) {
+                        model.unlockCafe();
                     }
 
                     updateLabels();
@@ -94,15 +103,12 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
         if (source.equals("COFFEEBUTTON")) {
             model.addCoffee(1);
-            if (model.canUnlockGrandpa()) {
-                model.unlockGrandpa();
-            }
             updateLabels();
         }
 
-        if (source.equals("CURSORBUTTON")) {
-            if (model.canBuyCursor()) {
-                model.buyCursor();
+        if (source.equals("COFFEEMACHINEBUTTON")) {
+            if (model.canBuyCoffeeMachine()) {
+                model.buyCoffeeMachine();
                 playSound("res/ding.wav");
             } else {
                 view.setMessageText("You need more coffees!");
@@ -111,14 +117,30 @@ public class GameController implements ActionListener, MouseListener, Runnable {
             updateLabels();
         }
 
-        if (source.equals("GRANDPABUTTON")) {
-            if (!model.isGrandpaUnlocked()) {
+        if (source.equals("BARISTABUTTON")) {
+            if (!model.isBaristaUnlocked()) {
+                view.setMessageText("This item is currently locked!");
+                playSound("res/error.wav");
+                return;
+            } else {
+                if (model.canBuyBarista()) {
+                    model.buyBarista();
+                    playSound("res/ding.wav");
+                } else {
+                    view.setMessageText("You need more coffees!");
+                    playSound("res/error.wav");
+                }
+            }
+        }
+
+        if (source.equals("CAFEBUTTON")) {
+            if (!model.isCafeUnlocked()) {
                 view.setMessageText("This item is currently locked!");
                 playSound("res/error.wav");
                 return;
             }else{
-                if (model.canBuyGrandpa()) {
-                    model.buyGrandpa();
+                if (model.canBuyCafe()) {
+                    model.buyCafe();
                     playSound("res/ding.wav");
                 }else{
                     view.setMessageText("You need more coffees!");
@@ -130,19 +152,22 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        Object src = e.getSource();
         String name = ((Component) e.getSource()).getName();
 
-        if (src.equals("CURSORBUTTON")) {
-            view.setMessageText("Cursor\n[price: " + model.getCursorPrice() + "]\nAutoclicks once every 10 seconds.");
-        } else if (src.equals("GRANDPABUTTON")) {
-            if (!model.isGrandpaUnlocked()) {
+        if ("COFFEEMACHINEBUTTON".equals(name)) {
+            view.setMessageText("Coffee Machine\n[price: " + model.getCoffeeMachinePrice() + "]\nAutoclicks once every 10 seconds.");
+        } else if ("BARISTABUTTON".equals(name)) {
+            if (!model.isBaristaUnlocked()) {
                 view.setMessageText("This item is currently locked!");
             } else {
-                view.setMessageText("Grandpa\n[price: " + model.getGrandpaPrice() + "]\nProduces 1 coffee per second.");
+                view.setMessageText("Barista\n[price: " + model.getBaristaPrice() + "]\nProduces 1 coffee every 2 seconds.");
             }
-        } else if (src.equals("MYSTERYBUTTON")) {
-            view.setMessageText("This item is currently locked!");
+        } else if ("CAFEBUTTON".equals(name)) {
+            if (!model.isCafeUnlocked()) {
+                view.setMessageText("This item is currently locked!");
+            } else {
+                view.setMessageText("Cafe\n[price: " + model.getCafePrice() + "]\nProduces 1 coffee every second.");
+            }
         }
     }
 
@@ -155,7 +180,7 @@ public class GameController implements ActionListener, MouseListener, Runnable {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GameManager model = new GameManager();
+            GameManager model = new GameManager(12);
             GameView view = new GameView();
             new GameController(model, view);
         });

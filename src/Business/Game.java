@@ -1,21 +1,18 @@
 package Business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
 
     private int gameID;
     private String name;
     private float coffee;
 
-    private int numA;
-    private int numB;
-    private int numC;
+    private int numCoffeeMachine;
+    private int numBarista;
+    private int numCafe;
 
-    private int numUpgradeA;
-    private int numUpgradeB;
-    private int numUpgradeC;
+    private int numUpgradeCoffeeMachine;
+    private int numUpgradeBarista;
+    private int numUpgradeCafe;
 
     private boolean hasEnded;
 
@@ -24,12 +21,12 @@ public class Game {
         this.gameID = gameID;
         this.name = "Partida " + gameID;
         this.coffee = 0;
-        this.numA = 0;
-        this.numB = 0;
-        this.numC = 0;
-        this.numUpgradeA = 0;
-        this.numUpgradeB = 0;
-        this.numUpgradeC = 0;
+        this.numCoffeeMachine = 0;
+        this.numBarista = 0;
+        this.numCafe = 0;
+        this.numUpgradeCoffeeMachine = 0;
+        this.numUpgradeBarista = 0;
+        this.numUpgradeCafe = 0;
         this.hasEnded = false;
     }
 
@@ -40,15 +37,15 @@ public class Game {
 
     // Métodos para incrementar generadores
     public void increaseGeneratorCoffeeMachine() {
-        numA++;
+        numCoffeeMachine++;
     }
 
     public void increaseGeneratorBarista() {
-        numB++;
+        numBarista++;
     }
 
     public void increaseGeneratorCafe() {
-        numC++;
+        numCafe++;
     }
 
     // Métodos para añadir café
@@ -58,42 +55,42 @@ public class Game {
 
     // Métodos para upgrades
     public void increaseUpgradeCoffeeMachine() {
-        numUpgradeA++;
+        numUpgradeCoffeeMachine++;
     }
 
     public void increaseUpgradeBarista() {
-        numUpgradeB++;
+        numUpgradeBarista++;
     }
 
     public void increaseUpgradeCafe() {
-        numUpgradeC++;
+        numUpgradeCafe++;
     }
 
     // CANVIAR UNA VEZ ESTAN HECHOS BIEN LOS GENERADORES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public int getCoffeeMachinePrice() {
-        return 100 + (numA * 20);
+        return 100 + (numCoffeeMachine * 20);
         //return (int) Math.round(cursorPriceBase * Math.pow(1.07, cursorNumber));
     }
 
     public int getBaristaPrice() {
-        return 150 + (numB * 30);
+        return 150 + (numBarista * 30);
         // return (int) Math.round(grandpaPriceBase * Math.pow(1.15, grandpaNumber));
     }
 
     public int getCafePrice() {
-        return 200 + (numC * 40);
+        return 200 + (numCafe * 40);
     }
 
     public int getCoffeeMachineUpgradePrice() {
-        return 75 + (numUpgradeA * 25);
+        return 75 + (numUpgradeCoffeeMachine * 25);
     }
 
     public int getBaristaUpgradePrice() {
-        return 125 + (numUpgradeB * 35);
+        return 125 + (numUpgradeBarista * 35);
     }
 
     public int getCafeUpgradePrice() {
-        return 175 + (numUpgradeC * 45);
+        return 175 + (numUpgradeCafe * 45);
     }
 
     // Getters
@@ -111,5 +108,16 @@ public class Game {
 
     public boolean hasEnded() {
         return hasEnded;
+    }
+
+    public int getNumCoffeeMachine() {
+        return numCoffeeMachine;
+    }
+    public int getNumBarista() {
+        return numBarista;
+    }
+
+    public int getNumCafe(){
+        return numCafe;
     }
 }
