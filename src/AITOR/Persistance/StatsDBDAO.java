@@ -12,7 +12,7 @@ public class StatsDBDAO {
 
     //HACEN FALTA CAMBIOS EN LA BBDD PARA QUE FUNCIONE, EJ: MINUTO EN STATS ESTA COMO MINUBO
     public ResultSet getStatsByGameId(int gameID){
-        String query = "Select * FROM stats WHERE IdPartida=?";
+        String query = "Select * FROM stats WHERE IdPartida=? ORDER BY Minuto ASC";
         ArrayList<String> valores = new ArrayList<String>();
         valores.add(String.valueOf(gameID));
         ArrayList<String> tipos = new ArrayList<String>();
