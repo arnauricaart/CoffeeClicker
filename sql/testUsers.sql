@@ -20,6 +20,12 @@ insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) 
 insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (15, 'ffdf' ,1230, 'tassani@gmail.com', false, NOW());
 insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (16, 'fdfdf' ,870, 'tassani@gmail.com', false, NOW());
 
+/*acabades*/
+insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (17, 'Amapola', 30, 'tassani@gmail.com', true, NOW());
+insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (18, 'rei', 12, 'tassani@gmail.com', true, NOW());
+insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (19, 'fdfd', 330, 'tassani@gmail.com', true, NOW());
+insert into partida (IdPartida, Nombre, Cafes, Correo, Terminada, UltimoAcceso) values (20, 'iaa', 3450, 'tassani@gmail.com', true, NOW());
+
 /*
 CREATE USER 'root'@'%' IDENTIFIED BY 'hola';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;

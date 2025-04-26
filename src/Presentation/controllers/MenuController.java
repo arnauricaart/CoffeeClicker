@@ -1,14 +1,19 @@
 package Presentation.controllers;
+import Business.Game;
 import Persitence.ConstraintException;
 import Persitence.GameDBDAO;
+import Persitence.SimuladorDePartidasDAO;
 import Persitence.UserDAO;
 import Presentation.views.*;
+
+import javax.swing.*;
+import java.util.List;
 
 
 public class MenuController {
     private MenuGUI menuView;
     private NewGameView newGameView;
-    private ContinueGameView continueGameView;
+    private ShowGamesView showGamesView;
     private RemoveAccountView removeAccountView;
     private UserDAO userDAO;
     private GameDBDAO gameDBDAO;
@@ -22,7 +27,7 @@ public class MenuController {
 
     public void initController() {
         menuView.setNewGameButtonListener(e -> startNewGame());
-        menuView.setStatisticsButtonListener(e -> showStatistics());
+        menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
         menuView.setContinueGameButtonListener(e -> selectGameToContinue());
@@ -31,15 +36,30 @@ public class MenuController {
     }
 
     private void startNewGame() {
-
         newGameView = new NewGameView();
         newGameView.setNewGameButtonListener(e -> newGame());
         newGameView.setCancelButtonListener(e -> newGameView.dispose());
         newGameView.setVisible(true);
     }
 
-    private void showStatistics() {
-        // Lógica para mostrar las estadísticas del juego
+    private void selectGameToShowStats() {
+        showGamesView = new ShowGamesView(gameDBDAO.getGamesFinishedByUser(correo), true);
+        showGamesView.setShowStatsActionListener(e ->{
+            int currentPartidaId = showGamesView.getCurrentPartidaId();
+            if (currentPartidaId != -1) {
+                openStatsForGame(currentPartidaId);
+            }
+        });
+        showGamesView.setVisible(true);
+    }
+
+    private void openStatsForGame(int gameId) {
+        List<Game> partidasFinalidas = SimuladorDePartidasDAO.obtenerPartidasFinalizadas();
+        List<Integer> cafesPorMinuto = partidasFinalidas.get(0).getCoffeePerMinute().stream().map(f -> f.intValue()).toList();
+        CafeStatsChart statsChart = new CafeStatsChart(cafesPorMinuto);
+        statsChart.setSize(800, 600);
+        statsChart.setLocationRelativeTo(null);
+        statsChart.setVisible(true);
     }
 
     private void logout() {
@@ -65,10 +85,11 @@ public class MenuController {
     }
 
     private void selectGameToContinue() {
-        continueGameView = new ContinueGameView(gameDBDAO.getGamesNotFinishedByUser(correo));
-        continueGameView.addDeleteActionListener(e -> gameDBDAO.removeGame(continueGameView.getCurrentPartida()));
-        continueGameView.setVisible(true);
+        showGamesView = new ShowGamesView(gameDBDAO.getGamesNotFinishedByUser(correo), false);
+        showGamesView.addDeleteActionListener(e -> gameDBDAO.removeGame(showGamesView.getCurrentPartidaId()));
+        showGamesView.setVisible(true);
     }
+
     private void newGame() {
         String name = newGameView.getNewGameName();
         try{

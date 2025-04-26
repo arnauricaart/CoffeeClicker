@@ -1,5 +1,8 @@
 package Business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 
     private int gameID;
@@ -14,7 +17,10 @@ public class Game {
     private int numUpgradeBarista;
     private int numUpgradeCafe;
 
+    private String lastAccess;
     private boolean hasEnded;
+
+    private List<Float> coffeePerMinute;
 
     // Constructor
     public Game(int gameID) {
@@ -28,6 +34,7 @@ public class Game {
         this.numUpgradeBarista = 0;
         this.numUpgradeCafe = 0;
         this.hasEnded = false;
+        this.coffeePerMinute = new ArrayList<>();
     }
 
     // Terminar partida
@@ -119,5 +126,16 @@ public class Game {
 
     public int getNumCafe(){
         return numCafe;
+    }
+
+    public String getLastAccess() {return lastAccess; }
+
+    // --- NUEVO: Registro de café por minuto para gráficas ---
+    public void recordMinute() {
+        coffeePerMinute.add(coffee);
+    }
+
+    public List<Float> getCoffeePerMinute() {
+        return coffeePerMinute;
     }
 }

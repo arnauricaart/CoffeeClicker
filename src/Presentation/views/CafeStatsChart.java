@@ -1,4 +1,4 @@
-package HECTOR;
+package Presentation.views;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

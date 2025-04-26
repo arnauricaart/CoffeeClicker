@@ -1,5 +1,6 @@
 package Persitence;
 
+import Business.Game;
 import Business.GameData;
 
 import java.sql.Date;
@@ -13,6 +14,31 @@ import java.util.List;
 public class GameDBDAO {
     public GameDBDAO() {
 
+    }
+    public List<GameData> getGamesFinishedByUser(String correo){
+        List<GameData> games = new ArrayList<>();
+
+        String query = "SELECT * FROM partida  WHERE correo =? AND Terminada = 1";
+        ArrayList<String> values = new ArrayList<String>();
+        ArrayList<String> tipos = new ArrayList<String>();
+
+        values.add(correo);
+        tipos.add("String");
+
+        ResultSet res = SQL_CRUD.Select(query,values,tipos);
+        while(true){
+            try {
+                if (!res.next()) break;
+                Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String formatedDate = formato.format(ultimoAcceso);
+                games.add(new GameData(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return games;
     }
 
     public List<GameData> getGamesNotFinishedByUser(String correo){
