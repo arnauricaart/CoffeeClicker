@@ -20,9 +20,9 @@ public class SQL_CRUD {
                 if (tipos.get(i).equals("String")){
                     pst.setString(i +1,values.get(i));
                 } else if (tipos.get(i).equals("int")){
-                    pst.setInt(i,Integer.parseInt(values.get(i)));
+                    pst.setInt(i+1,Integer.parseInt(values.get(i)));
                 } else if (tipos.get(i).equals("float")){
-                    pst.setDouble(i, Double.parseDouble(values.get(i)));
+                    pst.setDouble(i+1, Double.parseDouble(values.get(i)));
                 }
             }
             res = pst.executeQuery();

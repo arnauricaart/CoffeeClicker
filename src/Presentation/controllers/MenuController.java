@@ -1,9 +1,6 @@
 package Presentation.controllers;
 import Business.Game;
-import Persitence.ConstraintException;
-import Persitence.GameDBDAO;
-import Persitence.SimuladorDePartidasDAO;
-import Persitence.UserDAO;
+import Persitence.*;
 import Presentation.views.*;
 
 import javax.swing.*;
@@ -17,6 +14,7 @@ public class MenuController {
     private RemoveAccountView removeAccountView;
     private UserDAO userDAO;
     private GameDBDAO gameDBDAO;
+    private StatsDBDAO statsDBDAO;
     private String correo;
 
 
@@ -33,6 +31,7 @@ public class MenuController {
         menuView.setContinueGameButtonListener(e -> selectGameToContinue());
         userDAO = new UserDAO();
         gameDBDAO = new GameDBDAO();
+        statsDBDAO = new StatsDBDAO();
     }
 
     private void startNewGame() {
@@ -54,8 +53,7 @@ public class MenuController {
     }
 
     private void openStatsForGame(int gameId) {
-        List<Game> partidasFinalidas = SimuladorDePartidasDAO.obtenerPartidasFinalizadas();
-        List<Integer> cafesPorMinuto = partidasFinalidas.get(0).getCoffeePerMinute().stream().map(f -> f.intValue()).toList();
+        List<Integer> cafesPorMinuto = statsDBDAO.getStatsByGameId(gameId);
         CafeStatsChart statsChart = new CafeStatsChart(cafesPorMinuto);
         statsChart.setSize(800, 600);
         statsChart.setLocationRelativeTo(null);
