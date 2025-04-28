@@ -1,5 +1,4 @@
-package Persitence;
-import Persitence.Singleton;
+package Persistence;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

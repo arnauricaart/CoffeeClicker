@@ -1,9 +1,7 @@
-package Persitence;
+package Persistence;
 
-import Business.Game;
 import Business.GameData;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,10 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameDBDAO {
+public class GameDBDAO implements GameDAO{
     public GameDBDAO() {
 
     }
+
     public List<GameData> getGamesFinishedByUser(String correo){
         List<GameData> games = new ArrayList<>();
 

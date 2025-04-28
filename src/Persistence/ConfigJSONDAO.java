@@ -1,10 +1,10 @@
-package Persitence;
+package Persistence;
 import java.io.FileReader;
 import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class ConfigJSONDAO implements ConfigDAO{
+public class ConfigJSONDAO {
     private final String CONFIG_PATH = "data/ConfigurationFile.json";
     private JsonObject config;
 

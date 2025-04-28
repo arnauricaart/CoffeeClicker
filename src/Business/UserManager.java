@@ -1,12 +1,13 @@
 package Business;
 
-import Persitence.UserDAO;
+import Persistence.UserDAO;
+import Persistence.UserDBDAO;
 
 public class UserManager {
     private UserDAO userDAO;
 
     public UserManager() {
-        this.userDAO = new UserDAO();
+        this.userDAO = new UserDBDAO();
     }
 
     public boolean register(String username, String email, String password) {

@@ -1,4 +1,4 @@
-package Persitence;
+package Persistence;
 
 public class ConstraintException extends RuntimeException {
     public ConstraintException(Exception e) {

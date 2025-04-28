@@ -1,4 +1,4 @@
-package Persitence;
+package Persistence;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package Persitence;
+package Persistence;
 
 import Business.Game;
 

@@ -1,7 +1,3 @@
-import Persitence.ConfigJSONDAO;
-import Persitence.ConfigDAO;
-import Presentation.views.MenuGUI;
-import Presentation.controllers.MenuController;
 import Presentation.controllers.LoginController;
 import javax.swing.SwingUtilities;
 

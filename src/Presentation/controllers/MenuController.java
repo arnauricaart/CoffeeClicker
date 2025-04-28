@@ -1,9 +1,7 @@
 package Presentation.controllers;
-import Business.Game;
-import Persitence.*;
+import Persistence.*;
 import Presentation.views.*;
 
-import javax.swing.*;
 import java.util.List;
 
 
@@ -12,7 +10,7 @@ public class MenuController {
     private NewGameView newGameView;
     private ShowGamesView showGamesView;
     private RemoveAccountView removeAccountView;
-    private UserDAO userDAO;
+    private UserDBDAO userDAO;
     private GameDBDAO gameDBDAO;
     private StatsDBDAO statsDBDAO;
     private String correo;
@@ -29,7 +27,7 @@ public class MenuController {
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
         menuView.setContinueGameButtonListener(e -> selectGameToContinue());
-        userDAO = new UserDAO();
+        userDAO = new UserDBDAO();
         gameDBDAO = new GameDBDAO();
         statsDBDAO = new StatsDBDAO();
     }

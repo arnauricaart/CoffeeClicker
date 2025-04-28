@@ -1,4 +1,4 @@
-package Persitence;
+package Persistence;
 import java.sql.*;
 
 public final class Singleton {
@@ -9,7 +9,7 @@ public final class Singleton {
     private Connection conn;
 
     private Singleton() {
-        ConfigDAO config = new ConfigJSONDAO();
+        ConfigJSONDAO config = new ConfigJSONDAO();
         String url = "jdbc:mysql://" + config.getDatabaseHost() + ":" + config.getDatabasePort() + "/" + config.getDatabaseName();
         String driver = "com.mysql.cj.jdbc.Driver";
         String usuario = config.getDatabaseUser();

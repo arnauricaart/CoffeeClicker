@@ -1,7 +1,10 @@
 package MARIA;
 import Business.Game;
+import Persistence.GameDBDAO;
+import Persistence.UserDAO;
+import Persistence.UserDBDAO;
 
-public class GameManager {
+public class GameManager{
     private double coffeeCounter;
     private int coffeeMachineNumber;
     private int baristaNumber;
@@ -12,6 +15,8 @@ public class GameManager {
     private final int baristaPriceBase = 150;
     private final int cafePriceBase = 150;
     private double perSecond;
+
+    private UserDAO userDAO = new UserDBDAO();
     
     // Provisional, se tendrá que cambiar. Game ID inventado
     private Game game = new Game(12);

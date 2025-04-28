@@ -1,10 +1,10 @@
-package Persitence;
+package Persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UserDAO {
+public class UserDBDAO implements UserDAO{
 
     public boolean removeUserAndData(String email){
         System.out.println("Remove user");
