@@ -1,8 +1,10 @@
 package MARIA;
-import Business.Game;
+import Business.Entities.Game;
+import Business.GameData;
+import Persistence.GameDAO;
 import Persistence.GameDBDAO;
-import Persistence.UserDAO;
-import Persistence.UserDBDAO;
+
+import java.util.List;
 
 public class GameManager{
     private double coffeeCounter;
@@ -15,11 +17,8 @@ public class GameManager{
     private final int baristaPriceBase = 150;
     private final int cafePriceBase = 150;
     private double perSecond;
-
-    private UserDAO userDAO = new UserDBDAO();
-    
-    // Provisional, se tendrá que cambiar. Game ID inventado
-    private Game game = new Game(12);
+    private GameDAO gameDAO;
+    private Game game;
 
     public GameManager(int ID) {
         coffeeCounter = 0;
@@ -29,8 +28,21 @@ public class GameManager{
         baristaUnlocked = false;
         cafeUnlocked = false;
         perSecond = 0.0;
-        // gameDAO.getGameByID();
+        // no asignamos game aún
+
     }
+
+    // la función se llama desde el controller cuando se clica "new game" o "continue game"
+    public void startNewGame(String userName, String email) {
+        gameDAO.insertGame(userName, email); // tendría que devolver el ID o que devuelva game
+        // Falta asignar game
+    }
+
+    public void continueGame(String email) {
+        //resultSet? game = getGameById(String gameID);
+        // game =  getGamesNotFinishedByUser(email);
+
+        }
 
     // cambiar
     public void addCoffee(double amount) {

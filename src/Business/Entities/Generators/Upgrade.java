@@ -1,4 +1,4 @@
-package Business.Generators;
+package Business.Entities.Generators;
 
 public abstract class Upgrade {
     private float basePrice;

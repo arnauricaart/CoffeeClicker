@@ -1,6 +1,6 @@
 package Persistence;
 
-import Business.Game;
+import Business.Entities.Game;
 
 import java.util.List;
 import java.util.ArrayList;
