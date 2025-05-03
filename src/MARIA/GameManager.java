@@ -21,6 +21,7 @@ public class GameManager{
     private Game game;
 
     public GameManager(int ID) {
+        gameDAO = new GameDBDAO();
         coffeeCounter = 0;
         coffeeMachineNumber = 0;
         baristaNumber = 0;

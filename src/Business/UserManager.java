@@ -28,4 +28,13 @@ public class UserManager {
     public String getCorreoFromLogin(String input, String password) {
         return userDAO.getCorreoFromLogin(input, password);
     }
+
+    public boolean checkUserExists(String username){
+        return userDAO.checkUserExists(username);
+    }
+
+    public boolean removeUserAndData(String email){
+        return userDAO.removeUserAndData(email);
+    }
+
 }
