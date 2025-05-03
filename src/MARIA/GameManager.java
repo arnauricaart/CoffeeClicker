@@ -1,6 +1,7 @@
 package MARIA;
 import Business.Entities.Game;
 import Persistence.GameDAO;
+import Persistence.GameDBDAO;
 
 public class GameManager{
     private double coffeeCounter;
