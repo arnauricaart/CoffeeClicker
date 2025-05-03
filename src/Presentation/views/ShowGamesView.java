@@ -1,6 +1,6 @@
 package Presentation.views;
 
-import Business.GameData;
+import Business.Entities.Game;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,7 +20,7 @@ public class ShowGamesView extends JFrame {
     private JButton deleteButton;
     private ActionListener showStatsActionListener;
 
-    public ShowGamesView(List<GameData> games, boolean isFinishedGames) {
+    public ShowGamesView(List<Game> games, boolean isFinishedGames) {
         setTitle("Continue Game");
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -35,8 +35,8 @@ public class ShowGamesView extends JFrame {
             }
         };
 
-        for (GameData game : games) {
-            Object[] row = {game.getId(), game.getNombre(), game.getCoffees(), game.getUltimoAcceso()};
+        for (Game game : games) {
+            Object[] row = {game.getGameID(), game.getName(), game.getCoffees(), game.getLastAccess()};
             tableModel.addRow(row);
         }
 

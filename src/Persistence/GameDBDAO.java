@@ -1,6 +1,6 @@
 package Persistence;
 
-import Business.GameData;
+import Business.Entities.Game;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +14,8 @@ public class GameDBDAO implements GameDAO{
 
     }
 
-    public List<GameData> getGamesFinishedByUser(String correo){
-        List<GameData> games = new ArrayList<>();
+    public List<Game> getGamesFinishedByUser(String correo){
+        List<Game> games = new ArrayList<>();
 
         String query = "SELECT * FROM partida  WHERE correo =? AND Terminada = 1";
         ArrayList<String> values = new ArrayList<String>();
@@ -31,7 +31,7 @@ public class GameDBDAO implements GameDAO{
                 Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
                 SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String formatedDate = formato.format(ultimoAcceso);
-                games.add(new GameData(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
+                games.add(new Game(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -40,7 +40,7 @@ public class GameDBDAO implements GameDAO{
         return games;
     }
 
-    public List<GameData> getGamesNotFinishedByUser(String correo){
+    public List<Game> getGamesNotFinishedByUser(String correo){
         String query = "SELECT * FROM partida  WHERE correo =? AND Terminada = 0";
         ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> tipos = new ArrayList<String>();
@@ -49,14 +49,14 @@ public class GameDBDAO implements GameDAO{
         tipos.add("String");
 
         ResultSet res = SQL_CRUD.Select(query,values,tipos);
-        List<GameData> games = new ArrayList<>();
+        List<Game> games = new ArrayList<>();
         while(true){
             try {
                 if (!res.next()) break;
                 Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
                 SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String formatedDate = formato.format(ultimoAcceso);
-                games.add(new GameData(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
+                games.add(new Game(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

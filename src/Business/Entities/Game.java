@@ -7,7 +7,7 @@ public class Game {
 
     private int gameID;
     private String name;
-    private float coffee;
+    private int coffee;
 
     private int numCoffeeMachine;
     private int numBarista;
@@ -19,8 +19,6 @@ public class Game {
 
     private String lastAccess;
     private boolean hasEnded;
-
-    private List<Float> coffeePerMinute;
 
     // Constructor
     public Game(int gameID) {
@@ -34,7 +32,12 @@ public class Game {
         this.numUpgradeBarista = 0;
         this.numUpgradeCafe = 0;
         this.hasEnded = false;
-        this.coffeePerMinute = new ArrayList<>();
+    }
+    public Game(int gameID, String name, int coffees, String lastAccess) {
+        this.gameID = gameID;
+        this.name = name;
+        this.coffee = coffees;
+        this.lastAccess = lastAccess;
     }
 
     // Terminar partida
@@ -56,7 +59,7 @@ public class Game {
     }
 
     // Métodos para añadir café
-    public void addCoffee(double amount) {
+    public void addCoffee(int amount) {
         this.coffee += amount;
     }
 
@@ -109,7 +112,7 @@ public class Game {
         return gameID;
     }
 
-    public float getCoffees() {
+    public int getCoffees() {
         return coffee;
     }
 
@@ -129,13 +132,4 @@ public class Game {
     }
 
     public String getLastAccess() {return lastAccess; }
-
-    // --- NUEVO: Registro de café por minuto para gráficas ---
-    public void recordMinute() {
-        coffeePerMinute.add(coffee);
-    }
-
-    public List<Float> getCoffeePerMinute() {
-        return coffeePerMinute;
-    }
 }

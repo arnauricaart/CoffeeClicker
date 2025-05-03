@@ -1,15 +1,14 @@
 package Persistence;
 
-import Business.GameData;
+import Business.Entities.Game;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface GameDAO {
-    public List<GameData> getGamesFinishedByUser(String correo);
+    public List<Game> getGamesFinishedByUser(String correo);
 
-    public List<GameData> getGamesNotFinishedByUser(String correo);
+    public List<Game> getGamesNotFinishedByUser(String correo);
 
     public ResultSet getGameById(String gameID);
 
