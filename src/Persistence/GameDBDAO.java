@@ -64,17 +64,26 @@ public class GameDBDAO implements GameDAO{
         return games;
     }
 
-    public ResultSet getGameById(String gameID){
+    public Game getGameById(String gameID){
         String query = "SELECT * FROM partida WHERE IdPartida=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(gameID);
         ArrayList<String> tipos = new ArrayList<String>();
         tipos.add("int");
-        ResultSet res = SQL_CRUD.Select(query,values,tipos);
-        return res;
+
+        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+
+        try {
+            if(rs.next()){
+                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public ResultSet getGameByNameAndGame(String gameName, String userId){
+    public Game getGameByNameAndGame(String gameName, String userId){
         String query = "SELECT * FROM partida WHERE NombrePartida=? AND Nombre=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(gameName);
@@ -82,18 +91,25 @@ public class GameDBDAO implements GameDAO{
         ArrayList<String> tipos = new ArrayList<String>();
         tipos.add("String");
         tipos.add("String");
-        ResultSet res = SQL_CRUD.Select(query,values,tipos);
-        return res;
+
+        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+        try {
+            if(rs.next()){
+                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
     public boolean removeGame(int gameID){
         System.out.println("Remove user");
         String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida =?";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
-
         values.add(Integer.toString(gameID)); types.add("int");
-
 
         int result = SQL_CRUD.CUD(queryPartidaGenerador, values, types);
 
@@ -115,8 +131,8 @@ public class GameDBDAO implements GameDAO{
         return result > 0;
     }
 
-
-    public void insertGame(String nombre, String correo) {
+    // Retorna el ID de la partida creada
+    public int insertGame(String nombre, String correo) {
         String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso) VALUES(?,0,?,0,Now())";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
@@ -124,6 +140,7 @@ public class GameDBDAO implements GameDAO{
         values.add(nombre); types.add("String");
         values.add(correo); types.add("String");
 
-        int result = SQL_CRUD.CUD(query, values, types);
+        int result = SQL_CRUD.CUDReturningNextval(query, values, types);
+        return result;
     }
 }

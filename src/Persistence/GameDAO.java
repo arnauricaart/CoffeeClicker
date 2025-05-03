@@ -10,11 +10,11 @@ public interface GameDAO {
 
     public List<Game> getGamesNotFinishedByUser(String correo);
 
-    public ResultSet getGameById(String gameID);
+    public Game getGameById(String gameID);
 
-    public ResultSet getGameByNameAndGame(String gameName, String userId);
+    public Game getGameByNameAndGame(String gameName, String userId);
 
     public boolean removeGame(int gameID);
 
-    public void insertGame(String nombre, String correo);
+    public int insertGame(String nombre, String correo);
 }

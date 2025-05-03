@@ -89,7 +89,7 @@ public class MenuController {
     private void newGame() {
         String name = newGameView.getNewGameName();
         try{
-            gameDBDAO.insertGame(name, correo);
+            int partidaID = gameDBDAO.insertGame(name, correo);
         } catch (ConstraintException e){
             if(e.getMessage().contains("partida_nombre_uk")){
                 newGameView.showDuplicateGameMessage();

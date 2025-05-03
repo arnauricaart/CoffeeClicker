@@ -32,13 +32,17 @@ public class SQL_CRUD {
         return res;
     }
 
-    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos){
+    private static PreparedStatement CUDpreparedStament(String query, ArrayList<String> values, ArrayList<String> tipos, boolean isInsert) {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
         int res;
         try {
             System.out.println(query);
-            pst = s1.getConn().prepareStatement(query);
+            if (isInsert) {
+                pst = s1.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            } else {
+                pst = s1.getConn().prepareStatement(query);
+            }
             for (int i = 0; i < values.size(); i++){
                 if (tipos.get(i).equals("String")){
                     pst.setString(i+1,values.get(i));
@@ -48,6 +52,16 @@ public class SQL_CRUD {
                     pst.setDouble(i +1, Double.parseDouble(values.get(i)));
                 }
             }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return pst;
+    }
+
+    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos){
+        int res;
+        try {
+            PreparedStatement pst = CUDpreparedStament(query,values,tipos, false);
             res = pst.executeUpdate();
         }catch (SQLIntegrityConstraintViolationException e){
             throw new ConstraintException(e);
@@ -55,6 +69,24 @@ public class SQL_CRUD {
             throw new RuntimeException(e);
         }
         return res;
+    }
+
+    public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos){
+        try {
+            PreparedStatement pst = CUDpreparedStament(query,values,tipos, true);
+            int res = pst.executeUpdate();
+            if (res > 0) {
+                ResultSet rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }catch (SQLIntegrityConstraintViolationException e){
+            throw new ConstraintException(e);
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        throw new RuntimeException("Error insertando en la base de datos");
     }
 }
 
