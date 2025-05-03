@@ -54,7 +54,7 @@ public class MenuController {
         List<Integer> cafesPorMinuto = statsDBDAO.getStatsByGameId(gameId);
         CafeStatsChart statsChart = new CafeStatsChart(cafesPorMinuto);
         statsChart.setSize(800, 600);
-        statsChart.setLocationRelativeTo(null);
+        //statsChart.setLocationRelativeTo(null);
         statsChart.setVisible(true);
     }
 
