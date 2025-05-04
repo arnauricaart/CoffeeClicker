@@ -7,13 +7,12 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class GameController implements ActionListener, MouseListener, Runnable {
+public class GameController implements ActionListener, MouseListener, GameUpdateListener {
 
     private GameManager model;
     private GameView view;
-    private Thread autoCoffeeThread;
-    private boolean running = true;
-    private boolean paused = false;
+
+
     //cantidad de cada uno de los generadores
 
     public GameController(GameManager model, GameView view) {
@@ -29,16 +28,24 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         view.addBaristaButtonMouseListener(this);
         view.addCafeButtonMouseListener(this);
         view.addPauseButtonListener(e -> togglePause());
+        view.addEndGameButtonListener(e -> endGame());
+
+        model.setGameUpdateListener(this);
 
         updateLabels();
-        run();
+        model.run();
     }
 
-    private void togglePause() {
-        paused = !paused;
-        view.setPauseButtonText(paused ? "Resume" : "Pause");
+    public void togglePause() {
+        model.pauseGame();
+        // Falta volver al menu
     }
 
+    // Falta poner el botón (en la view), el listener y que cuando se pulse llame a esta función
+    public void endGame(){
+        model.endGame();
+        // Falta volver al menu
+    }
 
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
@@ -54,36 +61,6 @@ public class GameController implements ActionListener, MouseListener, Runnable {
         });
     }
 
-    // cambiar a clase Generator
-    @Override
-    public void run() {
-        autoCoffeeThread = new Thread(() -> {
-            while (running) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                if (!paused) {
-                    model.addCoffee(model.getPerSecond());
-
-                    if (model.canUnlockBarista()) {
-                        model.unlockBarista();
-                    }
-
-                    if (model.canUnlockCafe()) {
-                        model.unlockCafe();
-                    }
-
-                    updateLabels();
-                }
-            }
-        });
-
-        autoCoffeeThread.setDaemon(true);
-        autoCoffeeThread.start();
-    }
 
     private void playSound(String path) {
         try {
@@ -178,6 +155,11 @@ public class GameController implements ActionListener, MouseListener, Runnable {
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
 
+    @Override
+    public void onGameUpdated() {
+        updateLabels();
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             GameManager model = new GameManager(12);
@@ -185,5 +167,7 @@ public class GameController implements ActionListener, MouseListener, Runnable {
             new GameController(model, view);
         });
     }
+
+
 }
 
