@@ -16,5 +16,5 @@ public interface GameDAO {
 
     public boolean removeGame(int gameID);
 
-    public int insertGame(String nombre, String correo);
+    public int insertGame(String gameName, String correo);
 }

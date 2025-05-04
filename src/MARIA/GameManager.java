@@ -31,8 +31,8 @@ public class GameManager{
     }
 
     // la función se llama desde el controller cuando se clica "new game" o "continue game"
-    public void startNewGame(String userName, String email) {
-        int partidaID = gameDAO.insertGame(userName, email); // tendría que devolver el ID o que devuelva game
+    public void startNewGame(String gameName, String email) {
+        int partidaID = gameDAO.insertGame(gameName, email); // tendría que devolver el ID o que devuelva game
         // Falta asignar game
     }
 

@@ -132,12 +132,12 @@ public class GameDBDAO implements GameDAO{
     }
 
     // Retorna el ID de la partida creada
-    public int insertGame(String nombre, String correo) {
+    public int insertGame(String gameName, String correo) {
         String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso) VALUES(?,0,?,0,Now())";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
-        values.add(nombre); types.add("String");
+        values.add(gameName); types.add("String");
         values.add(correo); types.add("String");
 
         int result = SQL_CRUD.CUDReturningNextval(query, values, types);
