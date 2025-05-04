@@ -16,8 +16,6 @@ import java.util.List;
 public class ShowGamesView extends JFrame {
 
     private JTable gameTable;
-    private JButton loadButton;
-    private JButton deleteButton;
     private ActionListener showStatsActionListener;
 
     public ShowGamesView(List<Game> games, boolean isFinishedGames) {
@@ -54,27 +52,14 @@ public class ShowGamesView extends JFrame {
         TableColumn hiddenColumn = columnModel.getColumn(0);
         columnModel.removeColumn(hiddenColumn);
 
-
-        // Acción de doble clic para cargar partida o mostrar estadisticas
-        if (!isFinishedGames) {
-            gameTable.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getClickCount() == 2 && gameTable.getSelectedRow() != -1) {
-                        loadSelectedGame();
-                    }
+        gameTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && gameTable.getSelectedRow() != -1) {
+                    showStatsActionListener.actionPerformed(null);
                 }
-            });
-        } else {
-            gameTable.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getClickCount() == 2 && gameTable.getSelectedRow() != -1) {
-                        showStatsActionListener.actionPerformed(null);
-                    }
-                }
-            });
-        }
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(gameTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -83,57 +68,7 @@ public class ShowGamesView extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 10));
 
-        if(!isFinishedGames){
-            loadButton = new JButton("Continue game");
-            deleteButton = new JButton("Remove game");
-
-            // Acción de cargar partida (igual que doble clic)
-            loadButton.addActionListener(e -> {
-                if (gameTable.getSelectedRow() != -1) {
-                    loadSelectedGame();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Select a game first.");
-                }
-            });
-
-            // Acción de eliminar partida
-            deleteButton.addActionListener(e -> {
-                if (gameTable.getSelectedRow() != -1) {
-                    int selectedRow = gameTable.getSelectedRow();
-                    String gameName = (String)gameTable.getValueAt(selectedRow, 0);
-
-                    // Aquí deberías llamar al controlador para eliminar la partida
-                    JOptionPane.showMessageDialog(this,
-                            "Partida con ID " + gameName + " eliminada.",
-                            "Eliminar Partida",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    // Quitar del modelo de tabla
-                    ((DefaultTableModel) gameTable.getModel()).removeRow(selectedRow);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Select a game first.");
-                }
-            });
-
-            buttonPanel.add(loadButton);
-            buttonPanel.add(deleteButton);
-        }
-
         add(buttonPanel, BorderLayout.SOUTH);
-    }
-
-    private void loadSelectedGame() {
-        int selectedRow = gameTable.getSelectedRow();
-        if (selectedRow != -1) {
-            String gameName = (String)gameTable.getValueAt(selectedRow, 0);
-            int coffees = (int) gameTable.getValueAt(selectedRow, 1);
-
-            // Aquí puedes llamar al controlador para cargar la partida
-            JOptionPane.showMessageDialog(this,
-                    "Cargando partida con nombre: " + gameName + " (" + coffees + " coffees) e Id:" + getCurrentPartidaId(),
-                    "Continuar Partida",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
     }
     public void addDeleteActionListener(ActionListener l) {
         deleteButton.addActionListener(l);

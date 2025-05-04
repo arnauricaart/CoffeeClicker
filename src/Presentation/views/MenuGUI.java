@@ -13,7 +13,6 @@ public class MenuGUI extends JFrame {
     private JButton statisticsButton;
     private JButton logoutButton;
     private JButton deleteAccountButton;
-    private JButton continueGameButton;
 
     public MenuGUI() {
         setTitle("Coffee Clicker");
@@ -57,15 +56,12 @@ public class MenuGUI extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
         centerPanel.add(titleLabel);
 
-        newGameButton = createStyledButton("NEW GAME");
-        statisticsButton = createStyledButton("STATISTICS OF GAME");
+        newGameButton = createStyledButton("PLAY");
+        statisticsButton = createStyledButton("STATISTICS");
         logoutButton = createStyledButton("LOGOUT");
         deleteAccountButton = createStyledButton("DELETE ACCOUNT");
-        continueGameButton = createStyledButton("GAMES");
 
         centerPanel.add(newGameButton);
-        centerPanel.add(Box.createVerticalStrut(15));
-        centerPanel.add(continueGameButton);
         centerPanel.add(Box.createVerticalStrut(15));
         centerPanel.add(statisticsButton);
 
@@ -140,9 +136,6 @@ public class MenuGUI extends JFrame {
 
     public void setDeleteAccountButtonListener(java.awt.event.ActionListener l) {
         deleteAccountButton.addActionListener(l);
-    }
-    public void setContinueGameButtonListener(java.awt.event.ActionListener l) {
-        continueGameButton.addActionListener(l);
     }
 
 }

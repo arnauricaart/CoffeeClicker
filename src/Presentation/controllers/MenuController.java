@@ -26,7 +26,6 @@ public class MenuController {
         menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
-        menuView.setContinueGameButtonListener(e -> selectGameToContinue());
         userDAO = new UserDBDAO();
         gameDBDAO = new GameDBDAO();
         statsDBDAO = new StatsDBDAO();
@@ -77,19 +76,12 @@ public class MenuController {
         removeAccountView.setRemoveAccButtonListener(e -> removeAccountFromDatabase());
         removeAccountView.setCancelButtonListener(e -> removeAccountView.dispose());
         removeAccountView.setVisible(true);
-
-    }
-
-    private void selectGameToContinue() {
-        showGamesView = new ShowGamesView(gameDBDAO.getGamesNotFinishedByUser(correo), false);
-        showGamesView.addDeleteActionListener(e -> gameDBDAO.removeGame(showGamesView.getCurrentPartidaId()));
-        showGamesView.setVisible(true);
     }
 
     private void newGame() {
         String name = newGameView.getNewGameName();
         try{
-            int partidaID = gameDBDAO.insertGame(name, correo);
+            gameDBDAO.insertGame(name, correo);
         } catch (ConstraintException e){
             if(e.getMessage().contains("partida_nombre_uk")){
                 newGameView.showDuplicateGameMessage();
