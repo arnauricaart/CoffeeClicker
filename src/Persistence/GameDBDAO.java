@@ -26,7 +26,7 @@ public class GameDBDAO implements GameDAO{
             try {
                 if (!res.next()) break;
                 Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 String formatedDate = formato.format(ultimoAcceso);
                 games.add(new Game(res.getInt("IdPartida"), res.getString("UserName"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {

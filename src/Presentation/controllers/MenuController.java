@@ -58,10 +58,7 @@ public class MenuController {
 
     private void openStatsForGame(int gameId) {
         List<Integer> cafesPorMinuto = statsDBDAO.getStatsByGameId(gameId);
-        CafeStatsChart statsChart = new CafeStatsChart(cafesPorMinuto);
-        statsChart.setSize(800, 600);
-        //statsChart.setLocationRelativeTo(null);
-        statsChart.setVisible(true);
+        showGamesView.updateStatsChart(cafesPorMinuto);
     }
 
     private void logout() {

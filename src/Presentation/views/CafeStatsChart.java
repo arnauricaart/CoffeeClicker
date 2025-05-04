@@ -61,7 +61,7 @@ public class CafeStatsChart extends JPanel {
         g2.setColor(Color.BLACK);
         for (int i = 0; i < data.size(); i++) {
             int x = leftMargin + i * stepX;
-            String label = (i + 1) + "m";
+            String label = String.valueOf(i + 1);
             g2.drawString(label, x - 10, height - bottomMargin + 20);
         }
 

@@ -28,14 +28,20 @@ public class ShowGamesView extends JFrame {
     private ActionListener searchActionListener;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
+    private JPanel statsPanel;
+    private JSplitPane splitPane;
 
     public ShowGamesView(List<Game> games, boolean isFinishedGames) {
-        setTitle("Continue Game");
-        setSize(600, 500);
+        setTitle("Game Statistics");
+        setSize(1200, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Create left panel for game list
+        JPanel leftPanel = new JPanel(new BorderLayout());
+
+        // Search panel
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
@@ -51,10 +57,10 @@ public class ShowGamesView extends JFrame {
         searchPanel.add(gameSearchField);
         searchPanel.add(searchButton);
         
-        add(searchPanel, BorderLayout.NORTH);
+        leftPanel.add(searchPanel, BorderLayout.NORTH);
 
         // Table setup
-        String[] columnNames = {"IdPartida", "User name", "Player name", "Coffees", "Last Access"};
+        String[] columnNames = {"IdPartida", "User name", "Game name", "Coffees", "Last Access"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -105,19 +111,28 @@ public class ShowGamesView extends JFrame {
         gameTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && gameTable.getSelectedRow() != -1) {
+                if (gameTable.getSelectedRow() != -1) {
                     showStatsActionListener.actionPerformed(null);
                 }
             }
         });
 
         JScrollPane scrollPane = new JScrollPane(gameTable);
-        add(scrollPane, BorderLayout.CENTER);
+        leftPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel de botones
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 10));
-        add(buttonPanel, BorderLayout.SOUTH);
+        // Create right panel for stats
+        statsPanel = new JPanel(new BorderLayout());
+        statsPanel.setBackground(Color.WHITE);
+        JLabel placeholderLabel = new JLabel("Select a game to view statistics", SwingConstants.CENTER);
+        placeholderLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        statsPanel.add(placeholderLabel, BorderLayout.CENTER);
+
+        // Create split pane
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, statsPanel);
+        splitPane.setDividerLocation(600);
+        splitPane.setResizeWeight(0.5);
+        
+        add(splitPane, BorderLayout.CENTER);
     }
 
     public void updateTableData(List<Game> games) {
@@ -126,6 +141,14 @@ public class ShowGamesView extends JFrame {
             Object[] row = {game.getGameID(), game.getUserName(), game.getName(), game.getCoffees(), game.getLastAccess()};
             tableModel.addRow(row);
         }
+    }
+
+    public void updateStatsChart(List<Integer> cafesPorMinuto) {
+        statsPanel.removeAll();
+        CafeStatsPanel statsChart = new CafeStatsPanel(cafesPorMinuto);
+        statsPanel.add(statsChart, BorderLayout.CENTER);
+        statsPanel.revalidate();
+        statsPanel.repaint();
     }
 
     public String getUserSearchText() {
@@ -148,7 +171,7 @@ public class ShowGamesView extends JFrame {
     public int getCurrentPartidaId(){
         int selectedRow = gameTable.getSelectedRow();
         if (selectedRow != -1) {
-            int modelRow= gameTable.convertRowIndexToModel(selectedRow);
+            int modelRow = gameTable.convertRowIndexToModel(selectedRow);
             Integer hiddenValue = (Integer) gameTable.getModel().getValueAt(modelRow, 0);
             return hiddenValue;
         }
@@ -188,5 +211,4 @@ public class ShowGamesView extends JFrame {
             return c;
         }
     }
-
 }
