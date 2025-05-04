@@ -70,9 +70,7 @@ public class ShowGamesView extends JFrame {
 
         add(buttonPanel, BorderLayout.SOUTH);
     }
-    public void addDeleteActionListener(ActionListener l) {
-        deleteButton.addActionListener(l);
-    }
+
     public int getCurrentPartidaId(){
         int selectedRow = gameTable.getSelectedRow();
         if (selectedRow != -1) {
