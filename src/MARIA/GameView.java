@@ -10,7 +10,7 @@ public class GameView {
 
     private JFrame window; // HAY QUE AÑADIR PRIVATE AQUÍ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private JLabel counterLabel, perSecLabel;
-    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton, pauseButton;
+    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton, pauseButton, endGameButton;
     private JTextArea messageText;
     private Font font1, font2;
 
@@ -41,6 +41,7 @@ public class GameView {
     public void setCafeButtonText(String message) {
         this.cafeButton.setText(message);
     }
+
 
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener){
         coffeeMachineButton.addMouseListener(mouseListener);
@@ -73,6 +74,11 @@ public class GameView {
     public void addPauseButtonListener(ActionListener listener) {
         pauseButton.addActionListener(listener);
     }
+
+    public void addEndGameButtonListener(ActionListener listener) {
+        endGameButton.addActionListener(listener);
+    }
+
 
     public GameView() {
         createFont();
@@ -156,6 +162,9 @@ public class GameView {
         pauseButton = new JButton("Pause");
         itemPanel.add(pauseButton);
 
+        endGameButton = new JButton("End Game");
+        itemPanel.add(endGameButton);
+
         JPanel messagePanel = new JPanel();
         messagePanel.setBounds(500, 70, 250, 150);
         messagePanel.setBackground(Color.black);
@@ -176,6 +185,7 @@ public class GameView {
         baristaButton.setActionCommand("BARISTABUTTON");
         pauseButton.setActionCommand("PAUSEBUTTON");
         cafeButton.setActionCommand("CAFEBUTTON");
+        endGameButton.setActionCommand("ENDGAMEBUTTON");
 
         coffeeMachineButton.setName("COFFEEMACHINEBUTTON");
         baristaButton.setName("BARISTABUTTON");

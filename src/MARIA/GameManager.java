@@ -3,7 +3,7 @@ import Business.Entities.Game;
 import Persistence.GameDAO;
 import Persistence.GameDBDAO;
 
-public class GameManager{
+public class GameManager implements Runnable{
     private double coffeeCounter;
     private int coffeeMachineNumber;
     private int baristaNumber;
@@ -17,6 +17,11 @@ public class GameManager{
     private GameDAO gameDAO;
     private Game game;
 
+    private Thread autoCoffeeThread;
+    private boolean running = false;
+
+    private GameUpdateListener listener;
+
     public GameManager(int ID) {
         gameDAO = new GameDBDAO();
         coffeeCounter = 0;
@@ -27,20 +32,39 @@ public class GameManager{
         cafeUnlocked = false;
         perSecond = 0.0;
         // no asignamos game aún
-
     }
 
+    public void setGameUpdateListener(GameUpdateListener listener) {
+        this.listener = listener;
+    }
+
+
+    public void preStartGame(Game game){
+
+    }
     // la función se llama desde el controller cuando se clica "new game" o "continue game"
     public void startNewGame(String gameName, String email) {
-        int partidaID = gameDAO.insertGame(gameName, email); // tendría que devolver el ID o que devuelva game
-        // Falta asignar game
+        int gameID = gameDAO.insertGame(gameName, email);
+        game = gameDAO.getGameById(String.valueOf(gameID)); //Esta función del DAO deberias ser un int no String
+        running = true;
     }
 
     public void continueGame(String email) {
         //resultSet? game = getGameById(String gameID);
         // game =  getGamesNotFinishedByUser(email);
+        running = true;
+    }
 
-        }
+    public void endGame() {
+        running = false;
+        game.endGame();
+        //Falta hacer un updateGame en la DB
+    }
+
+    public void pauseGame(){
+        running = false;
+        //Falta hacer un updateGame en la DB
+    }
 
     // cambiar
     public void addCoffee(double amount) {
@@ -121,7 +145,37 @@ public class GameManager{
 
     public void updatePerSecond() {
         perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
-        // tener en cuenta los upgrades. Añadir cafe y sus num upgrades
+        // FALTA tener en cuenta los upgrades. Añadir cafe y sus num upgrades
+    }
+
+    @Override
+    public void run() {
+        autoCoffeeThread = new Thread(() -> {
+            while (running) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                addCoffee(getPerSecond());
+
+                if (canUnlockBarista()) {
+                    unlockBarista();
+                }
+
+                if (canUnlockCafe()) {
+                    unlockCafe();
+                }
+
+                if (listener != null) {
+                    listener.onGameUpdated();
+                }
+            }
+        });
+
+        autoCoffeeThread.setDaemon(true);
+        autoCoffeeThread.start();
     }
 }
 
