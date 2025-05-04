@@ -1,12 +1,10 @@
 package Business.Entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
 
     private int gameID;
     private String name;
+    private String userName;
     private int coffee;
 
     private int numCoffeeMachine;
@@ -33,8 +31,18 @@ public class Game {
         this.numUpgradeCafe = 0;
         this.hasEnded = false;
     }
+
     public Game(int gameID, String name, int coffees, String lastAccess) {
         this.gameID = gameID;
+        this.name = name;
+        this.coffee = coffees;
+        this.lastAccess = lastAccess;
+    }
+
+    // Constructor amb userName per poder pintar les partides de les estadístiques
+    public Game(int gameID, String userName, String name, int coffees, String lastAccess) {
+        this.gameID = gameID;
+        this.userName = userName;
         this.name = name;
         this.coffee = coffees;
         this.lastAccess = lastAccess;
@@ -132,4 +140,9 @@ public class Game {
     }
 
     public String getLastAccess() {return lastAccess; }
+
+    // Getter for userName
+    public String getUserName() {
+        return userName;
+    }
 }

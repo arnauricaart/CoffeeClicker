@@ -1,4 +1,5 @@
 package Presentation.controllers;
+import Business.Entities.Game;
 import Persistence.*;
 import Presentation.views.*;
 
@@ -39,12 +40,18 @@ public class MenuController {
     }
 
     private void selectGameToShowStats() {
-        showGamesView = new ShowGamesView(gameDBDAO.getGamesFinishedByUser(correo), true);
-        showGamesView.setShowStatsActionListener(e ->{
+        showGamesView = new ShowGamesView(gameDBDAO.getGamesFinished(), true);
+        showGamesView.setShowStatsActionListener(e -> {
             int currentPartidaId = showGamesView.getCurrentPartidaId();
             if (currentPartidaId != -1) {
                 openStatsForGame(currentPartidaId);
             }
+        });
+        showGamesView.setSearchActionListener(e -> {
+            String userSearch = showGamesView.getUserSearchText();
+            String gameSearch = showGamesView.getGameSearchText();
+            List<Game> searchResults = gameDBDAO.searchGamesFinished(userSearch, gameSearch);
+            showGamesView.updateTableData(searchResults);
         });
         showGamesView.setVisible(true);
     }

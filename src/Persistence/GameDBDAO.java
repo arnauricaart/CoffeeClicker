@@ -14,15 +14,12 @@ public class GameDBDAO implements GameDAO{
 
     }
 
-    public List<Game> getGamesFinishedByUser(String correo){
+    public List<Game> getGamesFinished(){
         List<Game> games = new ArrayList<>();
 
-        String query = "SELECT * FROM partida  WHERE correo =? AND Terminada = 1";
+        String query = "SELECT p.*, u.Nombre as UserName FROM partida p JOIN users u ON p.Correo = u.Correo WHERE p.Terminada = 1";
         ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> tipos = new ArrayList<String>();
-
-        values.add(correo);
-        tipos.add("String");
 
         ResultSet res = SQL_CRUD.Select(query,values,tipos);
         while(true){
@@ -31,7 +28,7 @@ public class GameDBDAO implements GameDAO{
                 Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
                 SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String formatedDate = formato.format(ultimoAcceso);
-                games.add(new Game(res.getInt("IdPartida"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
+                games.add(new Game(res.getInt("IdPartida"), res.getString("UserName"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -40,7 +37,43 @@ public class GameDBDAO implements GameDAO{
         return games;
     }
 
+    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch) {
+        List<Game> games = new ArrayList<>();
 
+        String query = "SELECT p.*, u.Nombre as UserName FROM partida p " +
+                      "JOIN users u ON p.Correo = u.Correo " +
+                      "WHERE p.Terminada = 1 " +
+                      "AND (u.Nombre LIKE ? OR ? IS NULL) " +
+                      "AND (p.Nombre LIKE ? OR ? IS NULL)";
+                      
+        ArrayList<String> values = new ArrayList<String>();
+        ArrayList<String> tipos = new ArrayList<String>();
+
+        values.add(userNameSearch == null || userNameSearch.isEmpty() ? null : "%" + userNameSearch + "%");
+        values.add(userNameSearch == null || userNameSearch.isEmpty() ? null : "%" + userNameSearch + "%");
+        values.add(gameNameSearch == null || gameNameSearch.isEmpty() ? null : "%" + gameNameSearch + "%");
+        values.add(gameNameSearch == null || gameNameSearch.isEmpty() ? null : "%" + gameNameSearch + "%");
+        
+        tipos.add("String");
+        tipos.add("String");
+        tipos.add("String");
+        tipos.add("String");
+
+        ResultSet res = SQL_CRUD.Select(query, values, tipos);
+        while(true) {
+            try {
+                if (!res.next()) break;
+                Timestamp ultimoAcceso = res.getTimestamp("ultimoAcceso");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String formatedDate = formato.format(ultimoAcceso);
+                games.add(new Game(res.getInt("IdPartida"), res.getString("UserName"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return games;
+    }
 
     public Game getGameById(String gameID){
         String query = "SELECT * FROM partida WHERE IdPartida=?";

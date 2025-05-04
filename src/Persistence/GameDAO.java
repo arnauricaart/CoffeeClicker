@@ -2,11 +2,12 @@ package Persistence;
 
 import Business.Entities.Game;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 public interface GameDAO {
-    public List<Game> getGamesFinishedByUser(String correo);
+    public List<Game> getGamesFinished();
+
+    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch);
 
     public Game getGameById(String gameID);
 

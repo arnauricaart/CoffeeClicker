@@ -7,36 +7,70 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 
 public class ShowGamesView extends JFrame {
 
     private JTable gameTable;
+    private JTextField userSearchField;
+    private JTextField gameSearchField;
+    private JButton searchButton;
     private ActionListener showStatsActionListener;
+    private ActionListener searchActionListener;
+    private DefaultTableModel tableModel;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public ShowGamesView(List<Game> games, boolean isFinishedGames) {
         setTitle("Continue Game");
-        setSize(600, 400);
+        setSize(600, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"IdPartida", "Name", "Coffees", "Last Access"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        JLabel userSearchLabel = new JLabel("User name:");
+        userSearchField = new JTextField(15);
+        JLabel gameSearchLabel = new JLabel("Game name:");
+        gameSearchField = new JTextField(15);
+        searchButton = new JButton("Search");
+        
+        searchPanel.add(userSearchLabel);
+        searchPanel.add(userSearchField);
+        searchPanel.add(gameSearchLabel);
+        searchPanel.add(gameSearchField);
+        searchPanel.add(searchButton);
+        
+        add(searchPanel, BorderLayout.NORTH);
+
+        // Table setup
+        String[] columnNames = {"IdPartida", "User name", "Player name", "Coffees", "Last Access"};
+        tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+            
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 0 || column == 3) { // IdPartida and Coffees columns
+                    return Integer.class;
+                }
+                return String.class;
+            }
         };
 
-        for (Game game : games) {
-            Object[] row = {game.getGameID(), game.getName(), game.getCoffees(), game.getLastAccess()};
-            tableModel.addRow(row);
-        }
+        updateTableData(games);
 
         gameTable = new JTable(tableModel);
         gameTable.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -44,13 +78,29 @@ public class ShowGamesView extends JFrame {
         gameTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
         gameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        sorter = new TableRowSorter<>(tableModel);
+        gameTable.setRowSorter(sorter);
+
+        sorter.setComparator(4, (Comparator<String>) (date1, date2) -> {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                return format.parse(date1).compareTo(format.parse(date2));
+            } catch (ParseException e) {
+                return date1.compareTo(date2);
+            }
+        });
+
         gameTable.getColumnModel().getColumn(1).setCellRenderer(new AlternatingColorRenderer(JLabel.LEFT));
-        gameTable.getColumnModel().getColumn(2).setCellRenderer(new AlternatingColorRenderer(JLabel.CENTER));
-        gameTable.getColumnModel().getColumn(3).setCellRenderer(new AlternatingColorRenderer(JLabel.RIGHT));
+        gameTable.getColumnModel().getColumn(2).setCellRenderer(new AlternatingColorRenderer(JLabel.LEFT));
+        gameTable.getColumnModel().getColumn(3).setCellRenderer(new AlternatingColorRenderer(JLabel.CENTER));
+        gameTable.getColumnModel().getColumn(4).setCellRenderer(new AlternatingColorRenderer(JLabel.RIGHT));
 
         TableColumnModel columnModel = gameTable.getColumnModel();
         TableColumn hiddenColumn = columnModel.getColumn(0);
         columnModel.removeColumn(hiddenColumn);
+
+        gameTable.getTableHeader().setReorderingAllowed(false);
+        gameTable.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         gameTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -67,8 +117,32 @@ public class ShowGamesView extends JFrame {
         // Panel de botones
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 10));
-
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    public void updateTableData(List<Game> games) {
+        tableModel.setRowCount(0);
+        for (Game game : games) {
+            Object[] row = {game.getGameID(), game.getUserName(), game.getName(), game.getCoffees(), game.getLastAccess()};
+            tableModel.addRow(row);
+        }
+    }
+
+    public String getUserSearchText() {
+        return userSearchField.getText().trim();
+    }
+
+    public String getGameSearchText() {
+        return gameSearchField.getText().trim();
+    }
+
+    public void setSearchActionListener(ActionListener l) {
+        searchButton.addActionListener(l);
+        
+        // Also add action listeners to text fields for "Enter" key
+        ActionListener al = e -> l.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+        userSearchField.addActionListener(al);
+        gameSearchField.addActionListener(al);
     }
 
     public int getCurrentPartidaId(){

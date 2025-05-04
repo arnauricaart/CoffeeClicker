@@ -10,6 +10,7 @@ public class LoginView extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JLabel goToRegister;
+    private ActionListener loginActionListener;
 
     public LoginView() {
         setTitle("Login");
@@ -57,11 +58,24 @@ public class LoginView extends JFrame {
         goToRegister.setForeground(Color.decode("#000000"));
         goToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(goToRegister);
+
+        // Add Enter key support
+        ActionListener enterKeyListener = e -> {
+            if (loginActionListener != null) {
+                loginActionListener.actionPerformed(e);
+            }
+        };
+        
+        usernameField.addActionListener(enterKeyListener);
+        passwordField.addActionListener(enterKeyListener);
     }
 
     public String getUsername() { return usernameField.getText(); }
     public String getPassword() { return new String(passwordField.getPassword()); }
-    public void setLoginButtonListener(ActionListener al) { loginButton.addActionListener(al); }
+    public void setLoginButtonListener(ActionListener al) { 
+        loginActionListener = al;
+        loginButton.addActionListener(al); 
+    }
     public void setRegisterLabelListener(MouseAdapter ma) { goToRegister.addMouseListener(ma); }
     public void showLoginErrorMessage() {
         JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
