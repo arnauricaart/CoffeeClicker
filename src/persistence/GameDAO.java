@@ -14,4 +14,6 @@ public interface GameDAO {
     public Game getGameByNameAndGame(String gameName, String userId);
 
     public int insertGame(String gameName, String correo);
+
+    public Game getStartedGame(String correo);
 }

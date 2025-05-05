@@ -75,6 +75,25 @@ public class GameDBDAO implements GameDAO{
         return games;
     }
 
+    public Game getStartedGame(String correo){
+        String query = "SELECT * FROM partida p WHERE p.Correo = ? AND p.Terminada = 0";
+        ArrayList<String> values = new ArrayList<String>();
+        values.add(correo);
+        ArrayList<String> tipos = new ArrayList<String>();
+        tipos.add("String");
+
+        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+
+        try {
+            if(rs.next()){
+                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Game getGameById(String gameID){
         String query = "SELECT * FROM partida WHERE IdPartida=?";
         ArrayList<String> values = new ArrayList<String>();

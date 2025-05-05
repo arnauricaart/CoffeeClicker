@@ -36,10 +36,17 @@ public class MenuController {
     }
 
     private void startNewGame() {
-        newGameView = new NewGameView();
-        newGameView.setNewGameButtonListener(e -> newGame());
-        newGameView.setCancelButtonListener(e -> newGameView.dispose());
-        newGameView.setVisible(true);
+        Game game = partidaManager.getStartedGame(correo);
+
+        if(game == null) {
+            newGameView = new NewGameView();
+            newGameView.setNewGameButtonListener(e -> newGame());
+            newGameView.setCancelButtonListener(e -> newGameView.dispose());
+            newGameView.setVisible(true);
+        } else{
+            menuView.showGameExists();
+        }
+
     }
 
     private void selectGameToShowStats() {

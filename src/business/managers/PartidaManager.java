@@ -25,4 +25,8 @@ public class PartidaManager {
     public void insertGame(String userName, String correo){
         gameDAO.insertGame(userName, correo);
     }
+
+    public Game getStartedGame(String userName){
+        return gameDAO.getStartedGame(userName);
+    }
 }
