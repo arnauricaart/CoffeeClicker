@@ -1,9 +1,8 @@
 package Persistance;
 
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import Persistence.SQL_CRUD;
+import persistence.SQL_CRUD;
 
 public class StatsDBDAO {
 

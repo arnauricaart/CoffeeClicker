@@ -1,4 +1,4 @@
-import Presentation.controllers.LoginController;
+import presentation.controllers.LoginController;
 import javax.swing.SwingUtilities;
 
 public class Main {

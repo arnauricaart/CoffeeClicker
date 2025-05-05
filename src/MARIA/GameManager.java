@@ -1,7 +1,7 @@
 package MARIA;
-import Business.Entities.Game;
-import Persistence.GameDAO;
-import Persistence.GameDBDAO;
+import business.entities.Game;
+import persistence.GameDAO;
+import persistence.GameDBDAO;
 
 public class GameManager implements Runnable{
     private double coffeeCounter;

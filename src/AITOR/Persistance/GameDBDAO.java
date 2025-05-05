@@ -2,7 +2,7 @@ package Persistance;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import Persistence.SQL_CRUD;
+import persistence.SQL_CRUD;
 
 public class GameDBDAO {
     public GameDBDAO() {

@@ -1,6 +1,5 @@
-package Persistance;
+package persistence;
 import java.sql.*;
-import persistence.ConfigJSONDAO;
 
 public final class Singleton {
     // The field must be declared volatile so that double check lock would work
@@ -10,11 +9,11 @@ public final class Singleton {
     private Connection conn;
 
     private Singleton() {
-        ConfigJSONDAO conf = new ConfigJSONDAO();
-        String url = "jdbc:mysql://" + conf.getDatabaseHost() + ":" + conf.getDatabasePort() + "/" + conf.getDatabaseName();
+        ConfigJSONDAO config = new ConfigJSONDAO();
+        String url = "jdbc:mysql://" + config.getDatabaseHost() + ":" + config.getDatabasePort() + "/" + config.getDatabaseName();
         String driver = "com.mysql.cj.jdbc.Driver";
-        String usuario = conf.getDatabaseUser();
-        String password = conf.getDatabasePassword();
+        String usuario = config.getDatabaseUser();
+        String password = config.getDatabasePassword();
         try{
             Class.forName(driver);
             this.conn = DriverManager.getConnection(url, usuario, password);
@@ -39,6 +38,7 @@ public final class Singleton {
     }
 
     public Connection getConn(){
+
         return this.conn;
     }
 
