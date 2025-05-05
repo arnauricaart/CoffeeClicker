@@ -37,4 +37,6 @@ public class UserManager {
         return userDAO.removeUserAndData(email);
     }
 
+
+
 }

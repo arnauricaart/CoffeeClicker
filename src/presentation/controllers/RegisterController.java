@@ -1,6 +1,6 @@
 package presentation.controllers;
 
-import business.UserManager;
+import business.managers.UserManager;
 import presentation.views.RegisterView;
 
 import java.awt.event.MouseAdapter;

@@ -1,6 +1,6 @@
 package presentation.controllers;
 
-import business.UserManager;
+import business.managers.UserManager;
 import presentation.views.LoginView;
 import presentation.views.MenuGUI;
 
@@ -9,10 +9,10 @@ import java.awt.event.MouseEvent;
 
 public class LoginController {
     private LoginView view;
-    private UserManager model;
+    private UserManager userManager;
 
     public LoginController() {
-        this.model = new UserManager();
+        this.userManager = new UserManager();
     }
 
     public void start() {
@@ -27,7 +27,7 @@ public class LoginController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 view.dispose();
-                new RegisterController(model).start();
+                new RegisterController(userManager).start();
             }
         });
     }
@@ -36,7 +36,7 @@ public class LoginController {
         String usernameOrEmail = view.getUsername();
         String password = view.getPassword();
 
-        String correo = model.getCorreoFromLogin(usernameOrEmail, password);
+        String correo = userManager.getCorreoFromLogin(usernameOrEmail, password);
         if(correo == null) {
             view.showLoginErrorMessage();
         }

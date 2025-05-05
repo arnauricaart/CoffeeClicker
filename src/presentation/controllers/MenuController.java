@@ -1,5 +1,9 @@
 package presentation.controllers;
+import MARIA.GameManager;
 import business.entities.Game;
+import business.managers.PartidaManager;
+import business.managers.StatisticsManager;
+import business.managers.UserManager;
 import persistence.*;
 import presentation.views.*;
 
@@ -11,11 +15,10 @@ public class MenuController {
     private NewGameView newGameView;
     private ShowGamesView showGamesView;
     private RemoveAccountView removeAccountView;
-    private UserDBDAO userDAO;
-    private GameDBDAO gameDBDAO;
-    private StatsDBDAO statsDBDAO;
     private String correo;
-
+    private UserManager userManager;
+    private PartidaManager partidaManager;
+    private StatisticsManager statisticsManager;
 
     public MenuController(MenuGUI menuView, String correo) {
         this.menuView = menuView;
@@ -27,9 +30,9 @@ public class MenuController {
         menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
-        userDAO = new UserDBDAO();
-        gameDBDAO = new GameDBDAO();
-        statsDBDAO = new StatsDBDAO();
+        userManager = new UserManager();
+        partidaManager = new PartidaManager();
+        statisticsManager = new StatisticsManager();
     }
 
     private void startNewGame() {
@@ -40,7 +43,7 @@ public class MenuController {
     }
 
     private void selectGameToShowStats() {
-        showGamesView = new ShowGamesView(gameDBDAO.getGamesFinished(), true);
+        showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
         showGamesView.setShowStatsActionListener(e -> {
             int currentPartidaId = showGamesView.getCurrentPartidaId();
             if (currentPartidaId != -1) {
@@ -50,14 +53,14 @@ public class MenuController {
         showGamesView.setSearchActionListener(e -> {
             String userSearch = showGamesView.getUserSearchText();
             String gameSearch = showGamesView.getGameSearchText();
-            List<Game> searchResults = gameDBDAO.searchGamesFinished(userSearch, gameSearch);
+            List<Game> searchResults = partidaManager.searchGamesFinished(userSearch, gameSearch);
             showGamesView.updateTableData(searchResults);
         });
         showGamesView.setVisible(true);
     }
 
     private void openStatsForGame(int gameId) {
-        List<Integer> cafesPorMinuto = statsDBDAO.getStatsByGameId(gameId);
+        List<Integer> cafesPorMinuto = statisticsManager.getStatsByGameId(gameId);
         showGamesView.updateStatsChart(cafesPorMinuto);
     }
 
@@ -83,9 +86,9 @@ public class MenuController {
     }
 
     private void newGame() {
-        String name = newGameView.getNewGameName();
+        String gameName = newGameView.getNewGameName();
         try{
-            gameDBDAO.insertGame(name, correo);
+            partidaManager.insertGame(gameName, correo);
         } catch (ConstraintException e){
             if(e.getMessage().contains("partida_nombre_uk")){
                 newGameView.showDuplicateGameMessage();
@@ -93,13 +96,13 @@ public class MenuController {
             }
         }
 
-        System.out.println("Name: " + name);
+        System.out.println("Name: " + gameName);
         //TODO cridar al joc
     }
     private void removeAccountFromDatabase() {
-        String correo = userDAO.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
+        String correo = userManager.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
         if(correo != null) {
-            userDAO.removeUserAndData(this.correo);
+            userManager.removeUserAndData(this.correo);
             removeAccountView.showRemoveUserMessage(true);
             removeAccountView.dispose();
             menuView.dispose();
@@ -108,7 +111,6 @@ public class MenuController {
         } else{
             removeAccountView.showRemoveUserMessage(false);
         }
-
 
         return;
     }
