@@ -23,10 +23,20 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         view.addCoffeeMachineButtonListener(this);
         view.addBaristaButtonListener(this);
         view.addCafeButtonListener(this);
+        ///////UGRADES////////
+        view.addCoffeeMachineUpgradeButtonListener(this);
+        view.addBaristaUpgradeButtonListener(this);
+        view.addCafeUpgradeButtonListener(this);
+        //////////////////////
 
         view.addCoffeeMachineButtonMouseListener(this);
         view.addBaristaButtonMouseListener(this);
         view.addCafeButtonMouseListener(this);
+        ///////////UPGRADES////////////
+        view.addCoffeeMachineUpgradeButtonListener(this);
+        view.addBaristaUpgradeButtonListener(this);
+        view.addCafeUpgradeButtonListener(this);
+        ///////////////////////////////
         view.addPauseButtonListener(e -> togglePause());
         view.addEndGameButtonListener(e -> endGame());
 
