@@ -35,7 +35,7 @@ public class GameManager implements Runnable{
     private final double BARISTA_PERSECOND = 1;
     private final double CAFE_PERSECOND = 5;
 
-    public GameManager(int ID) {
+    public GameManager() {
         gameDAO = new GameDBDAO();
         statDAO = new StatsDBDAO();
         baristaUnlocked = false;
@@ -62,12 +62,13 @@ public class GameManager implements Runnable{
         int gameID = gameDAO.insertGame(gameName, email);
         game = gameDAO.getGameById(String.valueOf(gameID)); //Esta función del DAO deberias ser un int no String
         running = true;
+        run();
     }
 
-    public void continueGame(String email) {
-        //resultSet? game = getGameById(String gameID);
-        // game =  getGamesNotFinishedByUser(email);
+    public void continueGame(String gameID) {
+        game = gameDAO.getGameById(gameID);
         running = true;
+        run();
     }
 
     public void endGame() {

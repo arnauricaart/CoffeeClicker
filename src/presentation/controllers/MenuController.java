@@ -10,7 +10,7 @@ import presentation.views.*;
 import java.util.List;
 
 
-public class MenuController {
+public class MenuController implements MenuNavigator{
     private MenuGUI menuView;
     private NewGameView newGameView;
     private ShowGamesView showGamesView;
@@ -19,10 +19,21 @@ public class MenuController {
     private UserManager userManager;
     private PartidaManager partidaManager;
     private StatisticsManager statisticsManager;
+    private GameController gameController;
 
     public MenuController(MenuGUI menuView, String correo) {
         this.menuView = menuView;
         this.correo = correo;
+        gameController = new GameController(this);
+    }
+
+    @Override
+    public void returnToMenu() {
+        menuView = new MenuGUI();
+        menuView.setNewGameButtonListener(e -> startNewGame());
+        menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
+        menuView.setLogoutButtonListener(e -> logout());
+        menuView.setDeleteAccountButtonListener(e -> deleteAccount());
     }
 
     public void initController() {
@@ -40,10 +51,22 @@ public class MenuController {
         if (partida == null) {
             newGameView = new NewGameView();
             newGameView.setNewGameButtonListener(e -> newGame());
+
+            newGameView.setNewGameButtonListener(e -> {
+                Game nuevaPartida = newGame();
+                if (nuevaPartida != null) {
+                    gameController.startGame(nuevaPartida.getName(), correo);
+                }
+            });
+
             newGameView.setCancelButtonListener(e -> newGameView.dispose());
             newGameView.setVisible(true);
+            //AQUI SE CREA NUEVA PARTIDA
+            //gameController.startGame(partida.getName() , correo);
         } else {
-            new GameController();
+            //AQUI YA EXISTE
+            menuView.showGameExists();
+            gameController.continueGame(String.valueOf(partida.getGameID()));
             menuView.dispose();
         }
     }
@@ -90,19 +113,21 @@ public class MenuController {
         removeAccountView.setVisible(true);
     }
 
-    private void newGame() {
+    private Game newGame() {
         String gameName = newGameView.getNewGameName();
+        Game game = null;
         try {
             int gameId = partidaManager.insertGame(gameName, correo);
-            Game game = partidaManager.getGameById(gameId);
-            new GameController();
-            newGameView.dispose();
-            menuView.dispose();
+            game = partidaManager.getGameById(gameId);
+            //new GameController(this);
+            //newGameView.dispose();
+            //menuView.dispose();
         } catch (ConstraintException e) {
             if (e.getMessage().contains("partida_nombre_uk")) {
                 newGameView.showDuplicateGameMessage();
             }
         }
+        return game;
     }
 
     private void removeAccountFromDatabase() {

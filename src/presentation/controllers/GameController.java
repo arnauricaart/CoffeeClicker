@@ -2,6 +2,7 @@ package presentation.controllers;
 
 import business.managers.GameManager;
 import presentation.views.GameView;
+import presentation.views.MenuGUI;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -14,50 +15,64 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
 
     private GameManager model;
     private GameView view;
+    private MenuNavigator menuNavigator;
 
 
     //cantidad de cada uno de los generadores
 
-    public GameController() {
-        model = new GameManager(12); // cambiar gameID
+    public GameController(MenuNavigator navigator) {
+        model = new GameManager();
+        this.menuNavigator = navigator;
+    }
+
+    private void createView(){
         view = new GameView();
 
         view.addCoffeeButtonListener(this);
         view.addCoffeeMachineButtonListener(this);
         view.addBaristaButtonListener(this);
         view.addCafeButtonListener(this);
-        ///////UGRADES////////
+
         view.addCoffeeMachineUpgradeButtonListener(this);
         view.addBaristaUpgradeButtonListener(this);
         view.addCafeUpgradeButtonListener(this);
-        //////////////////////
 
         view.addCoffeeMachineButtonMouseListener(this);
         view.addBaristaButtonMouseListener(this);
         view.addCafeButtonMouseListener(this);
-        ///////////UPGRADES////////////
         view.addCoffeeMachineUpgradeButtonListener(this);
         view.addBaristaUpgradeButtonListener(this);
         view.addCafeUpgradeButtonListener(this);
-        ///////////////////////////////
         view.addPauseButtonListener(e -> togglePause());
         view.addEndGameButtonListener(e -> endGame());
 
         model.setGameUpdateListener(this);
 
         updateLabels();
-        model.run();
+    }
+
+    public void startGame(String gameName, String email) {
+        model.startNewGame(gameName, email);
+        createView();
+        view.open();
+    }
+
+    public void continueGame(String gameID){
+        model.continueGame(gameID);
+        createView();
+        view.open();
+    }
+
+    public void endGame(){
+        model.endGame();
+        view.close();
+        menuNavigator.returnToMenu();
     }
 
     public void togglePause() {
         model.pauseGame();
-        // Falta volver al menu
-    }
-
-    // Falta poner el botón (en la view), el listener y que cuando se pulse llame a esta función
-    public void endGame(){
-        model.endGame();
-        // Para volver al menu
+        view.close();
+        menuNavigator.returnToMenu();
     }
 
     // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,...
@@ -179,8 +194,6 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             }
             updateLabels();
         }
-
-
     }
 
     @Override
@@ -229,14 +242,4 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     public void onGameUpdated() {
         updateLabels();
     }
-/*
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GameManager model = new GameManager(12);
-            GameView view = new GameView();
-            new GameController(model, view);
-        });
-    }
-*/
-
 }

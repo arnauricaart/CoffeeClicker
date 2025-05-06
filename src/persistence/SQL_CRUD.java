@@ -63,7 +63,6 @@ public class SQL_CRUD {
                     }
                 } else if (tipos.get(i).equals("datetime")) {
                     pst.setTimestamp(i +1, Timestamp.valueOf(LocalDateTime.now()));
-
                 }
             }
         } catch (SQLException e){
