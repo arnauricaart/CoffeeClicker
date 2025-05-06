@@ -10,7 +10,7 @@ public class GameView {
 
     private JFrame window; // HAY QUE AÑADIR PRIVATE AQUÍ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private JLabel counterLabel, perSecLabel;
-    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton, pauseButton, endGameButton;
+    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton, coffeeMachineUpgradeButton, baristaUpgradeButton, cafeUpgradeButton,pauseButton, endGameButton;
     private JTextArea messageText;
     private Font font1, font2;
 
@@ -41,6 +41,20 @@ public class GameView {
     public void setCafeButtonText(String message) {
         this.cafeButton.setText(message);
     }
+
+    ////////////UPGRADE BUTTON TEXT ////////////////////
+    public void setCoffeeMachineUpgradeButtonText(String message) {
+        this.coffeeMachineUpgradeButton.setText(message);
+    }
+
+    public void setBaristaUpgradeButtonText(String message) {
+        this.baristaUpgradeButton.setText(message);
+    }
+
+    public void setCafeUpgradeButtonText(String message) {
+        this.cafeUpgradeButton.setText(message);
+    }
+    ////////////////////////////////////////////////////
 
 
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener){
@@ -78,6 +92,20 @@ public class GameView {
     public void addEndGameButtonListener(ActionListener listener) {
         endGameButton.addActionListener(listener);
     }
+
+    ////////////////////Listener de Upgrades//////////////////////
+    public void addCoffeeMachineUpgradeButtonListener(ActionListener listener){
+        coffeeMachineUpgradeButton.addActionListener(listener);
+    }
+
+    public void addBaristaUpgradeButtonListener(ActionListener listener){
+        baristaUpgradeButton.addActionListener(listener);
+    }
+
+    public void addCafeUpgradeButtonListener(ActionListener listener){
+        cafeUpgradeButton.addActionListener(listener);
+    }
+    //////////////////////////////////////////////////////////////
 
 
     public GameView() {
@@ -159,6 +187,23 @@ public class GameView {
         cafeButton.setFocusPainted(false);
         itemPanel.add(cafeButton);
 
+        /////////////////////////BOTONES DE LAS UPGRADES////////////////////////////////////////
+        coffeeMachineUpgradeButton = new JButton("U1 (0)");
+        coffeeMachineUpgradeButton.setFont(font1);
+        coffeeMachineUpgradeButton.setFocusPainted(false);
+        itemPanel.add(coffeeMachineUpgradeButton);
+
+        baristaUpgradeButton = new JButton("?");
+        baristaUpgradeButton.setFont(font1);
+        baristaUpgradeButton.setFocusPainted(false);
+        itemPanel.add(baristaUpgradeButton);
+
+        cafeUpgradeButton = new JButton("?");
+        cafeUpgradeButton.setFont(font1);
+        cafeUpgradeButton.setFocusPainted(false);
+        itemPanel.add(cafeUpgradeButton);
+        //////////////////////////////////////////////////////////////////////////////////////
+
         pauseButton = new JButton("Pause");
         itemPanel.add(pauseButton);
 
@@ -181,17 +226,29 @@ public class GameView {
         messagePanel.add(messageText);
 
         coffeeButton.setActionCommand("COFFEEBUTTON");
+
         coffeeMachineButton.setActionCommand("COFFEEMACHINEBUTTON");
         baristaButton.setActionCommand("BARISTABUTTON");
-        pauseButton.setActionCommand("PAUSEBUTTON");
         cafeButton.setActionCommand("CAFEBUTTON");
+
+        /////////////////UGRADES////////////////////
+        coffeeMachineButton.setActionCommand("COFFEEMACHINEUPGRADEBUTTON");
+        baristaButton.setActionCommand("BARISTAUPGRADEBUTTON");
+        cafeButton.setActionCommand("CAFEUPGRADEBUTTON");
+        ////////////////////////////////////////////
+
+        pauseButton.setActionCommand("PAUSEBUTTON");
         endGameButton.setActionCommand("ENDGAMEBUTTON");
 
         coffeeMachineButton.setName("COFFEEMACHINEBUTTON");
         baristaButton.setName("BARISTABUTTON");
         cafeButton.setName("CAFEBUTTON");
 
-
+        /////////////////UGRADES////////////////////
+        coffeeMachineButton.setName("COFFEEMACHINEUPGRADEBUTTON");
+        baristaButton.setName("BARISTAUPGRADEBUTTON");
+        cafeButton.setName("CAFEUPGRADEBUTTON");
+        ////////////////////////////////////////////
 
         window.setVisible(true);
     }

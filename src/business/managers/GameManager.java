@@ -3,6 +3,11 @@ import presentation.controllers.GameUpdateListener;
 import business.entities.Game;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
+import persistence.StatsDAO;
+import persistence.StatsDBDAO;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameManager implements Runnable{
     private double coffeeCounter;
@@ -16,15 +21,21 @@ public class GameManager implements Runnable{
     private final int cafePriceBase = 150;
     private double perSecond;
     private GameDAO gameDAO;
-    private Game game;
+    private StatsDAO statDAO;
+    private business.entities.Game game;
+
+    private int currentMinute;
 
     private Thread autoCoffeeThread;
-    private boolean running = false;
+
+    //Cuando se haga bien el Game en el codigo principal canviar a FALSE
+    private boolean running = true;
 
     private GameUpdateListener listener;
 
     public GameManager(int ID) {
         gameDAO = new GameDBDAO();
+        statDAO = new StatsDBDAO();
         coffeeCounter = 0;
         coffeeMachineNumber = 0;
         baristaNumber = 0;
@@ -33,13 +44,16 @@ public class GameManager implements Runnable{
         cafeUnlocked = false;
         perSecond = 0.0;
         // no asignamos game aún
+
+        //Deberíamos hacer que game almazene los minutos que ha durado
+        currentMinute = 1;
     }
 
     public void setGameUpdateListener(GameUpdateListener listener) {
         this.listener = listener;
     }
 
-
+    //Inicializar las variables dependiendo se si es unn juego nuevo o se continua
     public void preStartGame(Game game){
 
     }
@@ -145,13 +159,26 @@ public class GameManager implements Runnable{
     }
 
     public void updatePerSecond() {
-        perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
+        perSecond = coffeeMachineNumber * 0.2 + baristaNumber * 0.5;
+        //perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
         // FALTA tener en cuenta los upgrades. Añadir cafe y sus num upgrades
     }
 
     @Override
     public void run() {
         autoCoffeeThread = new Thread(() -> {
+            // Timer para guardar cafes cada minuto
+            Timer statsTimer = new Timer();
+            statsTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (running) {
+                        statDAO.updateStats(game.getGameID(), getCafeNumber(), currentMinute);
+                        currentMinute++;
+                    }
+                }
+            }, 0, 60 * 1000); // 1min
+
             while (running) {
                 try {
                     Thread.sleep(1000);
@@ -173,10 +200,13 @@ public class GameManager implements Runnable{
                     listener.onGameUpdated();
                 }
             }
+
+            statsTimer.cancel(); // Cierra el timer si se para el juego
         });
 
         autoCoffeeThread.setDaemon(true);
         autoCoffeeThread.start();
     }
+
 }
 
