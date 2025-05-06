@@ -1,4 +1,5 @@
-package MARIA;
+package business.managers;
+import presentation.controllers.GameUpdateListener;
 import business.entities.Game;
 import persistence.GameDAO;
 import persistence.GameDBDAO;

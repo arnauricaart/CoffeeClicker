@@ -21,7 +21,7 @@ public class Main {
         System.out.println(password);
         ////////////////////////////////////////////////////////////////////////////
 */
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(()->{
             new LoginController().start();
         });
 

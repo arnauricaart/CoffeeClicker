@@ -1,4 +1,4 @@
-package MARIA;
+package presentation.views;
 
 
 import javax.swing.*;

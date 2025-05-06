@@ -15,6 +15,7 @@ public class MenuGUI extends JFrame {
     private JButton deleteAccountButton;
 
     public MenuGUI() {
+
         setTitle("Coffee Clicker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);

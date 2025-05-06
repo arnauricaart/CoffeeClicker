@@ -1,6 +1,6 @@
 package presentation.controllers;
-import MARIA.GameManager;
 import business.entities.Game;
+import business.managers.GameManager;
 import business.managers.PartidaManager;
 import business.managers.StatisticsManager;
 import business.managers.UserManager;
@@ -36,19 +36,20 @@ public class MenuController {
     }
 
     private void startNewGame() {
-        Game game = partidaManager.getStartedGame(correo);
-
-        if(game == null) {
+        Game partida = partidaManager.getStartedGame(correo);
+        if (partida == null) {
             newGameView = new NewGameView();
             newGameView.setNewGameButtonListener(e -> newGame());
             newGameView.setCancelButtonListener(e -> newGameView.dispose());
             newGameView.setVisible(true);
-        } else{
-            menuView.showGameExists();
+        } else {
+
+            GameManager model = new GameManager(partida.getIdPartida());
+            GameView view = new GameView();
+            new GameController(model, view);
+            menuView.dispose();
         }
-
     }
-
     private void selectGameToShowStats() {
         showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
         showGamesView.setShowStatsActionListener(e -> {
@@ -94,18 +95,21 @@ public class MenuController {
 
     private void newGame() {
         String gameName = newGameView.getNewGameName();
-        try{
-            partidaManager.insertGame(gameName, correo);
-        } catch (ConstraintException e){
-            if(e.getMessage().contains("partida_nombre_uk")){
+        try {
+            int gameId = partidaManager.insertGame(gameName, correo);
+            Game game = partidaManager.getGameById(gameId);
+            GameManager model = new GameManager(gameId);
+            GameView view = new GameView();
+            new GameController(model, view);
+            newGameView.dispose();
+            menuView.dispose();
+        } catch (ConstraintException e) {
+            if (e.getMessage().contains("partida_nombre_uk")) {
                 newGameView.showDuplicateGameMessage();
-                return;
             }
         }
-
-        System.out.println("Name: " + gameName);
-        //TODO cridar al joc
     }
+
     private void removeAccountFromDatabase() {
         String correo = userManager.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
         if(correo != null) {

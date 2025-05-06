@@ -22,11 +22,16 @@ public class PartidaManager {
         return gameDAO.searchGamesFinished(userSearch, gameSearch);
     }
 
-    public void insertGame(String userName, String correo){
+    public int insertGame(String userName, String correo){
         gameDAO.insertGame(userName, correo);
+        return 0;
     }
 
     public Game getStartedGame(String userName){
         return gameDAO.getStartedGame(userName);
+    }
+
+    public Game getGameById(int id) {
+        return gameDAO.getGameById(String.valueOf(id));
     }
 }

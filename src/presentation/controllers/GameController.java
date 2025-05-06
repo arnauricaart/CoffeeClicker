@@ -1,4 +1,7 @@
-package MARIA;
+package presentation.controllers;
+
+import business.managers.GameManager;
+import presentation.views.GameView;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -44,7 +47,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     // Falta poner el botón (en la view), el listener y que cuando se pulse llame a esta función
     public void endGame(){
         model.endGame();
-        // Falta volver al menu
+        // Para volver al menu
     }
 
     private void updateLabels() {
@@ -159,7 +162,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     public void onGameUpdated() {
         updateLabels();
     }
-
+/*
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             GameManager model = new GameManager(12);
@@ -167,7 +170,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             new GameController(model, view);
         });
     }
-
+*/
 
 }
 

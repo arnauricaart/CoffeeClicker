@@ -18,6 +18,7 @@ public class Game {
     private String lastAccess;
     private boolean hasEnded;
 
+
     // Constructor
     public Game(int gameID) {
         this.gameID = gameID;
@@ -145,4 +146,7 @@ public class Game {
     public String getUserName() {
         return userName;
     }
+
+    public int getIdPartida() { return this.gameID;}
+
 }
