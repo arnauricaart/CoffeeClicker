@@ -43,10 +43,7 @@ public class MenuController {
             newGameView.setCancelButtonListener(e -> newGameView.dispose());
             newGameView.setVisible(true);
         } else {
-
-            GameManager model = new GameManager(partida.getIdPartida());
-            GameView view = new GameView();
-            new GameController(model, view);
+            new GameController();
             menuView.dispose();
         }
     }
@@ -98,9 +95,7 @@ public class MenuController {
         try {
             int gameId = partidaManager.insertGame(gameName, correo);
             Game game = partidaManager.getGameById(gameId);
-            GameManager model = new GameManager(gameId);
-            GameView view = new GameView();
-            new GameController(model, view);
+            new GameController();
             newGameView.dispose();
             menuView.dispose();
         } catch (ConstraintException e) {

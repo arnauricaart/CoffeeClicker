@@ -1,6 +1,6 @@
-package MARIA;
+package business.entities.generators;
 
-public abstract class Generator {
+public abstract class Generator implements Runnable{
     private String name;
     private float basePrice;
     private float production;
@@ -25,7 +25,7 @@ public abstract class Generator {
         // number of generators++?
     }
 
-    public void generateCoffee() {
+    public void generateCoffee(){
         //ToDo
     }
 

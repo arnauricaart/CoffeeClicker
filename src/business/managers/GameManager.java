@@ -10,15 +10,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameManager implements Runnable{
-    private double coffeeCounter;
-    private int coffeeMachineNumber;
-    private int baristaNumber;
-    private int cafeNumber;
     private boolean baristaUnlocked;
+    private boolean baristaUpgradeUnlocked;
     private boolean cafeUnlocked;
-    private final int coffeeMachinePriceBase = 10;
+    private boolean cafeUpgradeUnlocked;
+    private final int coffeeMachinePriceBase = 15;
     private final int baristaPriceBase = 150;
-    private final int cafePriceBase = 150;
+    private final int cafePriceBase = 300;
     private double perSecond;
     private GameDAO gameDAO;
     private StatsDAO statDAO;
@@ -33,14 +31,16 @@ public class GameManager implements Runnable{
 
     private GameUpdateListener listener;
 
+    private final double COFFEEMACHINE_PERSECOND = 0.2;
+    private final double BARISTA_PERSECOND = 1;
+    private final double CAFE_PERSECOND = 5;
+
     public GameManager(int ID) {
         gameDAO = new GameDBDAO();
         statDAO = new StatsDBDAO();
-        coffeeCounter = 0;
-        coffeeMachineNumber = 0;
-        baristaNumber = 0;
-        cafeNumber = 0;
         baristaUnlocked = false;
+        baristaUpgradeUnlocked = false;
+        cafeUpgradeUnlocked = false;
         cafeUnlocked = false;
         perSecond = 0.0;
         // no asignamos game aún
@@ -81,65 +81,98 @@ public class GameManager implements Runnable{
         //Falta hacer un updateGame en la DB
     }
 
-    // cambiar
     public void addCoffee(double amount) {
-        coffeeCounter += amount;
+         game.addCoffee(amount);
     }
 
     public boolean canBuyCoffeeMachine() {
-        return coffeeCounter >= getCoffeeMachinePrice();
+        return game.getNumCoffees() >= getCoffeeMachinePrice();
     }
 
 
     public void buyCoffeeMachine() {
-        coffeeCounter -= getCoffeeMachinePrice();
-        coffeeMachineNumber++;
-        perSecond += 0.2;
+        game.subtractCoffee(getCoffeeMachinePrice());
+        game.increaseGeneratorCoffeeMachine();
     }
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getCoffeeMachinePrice() {
-        return (int) Math.round(coffeeMachinePriceBase * Math.pow(1.07, coffeeMachineNumber));
+        return (int) Math.round(coffeeMachinePriceBase * Math.pow(1.07, game.getNumCoffeeMachine()));
     }
 
     public boolean canBuyBarista() {
-        return coffeeCounter >= getBaristaPrice();
+        return game.getNumCoffees() >= getBaristaPrice();
+    }
+
+    public void buyCafeUpgrade() {
+        game.subtractCoffee(getCafeUpgradePrice());
+        game.increaseUpgradeCafe();
     }
 
     public void buyBarista() {
-        coffeeCounter -= getBaristaPrice();
-        baristaNumber++;
-        perSecond += 0.5;
+        game.subtractCoffee(getBaristaPrice());
+        game.increaseGeneratorBarista();
         baristaUnlocked = true;
+    }
+
+    public void buyBaristaUpgrade(){
+        game.subtractCoffee(getBaristaUpgradePrice());
+        game.increaseUpgradeBarista();
+    }
+
+    public void buyCoffeeMachineUpgrade() {
+        game.subtractCoffee(getCoffeeMachineUpgradePrice());
+        game.increaseUpgradeCafe();
+    }
+    public int getCoffeeMachineUpgradePrice() {
+        return coffeeMachinePriceBase * (getCoffeeMachineUpgradeNumber() + 1);
+    }
+
+    public int getBaristaUpgradePrice(){
+        return baristaPriceBase * (getBaristaUpgradeNumber() + 1);
+    }
+
+    public int getCafeUpgradePrice() {
+        return cafePriceBase * (getCafeUpgradeNumber() + 1);
     }
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getBaristaPrice() {
-        return (int) Math.round(baristaPriceBase * Math.pow(1.15, baristaNumber));
+        return (int) Math.round(baristaPriceBase * Math.pow(1.15, game.getNumBarista()));
     }
 
     public boolean canUnlockBarista() {
-        return coffeeCounter >= baristaPriceBase && !baristaUnlocked;
+        return game.getNumCoffees() >= baristaPriceBase && !baristaUnlocked;
+    }
+
+    public boolean isBaristaUpgradeUnlocked(){
+        return baristaUpgradeUnlocked;
+    }
+
+    public boolean isCafeUpgradeUnlocked(){
+        return cafeUpgradeUnlocked;
     }
 
     public boolean canBuyCafe(){
-        return coffeeCounter >= getCafePrice();
+        return game.getNumCoffees() >= getCafePrice();
     }
 
+    public boolean canBuyCafeUpgrade() {return game.getNumCoffees() >= getCafeUpgradePrice();}
+
+    public boolean canBuyCoffeeMachineUpgrade() {return game.getNumCoffees() >= getCoffeeMachineUpgradePrice();}
+
+    public boolean canBuyBaristaUpgrade() {return game.getNumCoffees() >= getBaristaUpgradePrice();}
+
+
     public void buyCafe() {
-        coffeeCounter -= getCafePrice();
-        cafeNumber++;
-        perSecond += 1.0;
+        game.subtractCoffee(getCafePrice());
+        game.increaseGeneratorCafe();
     }
 
     public int getCafePrice() {
-        return (int) Math.round(cafePriceBase * Math.pow(1.07, cafeNumber));
+        return (int) Math.round(cafePriceBase * Math.pow(1.07, game.getNumCafe()));
     }
 
-    public int getCoffeeCounter() { return (int) coffeeCounter; }
-    public int getCoffeeMachineNumber() { return coffeeMachineNumber; }
-    public int getBaristaNumber() { return baristaNumber; }
-    public int getCafeNumber() { return cafeNumber; }
     public double getPerSecond() { return perSecond; }
 
     public boolean isBaristaUnlocked() { return baristaUnlocked; }
@@ -151,18 +184,39 @@ public class GameManager implements Runnable{
     public boolean isCafeUnlocked() { return cafeUnlocked; }
 
     public boolean canUnlockCafe() {
-        return coffeeCounter >= cafePriceBase && !cafeUnlocked;
+        return game.getNumCoffees() >= cafePriceBase && !cafeUnlocked;
     }
 
     public void unlockCafe(){
         cafeUnlocked = true;
     }
 
+    public void unlockBaristaUpgrade() { baristaUpgradeUnlocked = true;}
+
+    public void unlockCafeUpgrade(){cafeUpgradeUnlocked = true;}
+
     public void updatePerSecond() {
-        perSecond = coffeeMachineNumber * 0.2 + baristaNumber * 0.5;
         //perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
-        // FALTA tener en cuenta los upgrades. Añadir cafe y sus num upgrades
+        perSecond = (game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
+                    (game.getNumUpgradeBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
+                    (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
+
+    public double getCoffeeCounter() {return game.getNumCoffees();}
+
+    public int getBaristaNumber() {return game.getNumBarista();}
+
+    public int getCoffeeMachineNumber() {return game.getNumCoffeeMachine();}
+
+    public int getCafeNumber() {return game.getNumCafe();}
+
+
+    public int getBaristaUpgradeNumber() {return game.getNumUpgradeBarista();}
+
+    public int getCafeUpgradeNumber(){return game.getNumUpgradeCafe();}
+
+    public int getCoffeeMachineUpgradeNumber() {return game.getNumUpgradeCoffeeMachine();}
+
 
     @Override
     public void run() {
@@ -173,7 +227,7 @@ public class GameManager implements Runnable{
                 @Override
                 public void run() {
                     if (running) {
-                        statDAO.updateStats(game.getGameID(), getCafeNumber(), currentMinute);
+                        statDAO.updateStats(game.getGameID(), game.getNumCafe(), currentMinute);
                         currentMinute++;
                     }
                 }
@@ -182,18 +236,22 @@ public class GameManager implements Runnable{
             while (running) {
                 try {
                     Thread.sleep(1000);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
+                updatePerSecond();
                 addCoffee(getPerSecond());
 
                 if (canUnlockBarista()) {
                     unlockBarista();
+                    unlockBaristaUpgrade();
                 }
 
                 if (canUnlockCafe()) {
                     unlockCafe();
+                    unlockCafeUpgrade();
                 }
 
                 if (listener != null) {

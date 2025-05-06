@@ -18,9 +18,9 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
 
     //cantidad de cada uno de los generadores
 
-    public GameController(GameManager model, GameView view) {
-        this.model = model;
-        this.view = view;
+    public GameController() {
+        model = new GameManager(12); // cambiar gameID
+        view = new GameView();
 
         view.addCoffeeButtonListener(this);
         view.addCoffeeMachineButtonListener(this);
@@ -60,6 +60,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         // Para volver al menu
     }
 
+    // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,...
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
             view.setCounterLableText(model.getCoffeeCounter() + " coffees");
@@ -67,9 +68,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             view.setCoffeeMachineButtonText("Coffee Machine (" + model.getCoffeeMachineNumber() + ")");
             if (model.isBaristaUnlocked()) {
                 view.setBaristaButtonText("Barista (" + model.getBaristaNumber() + ")");
+                view.setBaristaUpgradeButtonText("U2 (" + model.getBaristaUpgradeNumber() + ")");
             }
             if (model.isCafeUnlocked()) {
                 view.setCafeButtonText("Cafe (" + model.getCafeNumber() + ")");
+                view.setCafeUpgradeButtonText("U3 (" + model.getCafeUpgradeNumber() + ")");
             }
         });
     }
@@ -107,6 +110,17 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             updateLabels();
         }
 
+        if (source.equals("COFFEEMACHINEUPGRADEBUTTON")) {
+            if (model.canBuyCoffeeMachineUpgrade()) {
+                model.buyCoffeeMachineUpgrade();
+                playSound("res/ding.wav");
+            } else {
+                view.setMessageText("You need more coffees!");
+                playSound("res/error.wav");
+            }
+            updateLabels();
+        }
+
         if (source.equals("BARISTABUTTON")) {
             if (!model.isBaristaUnlocked()) {
                 view.setMessageText("This item is currently locked!");
@@ -115,6 +129,22 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             } else {
                 if (model.canBuyBarista()) {
                     model.buyBarista();
+                    playSound("res/ding.wav");
+                } else {
+                    view.setMessageText("You need more coffees!");
+                    playSound("res/error.wav");
+                }
+            }
+        }
+
+        if (source.equals("BARISTAUPGRADEBUTTON")) {
+            if (!model.isBaristaUpgradeUnlocked()) {
+                view.setMessageText("This item is currently locked!");
+                playSound("res/error.wav");
+                return;
+            } else {
+                if (model.canBuyBaristaUpgrade()) {
+                    model.buyBaristaUpgrade();
                     playSound("res/ding.wav");
                 } else {
                     view.setMessageText("You need more coffees!");
@@ -138,6 +168,19 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
                 }
             }
         }
+
+        if (source.equals("CAFEUPGRADEBUTTON")) {
+            if (model.canBuyCafeUpgrade()) {
+                model.buyCafeUpgrade();
+                playSound("res/ding.wav");
+            } else {
+                view.setMessageText("You need more coffees!");
+                playSound("res/error.wav");
+            }
+            updateLabels();
+        }
+
+
     }
 
     @Override
@@ -157,6 +200,20 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
                 view.setMessageText("This item is currently locked!");
             } else {
                 view.setMessageText("Cafe\n[price: " + model.getCafePrice() + "]\nProduces 1 coffee every second.");
+            }
+        } else if ("COFFEEMACHINEUPGRADEBUTTON".equals(name)) {
+            view.setMessageText("Coffee Machine Upgrade\n[price: " + model.getCoffeeMachineUpgradePrice() + "]\nIncreases CoffeeMachine production by" + (model.getCoffeeMachineUpgradeNumber() + 1) + ".");
+        } else if ("BARISTAUPGRADEBUTTON".equals(name)) {
+            if (!model.isBaristaUpgradeUnlocked()) {
+                view.setMessageText("This item is currently locked!");
+            } else {
+                view.setMessageText("Barista Upgrade\n[price: " + model.getBaristaUpgradePrice() + "]\nIncreases Barista production by" + (model.getBaristaUpgradeNumber() + 1) + ".");
+            }
+        } else if ("CAFEUPGRADEBUTTON".equals(name)) {
+            if (!model.isCafeUpgradeUnlocked()) {
+                view.setMessageText("This item is currently locked!");
+            } else {
+                view.setMessageText("Cafe Upgarde\n[price: " + model.getCafeUpgradePrice() + "]\nIncreases Cafe production by" + (model.getCafeUpgradeNumber() + 1) + ".");
             }
         }
     }
@@ -183,4 +240,3 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
 */
 
 }
-

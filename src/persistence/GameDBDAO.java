@@ -146,4 +146,29 @@ public class GameDBDAO implements GameDAO{
         int result = SQL_CRUD.CUDReturningNextval(query, values, types);
         return result;
     }
+
+    public boolean updateGame(Game game){
+        String query = "UPDATE partida SET Cafes=?, Terminada=?, UltimoAcceso=?, Cafe=?, Barista=?, CoffeMachine=? WHERE IdPartida=? ";
+        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+        values.add(String.valueOf(game.getNumCoffees())); types.add("int");
+        values.add(String.valueOf(game.hasEnded())); types.add("int");
+        values.add(String.valueOf(game.hasEnded())); types.add("int");
+        values.add("1"); types.add("datetime");
+        values.add(String.valueOf(game.getNumCafe())); types.add("int");
+        values.add(String.valueOf(game.getNumBarista())); types.add("int");
+        values.add(String.valueOf(game.getNumCoffeeMachine())); types.add("int");
+        values.add(String.valueOf(game.getGameID())); types.add("int");
+
+        int result = SQL_CRUD.CUD(query,values,types);
+        boolean res = false;
+        if (result > 0){
+            res = true;
+        }
+        return res;
+
+
+    }
 }
+

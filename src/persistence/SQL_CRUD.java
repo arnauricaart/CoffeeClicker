@@ -1,9 +1,8 @@
 package persistence;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+
 
 public class SQL_CRUD {
     public SQL_CRUD(){
@@ -18,10 +17,16 @@ public class SQL_CRUD {
             for (int i = 0; i < values.size(); i++){
                 if (tipos.get(i).equals("String")){
                     pst.setString(i +1,values.get(i));
-                } else if (tipos.get(i).equals("int")){
+                } else if (tipos.get(i).equals("int") ){
                     pst.setInt(i+1,Integer.parseInt(values.get(i)));
                 } else if (tipos.get(i).equals("float")){
                     pst.setDouble(i+1, Double.parseDouble(values.get(i)));
+                } else if (tipos.get(i).equals("tinyint")) {
+                    if (values.get(i).equals("true")){
+                        pst.setInt(i+1,1);
+                    } else {
+                        pst.setInt(i+1,0);
+                    }
                 }
             }
             res = pst.executeQuery();
@@ -50,6 +55,15 @@ public class SQL_CRUD {
                     pst.setInt(i + 1,Integer.parseInt(values.get(i)));
                 } else if (tipos.get(i).equals("float")){
                     pst.setDouble(i +1, Double.parseDouble(values.get(i)));
+                } else if (tipos.get(i).equals("tinyint")) {
+                    if (values.get(i).equals("true")){
+                        pst.setInt(i+1,1);
+                    } else {
+                        pst.setInt(i+1,0);
+                    }
+                } else if (tipos.get(i).equals("datetime")) {
+                    pst.setTimestamp(i +1, Timestamp.valueOf(LocalDateTime.now()));
+
                 }
             }
         } catch (SQLException e){

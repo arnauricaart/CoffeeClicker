@@ -1,4 +1,4 @@
-package business.entities.generators;
+package business.entities.upgrades;
 
 public abstract class Upgrade {
     private float basePrice;

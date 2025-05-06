@@ -232,9 +232,9 @@ public class GameView {
         cafeButton.setActionCommand("CAFEBUTTON");
 
         /////////////////UGRADES////////////////////
-        coffeeMachineButton.setActionCommand("COFFEEMACHINEUPGRADEBUTTON");
-        baristaButton.setActionCommand("BARISTAUPGRADEBUTTON");
-        cafeButton.setActionCommand("CAFEUPGRADEBUTTON");
+        coffeeMachineUpgradeButton.setActionCommand("COFFEEMACHINEUPGRADEBUTTON");
+        baristaUpgradeButton.setActionCommand("BARISTAUPGRADEBUTTON");
+        cafeUpgradeButton.setActionCommand("CAFEUPGRADEBUTTON");
         ////////////////////////////////////////////
 
         pauseButton.setActionCommand("PAUSEBUTTON");
@@ -245,9 +245,9 @@ public class GameView {
         cafeButton.setName("CAFEBUTTON");
 
         /////////////////UGRADES////////////////////
-        coffeeMachineButton.setName("COFFEEMACHINEUPGRADEBUTTON");
-        baristaButton.setName("BARISTAUPGRADEBUTTON");
-        cafeButton.setName("CAFEUPGRADEBUTTON");
+        coffeeMachineUpgradeButton.setName("COFFEEMACHINEUPGRADEBUTTON");
+        baristaUpgradeButton.setName("BARISTAUPGRADEBUTTON");
+        cafeUpgradeButton.setName("CAFEUPGRADEBUTTON");
         ////////////////////////////////////////////
 
         window.setVisible(true);

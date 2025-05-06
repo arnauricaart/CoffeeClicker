@@ -5,7 +5,7 @@ public class Game {
     private int gameID;
     private String name;
     private String userName;
-    private int coffee;
+    private int numCoffee;
 
     private int numCoffeeMachine;
     private int numBarista;
@@ -23,7 +23,7 @@ public class Game {
     public Game(int gameID) {
         this.gameID = gameID;
         this.name = "Partida " + gameID;
-        this.coffee = 0;
+        this.numCoffee = 0;
         this.numCoffeeMachine = 0;
         this.numBarista = 0;
         this.numCafe = 0;
@@ -36,7 +36,7 @@ public class Game {
     public Game(int gameID, String name, int coffees, String lastAccess) {
         this.gameID = gameID;
         this.name = name;
-        this.coffee = coffees;
+        this.numCoffee = coffees;
         this.lastAccess = lastAccess;
     }
 
@@ -45,7 +45,7 @@ public class Game {
         this.gameID = gameID;
         this.userName = userName;
         this.name = name;
-        this.coffee = coffees;
+        this.numCoffee = coffees;
         this.lastAccess = lastAccess;
     }
 
@@ -68,9 +68,12 @@ public class Game {
     }
 
     // Métodos para añadir café
-    public void addCoffee(int amount) {
-        this.coffee += amount;
+    public void addCoffee(double amount) {
+        this.numCoffee += amount;
     }
+
+    // Método para quitar cafes
+    public void subtractCoffee(double amount) {this.numCoffee -= amount;}
 
     // Métodos para upgrades
     public void increaseUpgradeCoffeeMachine() {
@@ -121,8 +124,8 @@ public class Game {
         return gameID;
     }
 
-    public int getCoffees() {
-        return coffee;
+    public int getNumCoffees() {
+        return numCoffee;
     }
 
     public boolean hasEnded() {
@@ -135,9 +138,18 @@ public class Game {
     public int getNumBarista() {
         return numBarista;
     }
-
     public int getNumCafe(){
         return numCafe;
+    }
+
+    public int getNumUpgradeCoffeeMachine() {
+        return numUpgradeCoffeeMachine;
+    }
+    public int getNumUpgradeBarista() {
+        return numUpgradeBarista;
+    }
+    public int getNumUpgradeCafe(){
+        return numUpgradeCafe;
     }
 
     public String getLastAccess() {return lastAccess; }
@@ -148,5 +160,6 @@ public class Game {
     }
 
     public int getIdPartida() { return this.gameID;}
+
 
 }
