@@ -55,6 +55,8 @@ public class GameManager implements Runnable{
 
     public void playGame(Game game) {
         running = true;
+        this.game = game;
+
         run();
     }
 
