@@ -66,7 +66,7 @@ public class MenuController implements MenuNavigator{
         } else {
             //AQUI YA EXISTE
             menuView.showGameExists();
-            gameController.continueGame(String.valueOf(partida.getGameID()));
+            gameController.continueGame(partida.getGameID());
             menuView.dispose();
         }
     }

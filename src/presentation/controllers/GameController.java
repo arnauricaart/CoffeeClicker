@@ -57,7 +57,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         view.open();
     }
 
-    public void continueGame(String gameID){
+    public void continueGame(int gameID){
         model.continueGame(gameID);
         createView();
         view.open();

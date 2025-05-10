@@ -10,13 +10,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameManager implements Runnable{
+    private final int COFFEE_MACHINE_PRICE_BASE = 15;
+    private final int BARISTA_PRICE_BASE = 150;
+    private final int CAFE_PRICE_BASE = 300;
+    private final double COFFEEMACHINE_PERSECOND = 0.2;
+    private final double BARISTA_PERSECOND = 1;
+    private final double CAFE_PERSECOND = 5;
+
     private boolean baristaUnlocked;
     private boolean baristaUpgradeUnlocked;
     private boolean cafeUnlocked;
     private boolean cafeUpgradeUnlocked;
-    private final int coffeeMachinePriceBase = 15;
-    private final int baristaPriceBase = 150;
-    private final int cafePriceBase = 300;
     private double perSecond;
     private GameDAO gameDAO;
     private StatsDAO statDAO;
@@ -30,10 +34,6 @@ public class GameManager implements Runnable{
     private boolean running = true;
 
     private GameUpdateListener listener;
-
-    private final double COFFEEMACHINE_PERSECOND = 0.2;
-    private final double BARISTA_PERSECOND = 1;
-    private final double CAFE_PERSECOND = 5;
 
     public GameManager() {
         gameDAO = new GameDBDAO();
@@ -60,12 +60,12 @@ public class GameManager implements Runnable{
     // la función se llama desde el controller cuando se clica "new game" o "continue game"
     public void startNewGame(String gameName, String email) {
         int gameID = gameDAO.insertGame(gameName, email);
-        game = gameDAO.getGameById(String.valueOf(gameID)); //Esta función del DAO deberias ser un int no String
+        game = gameDAO.getGameById(gameID);
         running = true;
         run();
     }
 
-    public void continueGame(String gameID) {
+    public void continueGame(int gameID) {
         game = gameDAO.getGameById(gameID);
         running = true;
         run();
@@ -98,7 +98,7 @@ public class GameManager implements Runnable{
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getCoffeeMachinePrice() {
-        return (int) Math.round(coffeeMachinePriceBase * Math.pow(1.07, game.getNumCoffeeMachine()));
+        return (int) Math.round(COFFEE_MACHINE_PRICE_BASE * Math.pow(1.07, game.getNumCoffeeMachine()));
     }
 
     public boolean canBuyBarista() {
@@ -126,24 +126,24 @@ public class GameManager implements Runnable{
         game.increaseUpgradeCafe();
     }
     public int getCoffeeMachineUpgradePrice() {
-        return coffeeMachinePriceBase * (getCoffeeMachineUpgradeNumber() + 1);
+        return COFFEE_MACHINE_PRICE_BASE * (getCoffeeMachineUpgradeNumber() + 1);
     }
 
     public int getBaristaUpgradePrice(){
-        return baristaPriceBase * (getBaristaUpgradeNumber() + 1);
+        return BARISTA_PRICE_BASE * (getBaristaUpgradeNumber() + 1);
     }
 
     public int getCafeUpgradePrice() {
-        return cafePriceBase * (getCafeUpgradeNumber() + 1);
+        return CAFE_PRICE_BASE * (getCafeUpgradeNumber() + 1);
     }
 
     // aqui no va esto, sino dentro de upgrade uno de los hijos
     public int getBaristaPrice() {
-        return (int) Math.round(baristaPriceBase * Math.pow(1.15, game.getNumBarista()));
+        return (int) Math.round(BARISTA_PRICE_BASE * Math.pow(1.15, game.getNumBarista()));
     }
 
     public boolean canUnlockBarista() {
-        return game.getNumCoffees() >= baristaPriceBase && !baristaUnlocked;
+        return game.getNumCoffees() >= BARISTA_PRICE_BASE && !baristaUnlocked;
     }
 
     public boolean isBaristaUpgradeUnlocked(){
@@ -171,7 +171,7 @@ public class GameManager implements Runnable{
     }
 
     public int getCafePrice() {
-        return (int) Math.round(cafePriceBase * Math.pow(1.07, game.getNumCafe()));
+        return (int) Math.round(CAFE_PRICE_BASE * Math.pow(1.07, game.getNumCafe()));
     }
 
     public double getPerSecond() { return perSecond; }
@@ -185,7 +185,7 @@ public class GameManager implements Runnable{
     public boolean isCafeUnlocked() { return cafeUnlocked; }
 
     public boolean canUnlockCafe() {
-        return game.getNumCoffees() >= cafePriceBase && !cafeUnlocked;
+        return game.getNumCoffees() >= CAFE_PRICE_BASE && !cafeUnlocked;
     }
 
     public void unlockCafe(){

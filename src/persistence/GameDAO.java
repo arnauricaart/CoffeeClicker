@@ -9,7 +9,7 @@ public interface GameDAO {
 
     public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch);
 
-    public Game getGameById(String gameID);
+    public Game getGameById(int gameID);
 
     public Game getGameByNameAndGame(String gameName, String userId);
 

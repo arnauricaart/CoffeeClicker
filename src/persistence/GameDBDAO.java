@@ -94,10 +94,10 @@ public class GameDBDAO implements GameDAO{
         return null;
     }
 
-    public Game getGameById(String gameID){
+    public Game getGameById(int gameID){
         String query = "SELECT * FROM partida WHERE IdPartida=?";
         ArrayList<String> values = new ArrayList<String>();
-        values.add(gameID);
+        values.add(String.valueOf(gameID));
         ArrayList<String> tipos = new ArrayList<String>();
         tipos.add("int");
 

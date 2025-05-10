@@ -32,6 +32,6 @@ public class PartidaManager {
     }
 
     public Game getGameById(int id) {
-        return gameDAO.getGameById(String.valueOf(id));
+        return gameDAO.getGameById(id);
     }
 }
