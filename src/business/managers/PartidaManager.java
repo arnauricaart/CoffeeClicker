@@ -23,8 +23,7 @@ public class PartidaManager {
     }
 
     public int insertGame(String userName, String correo){
-        gameDAO.insertGame(userName, correo);
-        return 0;
+        return gameDAO.insertGame(userName, correo);
     }
 
     public Game getStartedGame(String userName){

@@ -1,6 +1,5 @@
 package presentation.controllers;
 import business.entities.Game;
-import business.managers.GameManager;
 import business.managers.PartidaManager;
 import business.managers.StatisticsManager;
 import business.managers.UserManager;
@@ -50,23 +49,21 @@ public class MenuController implements MenuNavigator{
         Game partida = partidaManager.getStartedGame(correo);
         if (partida == null) {
             newGameView = new NewGameView();
-            newGameView.setNewGameButtonListener(e -> newGame());
+            //newGameView.setNewGameButtonListener(e -> newGame());
 
             newGameView.setNewGameButtonListener(e -> {
                 Game nuevaPartida = newGame();
                 if (nuevaPartida != null) {
-                    gameController.startGame(nuevaPartida.getName(), correo);
+                    gameController.playGame(partida);
                 }
             });
 
             newGameView.setCancelButtonListener(e -> newGameView.dispose());
             newGameView.setVisible(true);
-            //AQUI SE CREA NUEVA PARTIDA
-            //gameController.startGame(partida.getName() , correo);
         } else {
             //AQUI YA EXISTE
             menuView.showGameExists();
-            gameController.continueGame(partida.getGameID());
+            gameController.playGame(partida);
             menuView.dispose();
         }
     }

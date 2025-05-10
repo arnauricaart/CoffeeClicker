@@ -53,20 +53,7 @@ public class GameManager implements Runnable{
         this.listener = listener;
     }
 
-    //Inicializar las variables dependiendo se si es unn juego nuevo o se continua
-    public void preStartGame(Game game){
-
-    }
-    // la función se llama desde el controller cuando se clica "new game" o "continue game"
-    public void startNewGame(String gameName, String email) {
-        int gameID = gameDAO.insertGame(gameName, email);
-        game = gameDAO.getGameById(gameID);
-        running = true;
-        run();
-    }
-
-    public void continueGame(int gameID) {
-        game = gameDAO.getGameById(gameID);
+    public void playGame(Game game) {
         running = true;
         run();
     }

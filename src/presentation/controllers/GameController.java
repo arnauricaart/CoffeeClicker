@@ -1,8 +1,8 @@
 package presentation.controllers;
 
+import business.entities.Game;
 import business.managers.GameManager;
 import presentation.views.GameView;
-import presentation.views.MenuGUI;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -51,14 +51,8 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         updateLabels();
     }
 
-    public void startGame(String gameName, String email) {
-        model.startNewGame(gameName, email);
-        createView();
-        view.open();
-    }
-
-    public void continueGame(int gameID){
-        model.continueGame(gameID);
+    public void playGame(Game game){
+        model.playGame(game);
         createView();
         view.open();
     }
