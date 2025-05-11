@@ -134,7 +134,7 @@ public class GameManager implements Runnable{
 
     public void buyCoffeeMachineUpgrade() {
         game.subtractCoffee(getCoffeeMachineUpgradePrice());
-        game.increaseUpgradeCafe();
+        game.increaseUpgradeCoffeeMachine();
     }
     public int getCoffeeMachineUpgradePrice() {
         return COFFEE_MACHINE_PRICE_BASE * (getCoffeeMachineUpgradeNumber() + 1);
