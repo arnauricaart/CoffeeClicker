@@ -14,7 +14,7 @@ public class GameDBDAO implements GameDAO{
 
     }
 
-    public List<Game> getGamesFinished(){
+    public List<Game> getGamesFinishedForStats(){
         List<Game> games = new ArrayList<>();
 
         String query = "SELECT p.*, u.Nombre as UserName FROM partida p JOIN users u ON p.Correo = u.Correo WHERE p.Terminada = 1";
@@ -75,18 +75,30 @@ public class GameDBDAO implements GameDAO{
         return games;
     }
 
-    public Game getStartedGame(String correo){
-        String query = "SELECT * FROM partida p WHERE p.Correo = ? AND p.Terminada = 0";
+    @Override
+    public Game getStartedGame(String correo) {
+        String query = "SELECT * FROM partida WHERE Correo = ? AND Terminada = 0";
         ArrayList<String> values = new ArrayList<String>();
         values.add(correo);
         ArrayList<String> tipos = new ArrayList<String>();
         tipos.add("String");
 
-        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+        ResultSet rs = SQL_CRUD.Select(query, values, tipos);
 
         try {
-            if(rs.next()){
-                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            if(rs.next()) {
+                return new Game(
+                    rs.getInt("IdPartida"),
+                    rs.getString("Nombre"),
+                    rs.getInt("Cafes"),
+                    rs.getString("UltimoAcceso"),
+                    rs.getInt("numCoffeeMachine"),
+                    rs.getInt("numBarista"),
+                    rs.getInt("numCafe"),
+                    rs.getInt("numUpgradeCoffeeMachine"),
+                    rs.getInt("numUpgradeBarista"),
+                    rs.getInt("numUpgradeCafe")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,18 +106,30 @@ public class GameDBDAO implements GameDAO{
         return null;
     }
 
-    public Game getGameById(int gameID){
+    @Override
+    public Game getGameById(int gameID) {
         String query = "SELECT * FROM partida WHERE IdPartida=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(String.valueOf(gameID));
         ArrayList<String> tipos = new ArrayList<String>();
         tipos.add("int");
 
-        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+        ResultSet rs = SQL_CRUD.Select(query, values, tipos);
 
         try {
-            if(rs.next()){
-                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            if(rs.next()) {
+                return new Game(
+                    rs.getInt("IdPartida"),
+                    rs.getString("Nombre"),
+                    rs.getInt("Cafes"),
+                    rs.getString("UltimoAcceso"),
+                    rs.getInt("numCoffeeMachine"),
+                    rs.getInt("numBarista"),
+                    rs.getInt("numCafe"),
+                    rs.getInt("numUpgradeCoffeeMachine"),
+                    rs.getInt("numUpgradeBarista"),
+                    rs.getInt("numUpgradeCafe")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,7 +137,8 @@ public class GameDBDAO implements GameDAO{
         return null;
     }
 
-    public Game getGameByNameAndGame(String gameName, String userId){
+    @Override
+    public Game getGameByNameAndGame(String gameName, String userId) {
         String query = "SELECT * FROM partida WHERE NombrePartida=? AND Nombre=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(gameName);
@@ -122,10 +147,21 @@ public class GameDBDAO implements GameDAO{
         tipos.add("String");
         tipos.add("String");
 
-        ResultSet rs = SQL_CRUD.Select(query,values,tipos);
+        ResultSet rs = SQL_CRUD.Select(query, values, tipos);
         try {
-            if(rs.next()){
-                return new Game(rs.getInt("IdPartida"), rs.getString("Nombre"), rs.getInt("Cafes"), rs.getString("UltimoAcceso"));
+            if(rs.next()) {
+                return new Game(
+                    rs.getInt("IdPartida"),
+                    rs.getString("Nombre"),
+                    rs.getInt("Cafes"),
+                    rs.getString("UltimoAcceso"),
+                    rs.getInt("numCoffeeMachine"),
+                    rs.getInt("numBarista"),
+                    rs.getInt("numCafe"),
+                    rs.getInt("numUpgradeCoffeeMachine"),
+                    rs.getInt("numUpgradeBarista"),
+                    rs.getInt("numUpgradeCafe")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,42 +169,48 @@ public class GameDBDAO implements GameDAO{
         return null;
     }
 
-
     // Retorna el ID de la partida creada
     public int insertGame(String gameName, String correo) {
-        String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso) VALUES(?,0,?,0,Now())";
+        String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso, " +
+                      "numCoffeeMachine, numBarista, numCafe, " +
+                      "numUpgradeCoffeeMachine, numUpgradeBarista, numUpgradeCafe) " +
+                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0, 0, 0, 0)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
         values.add(gameName); types.add("String");
         values.add(correo); types.add("String");
 
-        int result = SQL_CRUD.CUDReturningNextval(query, values, types);
-        return result;
+        return SQL_CRUD.CUDReturningNextval(query, values, types);
     }
 
-    public boolean updateGame(Game game){
-        String query = "UPDATE partida SET Cafes=?, Terminada=?, UltimoAcceso=?, Cafe=?, Barista=?, CoffeMachine=? WHERE IdPartida=? ";
+    public void updateGameState(Game game) {
+        String query = "UPDATE partida SET " +
+                      "Cafes = ?, " +
+                      "numCoffeeMachine = ?, " +
+                      "numBarista = ?, " +
+                      "numCafe = ?, " +
+                      "numUpgradeCoffeeMachine = ?, " +
+                      "numUpgradeBarista = ?, " +
+                      "numUpgradeCafe = ?, " +
+                      "UltimoAcceso = Now(), " +
+                      "Terminada = ? " +
+                      "WHERE IdPartida = ?";
+
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
         values.add(String.valueOf(game.getNumCoffees())); types.add("int");
-        values.add(String.valueOf(game.hasEnded())); types.add("int");
-        values.add(String.valueOf(game.hasEnded())); types.add("int");
-        values.add("1"); types.add("datetime");
-        values.add(String.valueOf(game.getNumCafe())); types.add("int");
-        values.add(String.valueOf(game.getNumBarista())); types.add("int");
         values.add(String.valueOf(game.getNumCoffeeMachine())); types.add("int");
+        values.add(String.valueOf(game.getNumBarista())); types.add("int");
+        values.add(String.valueOf(game.getNumCafe())); types.add("int");
+        values.add(String.valueOf(game.getNumUpgradeCoffeeMachine())); types.add("int");
+        values.add(String.valueOf(game.getNumUpgradeBarista())); types.add("int");
+        values.add(String.valueOf(game.getNumUpgradeCafe())); types.add("int");
+        values.add(game.hasEnded() ? "1" : "0"); types.add("int");
         values.add(String.valueOf(game.getGameID())); types.add("int");
 
-        int result = SQL_CRUD.CUD(query,values,types);
-        boolean res = false;
-        if (result > 0){
-            res = true;
-        }
-        return res;
-
-
+        SQL_CRUD.CUD(query, values, types);
     }
 }
 

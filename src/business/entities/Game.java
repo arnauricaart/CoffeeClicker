@@ -18,35 +18,37 @@ public class Game {
     private String lastAccess;
     private boolean hasEnded;
 
-
-    // Constructor
-    public Game(int gameID) {
-        this.gameID = gameID;
-        this.name = "Partida " + gameID;
-        this.numCoffee = 0;
-        this.numCoffeeMachine = 0;
-        this.numBarista = 0;
-        this.numCafe = 0;
-        this.numUpgradeCoffeeMachine = 0;
-        this.numUpgradeBarista = 0;
-        this.numUpgradeCafe = 0;
-        this.hasEnded = false;
-    }
-
-    public Game(int gameID, String name, int coffees, String lastAccess) {
-        this.gameID = gameID;
-        this.name = name;
-        this.numCoffee = coffees;
-        this.lastAccess = lastAccess;
-    }
-
-    // Constructor amb userName per poder pintar les partides de les estadístiques
+        // Constructor per a estadístiques
     public Game(int gameID, String userName, String name, int coffees, String lastAccess) {
         this.gameID = gameID;
         this.userName = userName;
         this.name = name;
         this.numCoffee = coffees;
         this.lastAccess = lastAccess;
+        this.hasEnded = false;
+        this.numCoffeeMachine = 0;
+        this.numBarista = 0;
+        this.numCafe = 0;
+        this.numUpgradeCoffeeMachine = 0;
+        this.numUpgradeBarista = 0;
+        this.numUpgradeCafe = 0;
+    }
+
+    // Constructor amb tots els camps
+    public Game(int gameID, String name, int coffees, String lastAccess,
+                int numCoffeeMachine, int numBarista, int numCafe,
+                int numUpgradeCoffeeMachine, int numUpgradeBarista, int numUpgradeCafe) {
+        this.gameID = gameID;
+        this.name = name;
+        this.numCoffee = coffees;
+        this.lastAccess = lastAccess;
+        this.hasEnded = false;
+        this.numCoffeeMachine = numCoffeeMachine;
+        this.numBarista = numBarista;
+        this.numCafe = numCafe;
+        this.numUpgradeCoffeeMachine = numUpgradeCoffeeMachine;
+        this.numUpgradeBarista = numUpgradeBarista;
+        this.numUpgradeCafe = numUpgradeCafe;
     }
 
     // Terminar partida
@@ -113,6 +115,31 @@ public class Game {
 
     public int getCafeUpgradePrice() {
         return 175 + (numUpgradeCafe * 45);
+    }
+
+    // Setters for game state
+    public void setNumCoffeeMachine(int numCoffeeMachine) {
+        this.numCoffeeMachine = numCoffeeMachine;
+    }
+
+    public void setNumBarista(int numBarista) {
+        this.numBarista = numBarista;
+    }
+
+    public void setNumCafe(int numCafe) {
+        this.numCafe = numCafe;
+    }
+
+    public void setNumUpgradeCoffeeMachine(int numUpgradeCoffeeMachine) {
+        this.numUpgradeCoffeeMachine = numUpgradeCoffeeMachine;
+    }
+
+    public void setNumUpgradeBarista(int numUpgradeBarista) {
+        this.numUpgradeBarista = numUpgradeBarista;
+    }
+
+    public void setNumUpgradeCafe(int numUpgradeCafe) {
+        this.numUpgradeCafe = numUpgradeCafe;
     }
 
     // Getters

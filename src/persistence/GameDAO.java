@@ -5,7 +5,7 @@ import business.entities.Game;
 import java.util.List;
 
 public interface GameDAO {
-    public List<Game> getGamesFinished();
+    public List<Game> getGamesFinishedForStats();
 
     public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch);
 
@@ -16,4 +16,6 @@ public interface GameDAO {
     public int insertGame(String gameName, String correo);
 
     public Game getStartedGame(String correo);
+
+    public void updateGameState(Game game);
 }

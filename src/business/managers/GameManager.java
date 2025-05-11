@@ -35,6 +35,9 @@ public class GameManager implements Runnable{
 
     private GameUpdateListener listener;
 
+    private Timer autoSaveTimer;
+    private static final long AUTO_SAVE_INTERVAL = 60000; // Auto-save every minute
+
     public GameManager() {
         gameDAO = new GameDBDAO();
         statDAO = new StatsDBDAO();
@@ -47,6 +50,7 @@ public class GameManager implements Runnable{
 
         //Deberíamos hacer que game almazene los minutos que ha durado
         currentMinute = 1;
+        autoSaveTimer = new Timer(true); // Daemon timer
     }
 
     public void setGameUpdateListener(GameUpdateListener listener) {
@@ -56,19 +60,37 @@ public class GameManager implements Runnable{
     public void playGame(Game game) {
         running = true;
         this.game = game;
-
+        startAutoSave();
         run();
+    }
+
+    private void startAutoSave() {
+        autoSaveTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (running && game != null) {
+                    saveGameState();
+                }
+            }
+        }, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
+    }
+
+    private void saveGameState() {
+        if (game != null) {
+            gameDAO.updateGameState(game);
+        }
     }
 
     public void endGame() {
         running = false;
         game.endGame();
-        //Falta hacer un updateGame en la DB
+        saveGameState();
+        autoSaveTimer.cancel();
     }
 
     public void pauseGame(){
         running = false;
-        //Falta hacer un updateGame en la DB
+        saveGameState();
     }
 
     public void addCoffee(double amount) {

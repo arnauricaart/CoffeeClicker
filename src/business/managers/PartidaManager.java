@@ -15,7 +15,7 @@ public class PartidaManager {
     }
 
     public List<Game> getGamesFinished(){
-        return gameDAO.getGamesFinished();
+        return gameDAO.getGamesFinishedForStats();
     }
 
     public List<Game> searchGamesFinished(String userSearch, String gameSearch){
