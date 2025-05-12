@@ -38,7 +38,7 @@ public class RegisterController {
         String pass = view.getPassword();
         String repass = view.getRepassword();
 
-        boolean valid = user.length() >= 6 && pass.equals(repass) && !email.isEmpty();
+        boolean valid = user.length() >= 6 && pass.equals(repass) && !email.isEmpty() && pass.length() >= 8 && pass.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") && email.contains("@");
 
         boolean success = valid && model.register(user, email, pass);
         view.showRegisterResultMessage(success);
