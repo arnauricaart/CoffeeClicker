@@ -75,6 +75,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             view.setCounterLableText(model.getCoffeeCounter() + " coffees");
             view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
             view.setCoffeeMachineButtonText("Coffee Machine (" + model.getCoffeeMachineNumber() + ")");
+            view.setCoffeeMachineUpgradeButtonText("U1 (" + model.getCoffeeMachineUpgradeNumber() +")");
             if (model.isBaristaUnlocked()) {
                 view.setBaristaButtonText("Barista (" + model.getBaristaNumber() + ")");
                 view.setBaristaUpgradeButtonText("U2 (" + model.getBaristaUpgradeNumber() + ")");
