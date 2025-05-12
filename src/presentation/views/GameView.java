@@ -500,6 +500,19 @@ public class GameView extends JFrame {
     public void addBaristaButtonMouseListener(MouseListener mouseListener) {
         baristaButton.addMouseListener(mouseListener);
     }
+
+    public void addCoffeeMachineUpgradeButtonMouseListener(MouseListener mouseListener){
+        coffeeMachineUpgradeButton.addMouseListener(mouseListener);
+    }
+
+    public void addBaristaUpgradeButtonMouseListener(MouseListener mouseListener) {
+        baristaUpgradeButton.addMouseListener(mouseListener);
+    }
+
+    public void addCafeUpgradeButtonMouseListener(MouseListener mouseListener) {
+        cafeUpgradeButton.addMouseListener(mouseListener);
+    }
+
 }
 
 

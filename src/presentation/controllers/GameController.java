@@ -40,9 +40,9 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         view.addCoffeeMachineButtonMouseListener(this);
         view.addBaristaButtonMouseListener(this);
         view.addCafeButtonMouseListener(this);
-        view.addCoffeeMachineUpgradeButtonListener(this);
-        view.addBaristaUpgradeButtonListener(this);
-        view.addCafeUpgradeButtonListener(this);
+        view.addCoffeeMachineUpgradeButtonMouseListener(this);
+        view.addBaristaUpgradeButtonMouseListener(this);
+        view.addCafeUpgradeButtonMouseListener(this);
         view.addPauseButtonListener(e -> togglePause());
         view.addEndGameButtonListener(e -> endGame());
 
@@ -210,18 +210,18 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
                 view.setMessageText("Cafe\n[price: " + model.getCafePrice() + "]\nProduces 1 coffee every second.");
             }
         } else if ("COFFEEMACHINEUPGRADEBUTTON".equals(name)) {
-            view.setMessageText("Coffee Machine Upgrade\n[price: " + model.getCoffeeMachineUpgradePrice() + "]\nIncreases CoffeeMachine production by" + (model.getCoffeeMachineUpgradeNumber() + 1) + ".");
+            view.setMessageText("Coffee Machine Upgrade\n[price: " + model.getCoffeeMachineUpgradePrice() + "]\nIncreases CoffeeMachine production by " + (model.getCoffeeMachineUpgradeNumber() + 1) + ".");
         } else if ("BARISTAUPGRADEBUTTON".equals(name)) {
             if (!model.isBaristaUpgradeUnlocked()) {
                 view.setMessageText("This item is currently locked!");
             } else {
-                view.setMessageText("Barista Upgrade\n[price: " + model.getBaristaUpgradePrice() + "]\nIncreases Barista production by" + (model.getBaristaUpgradeNumber() + 1) + ".");
+                view.setMessageText("Barista Upgrade\n[price: " + model.getBaristaUpgradePrice() + "]\nIncreases Barista production by " + (model.getBaristaUpgradeNumber() + 1) + ".");
             }
         } else if ("CAFEUPGRADEBUTTON".equals(name)) {
             if (!model.isCafeUpgradeUnlocked()) {
                 view.setMessageText("This item is currently locked!");
             } else {
-                view.setMessageText("Cafe Upgarde\n[price: " + model.getCafeUpgradePrice() + "]\nIncreases Cafe production by" + (model.getCafeUpgradeNumber() + 1) + ".");
+                view.setMessageText("Cafe Upgarde\n[price: " + model.getCafeUpgradePrice() + "]\nIncreases Cafe production by " + (model.getCafeUpgradeNumber() + 1) + ".");
             }
         }
     }
