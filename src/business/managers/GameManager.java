@@ -26,7 +26,7 @@ public class GameManager implements Runnable{
     private StatsDAO statDAO;
     private business.entities.Game game;
 
-    private int currentMinute;
+    //private int currentMinute;
 
     private Thread autoCoffeeThread;
 
@@ -49,7 +49,7 @@ public class GameManager implements Runnable{
         // no asignamos game aún
 
         //Deberíamos hacer que game almazene los minutos que ha durado
-        currentMinute = 1;
+        //currentMinute = 1;
         autoSaveTimer = new Timer(true); // Daemon timer
     }
 
@@ -239,8 +239,8 @@ public class GameManager implements Runnable{
                 @Override
                 public void run() {
                     if (running) {
-                        statDAO.updateStats(game.getGameID(), game.getNumCafe(), currentMinute);
-                        currentMinute++;
+                        statDAO.updateStats(game.getGameID(), game.getNumCafe(), game.getMinDuration());
+                        game.increaseMinDuration();
                     }
                 }
             }, 0, 60 * 1000); // 1min

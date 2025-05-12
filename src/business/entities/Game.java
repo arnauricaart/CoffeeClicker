@@ -17,6 +17,7 @@ public class Game {
 
     private String lastAccess;
     private boolean hasEnded;
+    private int minDuration;
 
         // Constructor per a estadístiques
     public Game(int gameID, String userName, String name, int coffees, String lastAccess) {
@@ -32,6 +33,7 @@ public class Game {
         this.numUpgradeCoffeeMachine = 0;
         this.numUpgradeBarista = 0;
         this.numUpgradeCafe = 0;
+        this.minDuration = 1;
     }
 
     // Constructor amb tots els camps
@@ -187,6 +189,12 @@ public class Game {
     }
 
     public int getIdPartida() { return this.gameID;}
+
+    public int getMinDuration() { return this.minDuration; }
+
+    public void increaseMinDuration() {
+        this.minDuration++;
+    }
 
 
 }
