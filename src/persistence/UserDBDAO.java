@@ -76,6 +76,23 @@ public class UserDBDAO implements UserDAO{
         return true;
     }
 
+    public boolean checkEmailExists(String email) {
+        String query = "SELECT COUNT(*) FROM users WHERE Correo = ?";
+        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> tipos = new ArrayList<>();
+        values.add(email); tipos.add("String");
+
+        ResultSet rs = SQL_CRUD.Select(query, values, tipos);
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public String getCorreoFromLogin(String userOrEmail, String password) {
         String query = "SELECT Correo FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";
         ArrayList<String> values = new ArrayList<>();
