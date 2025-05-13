@@ -55,6 +55,9 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         model.playGame(game);
         createView();
         view.open();
+
+        // Llama a onGameUpdated una vez para llenar la tabla y etiquetas iniciales
+        onGameUpdated();
     }
 
     public void endGame(){
@@ -236,5 +239,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     @Override
     public void onGameUpdated() {
         updateLabels();
+
+        // Comnetar, para que se actialize la tabla
+        Object[][] statsData = model.getGeneratorStatsData();
+        if (view != null) {
+            view.updateGeneratorStatsTable(statsData);
+        }
     }
 }

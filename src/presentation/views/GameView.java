@@ -5,6 +5,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /*
 public class GameView {
@@ -269,6 +275,19 @@ public class GameView extends JFrame {
     private JTextArea messageText;
     private Font font1, font2;
 
+    //Noves funncions
+    private JTable generatorStatsTable;
+    private DefaultTableModel generatorStatsTableModel;
+    private JScrollPane generatorStatsScrollPane;
+    private final String[] generatorTableColumns = {
+            "Name",      // O "Generator"
+            "Qty",       // Abreviatura de Quantity
+            "Unit Prod", // Abreviatura de Unit Production
+            "Total Prod",// Abreviatura de Total Production
+            "% Overall"  // O "% Total"
+    };
+    private JLabel generatorTableTitleLabel;
+
     public GameView() {
         createFont();
         createUI();
@@ -283,8 +302,8 @@ public class GameView extends JFrame {
     }
 
     private void createFont() {
-        font1 = new Font("DePixel", Font.PLAIN, 25);
-        font2 = new Font("DePixel", Font.PLAIN, 13);
+        font1 = new Font("DePixelg", Font.PLAIN, 25);
+        font2 = new Font("DePixelg", Font.PLAIN, 13);
     }
 
     private void createUI() {
@@ -340,6 +359,66 @@ public class GameView extends JFrame {
         itemPanel.setBounds(930, 130, 300, 400);
         itemPanel.setBackground(Color.black);
         this.add(itemPanel);
+
+        //Taula
+        generatorStatsTableModel = new DefaultTableModel(generatorTableColumns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        generatorStatsTable = new JTable(generatorStatsTableModel);
+        generatorStatsTable.setFont(font2);
+        generatorStatsTable.getTableHeader().setFont(font2.deriveFont(Font.BOLD));
+
+        generatorStatsTable.setRowHeight(30); // Altura
+
+        generatorStatsTable.setFillsViewportHeight(true);
+        generatorStatsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        generatorStatsTable.getColumnModel().getColumn(0).setPreferredWidth(120); // Name
+        generatorStatsTable.getColumnModel().getColumn(1).setPreferredWidth(60);  // Qty
+        generatorStatsTable.getColumnModel().getColumn(2).setPreferredWidth(95);  // Unit Prod
+        generatorStatsTable.getColumnModel().getColumn(3).setPreferredWidth(95);  // Total Prod
+        generatorStatsTable.getColumnModel().getColumn(4).setPreferredWidth(75);  // % Overall
+
+        generatorStatsTable.setBackground(Color.decode("#B89C91"));
+        generatorStatsTable.setForeground(Color.WHITE);
+        generatorStatsTable.getTableHeader().setBackground(Color.decode("#9E6B57"));
+        generatorStatsTable.getTableHeader().setForeground(Color.WHITE);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        generatorStatsTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // Centrar Qty
+        generatorStatsTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Centrar Unit Prod
+        generatorStatsTable.getColumnModel().getColumn(3).setCellRenderer(centerRenderer); // Centrar Total Prod
+        generatorStatsTable.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); // Centrar % Overall
+
+        int tableX = 460;
+        int tableY = 400;
+        int tableWidth = 450;
+
+        int numRows = 3;
+        int dataRowHeight = generatorStatsTable.getRowHeight();
+        int headerHeight = generatorStatsTable.getTableHeader().getPreferredSize().height;
+        int tableHeight = headerHeight + (numRows * dataRowHeight) + 2;
+
+        generatorTableTitleLabel = new JLabel("GENERATOR TABLE");
+        generatorTableTitleLabel.setFont(font1);
+        generatorTableTitleLabel.setForeground(Color.WHITE);
+        generatorTableTitleLabel.setBounds(tableX, tableY - 40, tableWidth, 30);
+        this.add(generatorTableTitleLabel);
+
+        generatorStatsScrollPane = new JScrollPane(generatorStatsTable);
+        generatorStatsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        generatorStatsScrollPane.setBounds(tableX, tableY, tableWidth, tableHeight);
+
+        this.add(generatorStatsScrollPane);
+
+        //fide la taula
 
         coffeeMachineButton = new JButton("Cursor (0)");
         coffeeMachineButton.setFont(font1);
@@ -410,6 +489,45 @@ public class GameView extends JFrame {
         baristaUpgradeButton.setName("BARISTAUPGRADEBUTTON");
         cafeUpgradeButton.setName("CAFEUPGRADEBUTTON");
     }
+
+    // --- (NUEVO) Clase para renderizar celdas con ajuste de texto ---
+    class WrappingCellRenderer extends JTextArea implements TableCellRenderer {
+
+        public WrappingCellRenderer() {
+            setLineWrap(true);       // Activar ajuste de línea
+            setWrapStyleWord(true);  // Ajustar por palabras completas
+            setOpaque(true);
+            setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5)); // Pequeño margen interno
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            setText((value == null) ? "" : value.toString());
+            // Ajustar altura de fila dinámicamente (basado en el contenido)
+            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+            if (table.getRowHeight(row) != getPreferredSize().height) {
+                table.setRowHeight(row, getPreferredSize().height);
+            }
+
+            // Colores (puedes copiarlos de cómo configuraste la tabla o usar otros)
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                // Puedes poner aquí los mismos colores que usaste para las filas normales
+                setBackground(Color.decode("#D8BFD8")); // Fondo filas (Ej: Thistle claro - ¡igual que en createUI!)
+                setForeground(Color.BLACK);             // Texto filas
+                // O alternar colores si quieres:
+                // setBackground(row % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
+                // setForeground(Color.BLACK);
+            }
+            setFont(table.getFont()); // Usar la fuente de la tabla
+            return this;
+        }
+    }
+    // --- Fin de la clase WrappingCellRenderer ---
 
     // Métodos setters...
     public void setMessageText(String message) {
@@ -511,6 +629,24 @@ public class GameView extends JFrame {
 
     public void addCafeUpgradeButtonMouseListener(MouseListener mouseListener) {
         cafeUpgradeButton.addMouseListener(mouseListener);
+    }
+
+    /**
+     * (NUEVO) Actualiza los datos mostrados en la tabla de estadísticas de generadores.
+     * @param data Un array 2D de Object con los datos. Cada fila debe tener 5 elementos
+     * en el orden: {Nombre, Cantidad, Prod. Unitaria, Prod. Total, % Global}
+     */
+    public void updateGeneratorStatsTable(Object[][] data) {
+        // Limpia las filas anteriores
+        generatorStatsTableModel.setRowCount(0);
+
+        // Añade las nuevas filas que lleguen en 'data'
+        if (data != null) {
+            for (Object[] rowData : data) {
+                generatorStatsTableModel.addRow(rowData);
+            }
+        }
+        // Si 'data' es null o vacío, la tabla simplemente quedará vacía.
     }
 
 }

@@ -5,6 +5,7 @@ import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;
+import java.text.DecimalFormat;  //Nova
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -210,7 +211,7 @@ public class GameManager implements Runnable{
     public void updatePerSecond() {
         //perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
         perSecond = (game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
-                    (game.getNumUpgradeBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
+                    (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
                     (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
 
@@ -228,6 +229,59 @@ public class GameManager implements Runnable{
     public int getCafeUpgradeNumber(){return game.getNumUpgradeCafe();}
 
     public int getCoffeeMachineUpgradeNumber() {return game.getNumUpgradeCoffeeMachine();}
+
+    /**
+     * Calcula y formatea los datos de estadísticas para la tabla de generadores.
+     * @return Un array Object[3][5] con los datos para las 3 filas de la tabla.
+     * Columnas: {"Name", "Quantity", "Unit Production", "Total Production", "% Overall"}
+     */
+    public Object[][] getGeneratorStatsData() {
+        if (game == null) {
+            // Si no hay juego cargado, devuelve datos vacíos o nulos
+            return new Object[0][0];
+        }
+
+        Object[][] data = new Object[3][5];
+        DecimalFormat dfRate = new DecimalFormat("0.0"); // Formato para producción (ej: 1.5)
+        DecimalFormat dfPercent = new DecimalFormat("0.0'%'"); // Formato para porcentaje (ej: 25.5%)
+
+        // --- Datos Base ---
+        String[] names = {"Coffee Machine", "Barista", "Cafe"};
+        int[] quantities = {game.getNumCoffeeMachine(), game.getNumBarista(), game.getNumCafe()};
+        int[] upgradeLevels = {game.getNumUpgradeCoffeeMachine(), game.getNumUpgradeBarista(), game.getNumUpgradeCafe()};
+        double[] baseRates = {COFFEEMACHINE_PERSECOND, BARISTA_PERSECOND, CAFE_PERSECOND};
+
+        // --- Cálculos ---
+        double[] unitProductions = new double[3];
+        double[] totalProductions = new double[3];
+        double grandTotalProduction = getPerSecond(); // Usamos el total ya calculado
+
+        for (int i = 0; i < 3; i++) {
+            unitProductions[i] = baseRates[i] * (upgradeLevels[i] + 1);
+            totalProductions[i] = unitProductions[i] * quantities[i];
+        }
+
+        // --- Llenar el array de datos para la tabla ---
+        for (int i = 0; i < 3; i++) {
+            data[i][0] = names[i]; // Name
+            data[i][1] = quantities[i]; // Quantity
+
+            // Unit Production (formateado)
+            data[i][2] = dfRate.format(unitProductions[i]) + " c/s";
+
+            // Total Production (formateado)
+            data[i][3] = dfRate.format(totalProductions[i]) + " c/s";
+
+            // % Overall (formateado, con cuidado de división por cero)
+            double percentage = 0.0;
+            if (grandTotalProduction > 0) {
+                percentage = (totalProductions[i] / grandTotalProduction) * 100.0;
+            }
+            data[i][4] = dfPercent.format(percentage);
+        }
+
+        return data;
+    }
 
 
     @Override
@@ -277,6 +331,9 @@ public class GameManager implements Runnable{
         autoCoffeeThread.setDaemon(true);
         autoCoffeeThread.start();
     }
+
+
+
 
 }
 
