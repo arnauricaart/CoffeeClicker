@@ -1,147 +1,177 @@
 package presentation.views;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.net.URL;
 
 public class MenuGUI extends JFrame {
 
-    private JButton newGameButton;
-    private JButton statisticsButton;
-    private JButton logoutButton;
-    private JButton deleteAccountButton;
+    // --- Componentes UI ---
+    private JButton newGameButton, statisticsButton, logoutButton, deleteAccountButton;
 
-    public MenuGUI() {
+    // --- Colores UI ---
+    private final Color PLAY_STATS_BUTTON_BG = Color.decode("#9E6B57");
+    private final Color LOGOUT_BUTTON_BG = Color.decode("#654338");
+    private final Color DELETE_BUTTON_BG = Color.decode("#2F170E");
+    private final Color BUTTON_TEXT_FG = Color.WHITE;
+    private final Color TITLE_TEXT_COLOR = Color.BLACK;
 
-        setTitle("Coffee Clicker");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+    /** Botón personalizado con esquinas redondeadas. */
+    protected static class RoundedButton extends JButton {
+        private Color backgroundColor;
+        private int arcWidth, arcHeight;
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(245, 245, 245)); // fondo claro
+        public RoundedButton(String text, Color bgColor, Color fgColor, Dimension size, int arcW, int arcH) {
+            super(text);
+            this.backgroundColor = bgColor;
+            this.arcWidth = arcW;
+            this.arcHeight = arcH;
+            setContentAreaFilled(false); // Permite pintado personalizado
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setOpaque(false);
+            setFont(new Font("Arial", Font.BOLD, 15));
+            setForeground(fgColor);
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            setPreferredSize(size); // Establece tamaño
+            setMinimumSize(size);
+            setMaximumSize(size);
+        }
 
-        // Panel lateral izquierdo con imagen rotada + escalada
-        JLabel leftCoffee = createRotatedImageLabel("/coffee.png", 400, 400, 15, 1.0);
-        JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setOpaque(false);
-        leftPanel.add(leftCoffee);
+        @Override // Pinta el botón
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // Suaviza
 
-        // Imagen derecha: rotada -30°, escalada al 130%
-        JLabel rightCoffee = createRotatedImageLabel("/coffee.png", 400, 400, -30, 1.3f);
+            // Color según estado
+            if (getModel().isArmed()) g2.setColor(backgroundColor.darker());
+            else if (getModel().isRollover()) g2.setColor(backgroundColor.brighter());
+            else g2.setColor(backgroundColor);
 
-        // Panel contenedor que posiciona la imagen manualmente
-        JPanel rightContainer = new JPanel(null); // null layout: colocación absoluta
-        rightContainer.setOpaque(false);
-        rightContainer.setPreferredSize(new Dimension(300, 500)); // espacio visible limitado
-
-        // Posicionamos la imagen parcialmente fuera del panel visible (positivo en X)
-        int x = -20; // cuanto más negativo, más hacia la derecha está
-        int y = 50;
-        rightCoffee.setBounds(x, y, rightCoffee.getPreferredSize().width, rightCoffee.getPreferredSize().height);
-
-        rightContainer.add(rightCoffee);
-
-        // Panel central
-        JPanel centerPanel = new JPanel();
-        centerPanel.setOpaque(false);
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(80, 40, 80, 40));
-
-        JLabel titleLabel = new JLabel("WELCOME TO COFFEE CLICKER", JLabel.CENTER);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        titleLabel.setForeground(Color.DARK_GRAY);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
-        centerPanel.add(titleLabel);
-
-        newGameButton = createStyledButton("PLAY");
-        statisticsButton = createStyledButton("STATISTICS");
-        logoutButton = createStyledButton("LOGOUT");
-        deleteAccountButton = createStyledButton("DELETE ACCOUNT");
-
-        centerPanel.add(newGameButton);
-        centerPanel.add(Box.createVerticalStrut(15));
-        centerPanel.add(statisticsButton);
-
-        // separación mayor entre grupos
-        centerPanel.add(Box.createVerticalStrut(40));
-
-        centerPanel.add(logoutButton);
-        centerPanel.add(Box.createVerticalStrut(15));
-        centerPanel.add(deleteAccountButton);
-
-
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(rightContainer, BorderLayout.EAST);
-
-        setContentPane(mainPanel);
-        setVisible(true);
-    }
-
-    private JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.PLAIN, 16));
-        button.setFocusPainted(false);
-        button.setBackground(new Color(220, 220, 220));
-        button.setForeground(Color.BLACK);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(300, 40));
-        return button;
-    }
-
-    private JLabel createRotatedImageLabel(String path, int baseWidth, int baseHeight, double rotationDegrees, double scaleFactor) {
-        try {
-            BufferedImage img = ImageIO.read(getClass().getResource(path));
-
-            int scaledWidth = (int) (baseWidth * scaleFactor);
-            int scaledHeight = (int) (baseHeight * scaleFactor);
-
-            Image scaledImage = img.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-
-            BufferedImage rotated = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = rotated.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-            AffineTransform at = new AffineTransform();
-            at.translate(scaledWidth / 2.0, scaledHeight / 2.0);
-            at.rotate(Math.toRadians(rotationDegrees));
-            at.translate(-scaledWidth / 2.0, -scaledHeight / 2.0);
-            g2d.drawImage(scaledImage, at, null);
-            g2d.dispose();
-
-            JLabel label = new JLabel(new ImageIcon(rotated));
-            label.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
-            return label;
-        } catch (IOException e) {
-            System.err.println("⚠ No se pudo cargar la imagen: " + path);
-            return new JLabel();
+            g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight); // Dibuja fondo
+            super.paintComponent(g2); // Pinta texto
+            g2.dispose();
         }
     }
 
-    // Métodos para el controlador
-    public void setNewGameButtonListener(java.awt.event.ActionListener l) {
-        newGameButton.addActionListener(l);
+    /** Constructor: configura la ventana del menú. */
+    public MenuGUI() {
+        // --- Configuración Ventana ---
+        setTitle("Coffee Clicker");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1280, 720); // Tamaño fijo
+        setLocationRelativeTo(null); // Centrada
+        setResizable(false);
+
+        // --- Panel Principal ---
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 0));
+        mainPanel.setBackground(Color.WHITE);
+
+        // --- Panel Título (Superior) ---
+        JPanel titleHoldingPanel = new JPanel(new GridBagLayout()); // Para centrar título
+        titleHoldingPanel.setOpaque(false); // Transparente
+
+        int titlePanelHeight = 200; // Altura fija para esta sección
+        titleHoldingPanel.setPreferredSize(new Dimension(1280, titlePanelHeight));
+
+        // Márgenes para posicionar título (top empuja hacia abajo)
+        int topMarginForTitle = 160;
+        int bottomMarginForTitle = 0; // Fijado a 0
+        // Espacio útil vertical para el título: titlePanelHeight - topMarginForTitle = 40px
+        titleHoldingPanel.setBorder(BorderFactory.createEmptyBorder(topMarginForTitle, 10, bottomMarginForTitle, 10));
+
+        // Etiqueta Título
+        JLabel titleLabel = new JLabel("WELCOME TO COFFEE CLICKER", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        titleLabel.setForeground(TITLE_TEXT_COLOR);
+        titleHoldingPanel.add(titleLabel);
+
+        // --- Panel Contenido (Central) ---
+        JPanel contentBelowTitlePanel = new JPanel();
+        contentBelowTitlePanel.setLayout(null); // Posicionamiento manual
+        contentBelowTitlePanel.setOpaque(false);
+        int contentBelowTitlePanelHeight = 720 - titlePanelHeight; // Altura restante (520px)
+        contentBelowTitlePanel.setPreferredSize(new Dimension(1280, contentBelowTitlePanelHeight));
+
+        // --- Imágenes Decorativas ---
+        JLabel leftCoffee = loadImage("/coffee1.png");
+        JLabel rightCoffee = loadImage("/coffee2.png");
+
+        // --- Dimensiones Botones ---
+        Dimension playStatsButtonSize = new Dimension(300, 38);
+        Dimension logoutButtonSize = new Dimension(300, 38);
+        Dimension deleteButtonDim = new Dimension(200, 38);
+
+        // --- Creación Botones ---
+        newGameButton = createStyledButton("NEW/CONTINUE GAME", PLAY_STATS_BUTTON_BG, BUTTON_TEXT_FG, playStatsButtonSize);
+        statisticsButton = createStyledButton("STATISTICS OF GAME", PLAY_STATS_BUTTON_BG, BUTTON_TEXT_FG, playStatsButtonSize);
+        logoutButton = createStyledButton("LOGOUT", LOGOUT_BUTTON_BG, BUTTON_TEXT_FG, logoutButtonSize);
+        deleteAccountButton = createStyledButton("DELETE ACCOUNT", DELETE_BUTTON_BG, BUTTON_TEXT_FG, deleteButtonDim);
+
+        // --- Panel para agrupar botones principales ---
+        JPanel mainButtonsPanel = new JPanel();
+        mainButtonsPanel.setOpaque(false);
+        mainButtonsPanel.setLayout(new BoxLayout(mainButtonsPanel, BoxLayout.Y_AXIS)); // Vertical
+        mainButtonsPanel.add(newGameButton);
+        mainButtonsPanel.add(Box.createVerticalStrut(16)); // Espacio
+        mainButtonsPanel.add(statisticsButton);
+        mainButtonsPanel.add(Box.createVerticalStrut(50)); // Espacio
+        mainButtonsPanel.add(logoutButton);
+        mainButtonsPanel.setSize(new Dimension(300, 180)); // Tamaño panel botones
+
+        // --- Posicionamiento Manual en contentBelowTitlePanel ---
+        // (X, Y, Ancho, Alto)
+        if (leftCoffee != null) {
+            leftCoffee.setBounds(10, 0, 345, 345);
+            contentBelowTitlePanel.add(leftCoffee);
+        }
+        if (rightCoffee != null) {
+            // Nota: La coordenada Y (51) de coffee2_Y parece un valor específico de tu diseño.
+            rightCoffee.setBounds(1280 - 434 - 10, 51, 434, 434);
+            contentBelowTitlePanel.add(rightCoffee);
+        }
+        mainButtonsPanel.setBounds((1280 - mainButtonsPanel.getWidth()) / 2, 80, mainButtonsPanel.getWidth(), mainButtonsPanel.getHeight());
+        contentBelowTitlePanel.add(mainButtonsPanel);
+        deleteAccountButton.setBounds(18, contentBelowTitlePanelHeight - deleteButtonDim.height - 50, deleteButtonDim.width, deleteButtonDim.height);
+        contentBelowTitlePanel.add(deleteAccountButton);
+
+        // --- Ensamblaje Final ---
+        mainPanel.add(titleHoldingPanel, BorderLayout.NORTH);    // Título arriba
+        mainPanel.add(contentBelowTitlePanel, BorderLayout.CENTER); // Contenido en centro
+
+        setContentPane(mainPanel);
+        setVisible(true); // Mostrar ventana
     }
 
-    public void setStatisticsButtonListener(java.awt.event.ActionListener l) {
-        statisticsButton.addActionListener(l);
+    /** Crea un botón redondeado con estilo. */
+    private JButton createStyledButton(String text, Color bgColor, Color fgColor, Dimension buttonSize) {
+        RoundedButton button = new RoundedButton(text, bgColor, fgColor, buttonSize, 10, 10); // 10 = redondez
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return button;
     }
 
-    public void setLogoutButtonListener(java.awt.event.ActionListener l) {
-        logoutButton.addActionListener(l);
+    /** Carga imagen del classpath como JLabel. */
+    private JLabel loadImage(String path) {
+        URL imgUrl = getClass().getResource(path);
+        if (imgUrl != null) {
+            return new JLabel(new ImageIcon(imgUrl));
+        } else { // Error al cargar
+            System.err.println("⚠ Imagen no encontrada: " + path);
+            JLabel errorLabel = new JLabel("Falta: " + (path.startsWith("/") ? path.substring(1) : path));
+            errorLabel.setPreferredSize(new Dimension(100,50));
+            return errorLabel;
+        }
     }
 
-    public void setDeleteAccountButtonListener(java.awt.event.ActionListener l) {
-        deleteAccountButton.addActionListener(l);
-    }
+    // --- Setters para Listeners (usados por el Controller) ---
+    public void setNewGameButtonListener(java.awt.event.ActionListener l) { newGameButton.addActionListener(l); }
+    public void setStatisticsButtonListener(java.awt.event.ActionListener l) { statisticsButton.addActionListener(l); }
+    public void setLogoutButtonListener(java.awt.event.ActionListener l) { logoutButton.addActionListener(l); }
+    public void setDeleteAccountButtonListener(java.awt.event.ActionListener l) { deleteAccountButton.addActionListener(l); }
 
+    /** Muestra mensaje si ya hay partida iniciada. */
     public void showGameExists(){
         JOptionPane.showMessageDialog(this, "You have a game started", "Info", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
 }
