@@ -58,6 +58,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
 
         // Llama a onGameUpdated una vez para llenar la tabla y etiquetas iniciales
         onGameUpdated();
+        //No faltaria aqui poner el view del menu en invisible?
     }
 
     public void endGame(){

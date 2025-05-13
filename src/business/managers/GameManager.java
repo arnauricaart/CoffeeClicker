@@ -62,7 +62,10 @@ public class GameManager implements Runnable{
         running = true;
         this.game = game;
         startAutoSave();
+
         run();
+        // Corrección: inicia un nuevo hilo para `run()`
+        //new Thread(this).start();
     }
 
     private void startAutoSave() {

@@ -51,6 +51,7 @@ public class MenuController implements MenuNavigator{
             newGameView = new NewGameView();
             //newGameView.setNewGameButtonListener(e -> newGame());
 
+            //Parece que el error de la primera partida se encuetra aqui
             newGameView.setNewGameButtonListener(e -> {
                 Game nuevaPartida = newGame();
                 if (nuevaPartida != null) {
@@ -67,6 +68,7 @@ public class MenuController implements MenuNavigator{
             menuView.dispose();
         }
     }
+
     private void selectGameToShowStats() {
         showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
         showGamesView.setShowStatsActionListener(e -> {
