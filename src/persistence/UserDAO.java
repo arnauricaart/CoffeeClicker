@@ -9,4 +9,6 @@ public interface UserDAO {
     public boolean checkUserExists(String username);
 
     public String getCorreoFromLogin(String userOrEmail, String password);
+
+    boolean checkEmailExists(String email);
 }

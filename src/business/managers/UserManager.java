@@ -38,5 +38,6 @@ public class UserManager {
     }
 
 
-
+    public boolean checkEmailExists(String email) { return userDAO.checkEmailExists(email);
+    }
 }

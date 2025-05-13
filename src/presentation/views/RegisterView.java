@@ -89,7 +89,10 @@ public class RegisterView extends JFrame {
     public void setRegisterButtonListener(ActionListener al) { registerButton.addActionListener(al); }
     public void setLoginLabelListener(MouseAdapter ma) { goToLogin.addMouseListener(ma); }
 
-    public void showRegisterResultMessage(boolean success) {
-        JOptionPane.showMessageDialog(this, success ? "Register successful" : "Register failed (username or password may be incorrect)");
+    public void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showRegisterResultMessage(boolean b) {
     }
 }
