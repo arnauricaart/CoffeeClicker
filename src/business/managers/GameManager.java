@@ -15,8 +15,8 @@ public class GameManager implements Runnable{
     private final int BARISTA_PRICE_BASE = 150;
     private final int CAFE_PRICE_BASE = 300;
     private final double COFFEEMACHINE_PERSECOND = 0.2;
-    private final double BARISTA_PERSECOND = 1;
-    private final double CAFE_PERSECOND = 5;
+    private final double BARISTA_PERSECOND = 1.0;
+    private final double CAFE_PERSECOND = 5.0;
 
     private boolean baristaUnlocked;
     private boolean baristaUpgradeUnlocked;
@@ -68,6 +68,7 @@ public class GameManager implements Runnable{
         //new Thread(this).start();
     }
 
+    /*
     private void startAutoSave() {
         if (autoSaveTimer != null) {
             autoSaveTimer.cancel(); // Cancel existing timer if any
@@ -83,6 +84,25 @@ public class GameManager implements Runnable{
             }
         }, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
     }
+
+     */
+
+    private void startAutoSave() {
+        if (autoSaveTimer != null) {
+            autoSaveTimer.cancel(); // Cancel existing timer if any
+        }
+        autoSaveTimer = new Timer(true); // Create a new daemon timer
+
+        autoSaveTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (running && game != null) {
+                    saveGameState();
+                }
+            }
+        }, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
+    }
+
 
     private void saveGameState() {
         if (game != null) {
@@ -218,7 +238,7 @@ public class GameManager implements Runnable{
 
     public void updatePerSecond() {
         //perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
-        perSecond = (game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
+        perSecond = (double)(game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
                     (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
                     (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
@@ -339,9 +359,5 @@ public class GameManager implements Runnable{
         autoCoffeeThread.setDaemon(true);
         autoCoffeeThread.start();
     }
-
-
-
-
 }
 
