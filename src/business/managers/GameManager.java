@@ -301,7 +301,7 @@ public class GameManager implements Runnable{
                 @Override
                 public void run() {
                     if (running) {
-                        statDAO.updateStats(game.getGameID(), game.getNumCafe(), game.getMinDuration());
+                        statDAO.updateStats(game.getGameID(), (int)game.getNumCoffees(), game.getMinDuration());
                         game.increaseMinDuration();
                     }
                 }

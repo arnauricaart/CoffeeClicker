@@ -76,7 +76,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,...
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
-            view.setCounterLableText(model.getCoffeeCounter() + " coffees");
+            view.setCounterLableText((int) model.getCoffeeCounter() + " coffees");
             view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
             view.setCoffeeMachineButtonText("Coffee Machine (" + model.getCoffeeMachineNumber() + ")");
             view.setCoffeeMachineUpgradeButtonText("U1 (" + model.getCoffeeMachineUpgradeNumber() +")");
