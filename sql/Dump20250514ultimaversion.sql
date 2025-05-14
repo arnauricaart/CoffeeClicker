@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `partida`;
 CREATE TABLE `partida` (
   `IdPartida` int NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(255) NOT NULL,
-  `Cafes` int DEFAULT NULL,
+  `Cafes` double DEFAULT NULL,
   `Correo` varchar(255) DEFAULT NULL,
   `Terminada` tinyint DEFAULT NULL,
   `UltimoAcceso` datetime DEFAULT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `partida` (
   UNIQUE KEY `partida_nombre_uk` (`Nombre`),
   KEY `Correo` (`Correo`),
   CONSTRAINT `partida_ibfk_1` FOREIGN KEY (`Correo`) REFERENCES `users` (`Correo`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ CREATE TABLE `partida` (
 
 LOCK TABLES `partida` WRITE;
 /*!40000 ALTER TABLE `partida` DISABLE KEYS */;
-INSERT INTO `partida` VALUES (3,'Hola',30,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(4,'gay',12,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(6,'gluyer',3450,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(8,'nini',0,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(10,'hombre',11,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(13,'tigre',90,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(14,'dks',380,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(15,'ffdf',1230,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(16,'fdfdf',870,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(17,'Amapola',30,'tassani@gmail.com',1,'2025-04-26 20:46:40',0,0,0,0,0,0,0),(18,'new game',0,'tassani@gmail.com',1,'2025-04-20 22:44:57',0,0,0,0,0,0,0),(19,'gluyer mari',0,'tassani@gmail.com',1,'2025-04-22 22:17:19',0,0,0,0,0,0,0),(20,'iaa',3450,'tassani@gmail.com',1,'2025-04-26 20:47:30',0,0,0,0,0,0,0),(21,'rei',12,'tassani@gmail.com',1,'2025-04-26 20:47:10',0,0,0,0,0,0,0),(22,'arnau bot',0,'tassani@gmail.com',1,'2025-04-23 08:16:04',0,0,0,0,0,0,0),(24,'partida',0,'tassani@gmail.com',1,'2025-04-23 08:30:12',0,0,0,0,0,0,0),(26,'fkrofrf',0,'tassani@gmail.com',1,'2025-04-30 08:49:22',0,0,0,0,0,0,0),(29,'LaNovaPartida',0,'tassani@gmail.com',1,'2025-05-03 14:41:58',0,0,0,0,0,0,0),(30,'QWERTY',0,'tassani@gmail.com',1,'2025-05-03 14:46:47',0,0,0,0,0,0,0),(31,'ddeded',0,'tassani@gmail.com',1,'2025-05-04 12:10:41',0,0,0,0,0,0,0),(32,'Red',450,'dummy@nodomain.com',1,'2024-04-28 10:15:30',0,0,0,0,0,0,0),(33,'Blue',780,'dummy@nodomain.com',1,'2024-04-29 15:45:20',0,0,0,0,0,0,0),(34,'Green',920,'dummy@nodomain.com',1,'2024-04-30 09:30:45',0,0,0,0,0,0,0),(35,'Yellow',1200,'dummy@nodomain.com',1,'2024-05-01 14:20:15',0,0,0,0,0,0,0),(36,'Purple',550,'ducky@nodomain.com',1,'2024-05-01 16:40:10',0,0,0,0,0,0,0),(37,'Pink',670,'ducky@nodomain.com',1,'2024-05-03 08:55:30',0,0,0,0,0,0,0),(38,'Brown',1500,'ducky@nodomain.com',1,'2024-05-03 17:10:25',0,0,0,0,0,0,0),(39,'Cyan',820,'peip@nodomain.com',1,'2024-05-02 13:35:50',0,0,0,0,0,0,0),(40,'Magenta',990,'peip@nodomain.com',1,'2024-05-03 10:45:15',0,0,0,0,0,0,0),(41,'Gold',1100,'peip@nodomain.com',1,'2024-05-04 09:15:30',0,0,0,0,0,0,0),(42,'Silver',750,'peip@nodomain.com',1,'2024-05-04 15:50:20',0,0,0,0,0,0,0),(43,'frfmrl',0,'tassani@gmail.com',1,'2025-05-05 19:01:09',0,0,0,0,0,0,0),(69,'KO',10,'tassani@gmail.com',0,'2025-05-11 17:56:05',5,0,0,0,0,0,0),(70,'NEW_GAME',24,'botbot@gmail.com',1,'2025-05-11 19:35:56',2,0,0,1,0,0,0);
+INSERT INTO `partida` VALUES (3,'Hola',30,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(4,'gay',12,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(6,'gluyer',3450,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(8,'nini',0,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(10,'hombre',11,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(13,'tigre',90,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(14,'dks',380,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(15,'ffdf',1230,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(16,'fdfdf',870,'tassani@gmail.com',1,'2025-04-20 13:13:30',0,0,0,0,0,0,0),(17,'Amapola',30,'tassani@gmail.com',1,'2025-04-26 20:46:40',0,0,0,0,0,0,0),(18,'new game',0,'tassani@gmail.com',1,'2025-04-20 22:44:57',0,0,0,0,0,0,0),(19,'gluyer mari',0,'tassani@gmail.com',1,'2025-04-22 22:17:19',0,0,0,0,0,0,0),(20,'iaa',3450,'tassani@gmail.com',1,'2025-04-26 20:47:30',0,0,0,0,0,0,0),(21,'rei',12,'tassani@gmail.com',1,'2025-04-26 20:47:10',0,0,0,0,0,0,0),(22,'arnau bot',0,'tassani@gmail.com',1,'2025-04-23 08:16:04',0,0,0,0,0,0,0),(24,'partida',0,'tassani@gmail.com',1,'2025-04-23 08:30:12',0,0,0,0,0,0,0),(26,'fkrofrf',0,'tassani@gmail.com',1,'2025-04-30 08:49:22',0,0,0,0,0,0,0),(29,'LaNovaPartida',0,'tassani@gmail.com',1,'2025-05-03 14:41:58',0,0,0,0,0,0,0),(30,'QWERTY',0,'tassani@gmail.com',1,'2025-05-03 14:46:47',0,0,0,0,0,0,0),(31,'ddeded',0,'tassani@gmail.com',1,'2025-05-04 12:10:41',0,0,0,0,0,0,0),(32,'Red',450,'dummy@nodomain.com',1,'2024-04-28 10:15:30',0,0,0,0,0,0,0),(33,'Blue',780,'dummy@nodomain.com',1,'2024-04-29 15:45:20',0,0,0,0,0,0,0),(34,'Green',920,'dummy@nodomain.com',1,'2024-04-30 09:30:45',0,0,0,0,0,0,0),(35,'Yellow',1200,'dummy@nodomain.com',1,'2024-05-01 14:20:15',0,0,0,0,0,0,0),(36,'Purple',550,'ducky@nodomain.com',1,'2024-05-01 16:40:10',0,0,0,0,0,0,0),(37,'Pink',670,'ducky@nodomain.com',1,'2024-05-03 08:55:30',0,0,0,0,0,0,0),(38,'Brown',1500,'ducky@nodomain.com',1,'2024-05-03 17:10:25',0,0,0,0,0,0,0),(39,'Cyan',820,'peip@nodomain.com',1,'2024-05-02 13:35:50',0,0,0,0,0,0,0),(40,'Magenta',990,'peip@nodomain.com',1,'2024-05-03 10:45:15',0,0,0,0,0,0,0),(41,'Gold',1100,'peip@nodomain.com',1,'2024-05-04 09:15:30',0,0,0,0,0,0,0),(42,'Silver',750,'peip@nodomain.com',1,'2024-05-04 15:50:20',0,0,0,0,0,0,0),(43,'frfmrl',0,'tassani@gmail.com',1,'2025-05-05 19:01:09',0,0,0,0,0,0,0),(69,'KO',10,'tassani@gmail.com',0,'2025-05-11 17:56:05',5,0,0,0,0,0,0),(70,'NEW_GAME',24,'botbot@gmail.com',1,'2025-05-11 19:35:56',2,0,0,1,0,0,0),(71,'BOOOOOT',279,'botbot@gmail.com',1,'2025-05-13 10:14:47',6,0,1,1,0,0,0),(72,'GAME_ARNAU',15,'botbot@gmail.com',1,'2025-05-13 15:34:13',2,1,0,1,0,0,0),(73,'NEW_GAME_PROVA',0,'botbot@gmail.com',1,'2025-05-13 18:09:36',0,0,0,0,0,0,0),(75,'prova_ng',9,'botbot@gmail.com',1,'2025-05-13 18:10:43',0,0,0,0,0,0,0),(77,'FDAFAS',0,'botbot@gmail.com',1,'2025-05-13 18:12:12',0,0,0,0,0,0,0),(79,'FDASFJKLÑ',3,'botbot@gmail.com',1,'2025-05-13 20:01:25',0,0,0,0,0,0,0),(81,'nuevoprueva',7,'prova@gmail.com',0,'2025-05-13 18:15:36',0,0,0,0,0,0,0),(82,'jkng',0,'botbot@gmail.com',1,'2025-05-13 20:02:24',0,0,0,0,0,0,0),(84,'HOLA2',3,'botbot@gmail.com',1,'2025-05-14 08:15:16',1,0,0,0,0,0,0),(86,'DFAÑJLFLADSK',0,'botbot@gmail.com',0,'2025-05-14 08:15:20',0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `partida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +159,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('arnau.ricart@students.salle.url.edu','chuggy','chuggybot123'),('botbot@gmail.com','ARNAURICART','BOTBOTBOT'),('ducky@nodomain.com','Ducky','123'),('dummy@nodomain.com','Dummy','123'),('gerardmas@gmail.com','gerardmas','gerimas2005'),('hector@gmail.com','hector','hectorbot'),('peip@nodomain.com','Peip','123'),('tassani@gmail.com','T','1'),('tassvid@gmail.com','tassini123','tassvidbot456'),('zuri@gmail.com','ZURIKETE','zuripaki');
+INSERT INTO `users` VALUES ('arnau.ricart@students.salle.url.edu','chuggy','chuggybot123'),('botbot@gmail.com','ARNAURICART','BOTBOTBOT'),('ducky@nodomain.com','Ducky','123'),('dummy@nodomain.com','Dummy','123'),('gerardmas@gmail.com','gerardmas','gerimas2005'),('hector@gmail.com','hector','hectorbot'),('peip@nodomain.com','Peip','123'),('prova@gmail.com','NOMPROVA','Provanom123'),('tassani@gmail.com','T','1'),('tassvid@gmail.com','tassini123','tassvidbot456'),('zuri@gmail.com','ZURIKETE','zuripaki');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -172,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-12 11:47:08
+-- Dump completed on 2025-05-14  8:42:44
