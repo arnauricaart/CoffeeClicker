@@ -90,11 +90,11 @@ public class GameDBDAO implements GameDAO{
                 return new Game(
                     rs.getInt("IdPartida"),
                     rs.getString("Nombre"),
-                    rs.getInt("Cafes"),
+                    rs.getDouble("Cafes"),
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getDouble("numCafe"),
+                    rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -122,11 +122,11 @@ public class GameDBDAO implements GameDAO{
                 return new Game(
                     rs.getInt("IdPartida"),
                     rs.getString("Nombre"),
-                    rs.getInt("Cafes"),
+                    rs.getDouble("Cafes"),
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getDouble("numCafe"),
+                    rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -155,11 +155,11 @@ public class GameDBDAO implements GameDAO{
                 return new Game(
                     rs.getInt("IdPartida"),
                     rs.getString("Nombre"),
-                    rs.getInt("Cafes"),
+                    rs.getDouble("Cafes"),
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getDouble("numCafe"),
+                    rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -177,7 +177,7 @@ public class GameDBDAO implements GameDAO{
         String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso, " +
                       "numCoffeeMachine, numBarista, numCafe, " +
                       "numUpgradeCoffeeMachine, numUpgradeBarista, numUpgradeCafe, minDuration) " +
-                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0.0, 0, 0, 0, 0)";
+                      "VALUES(?, 0.0, ?, 0, Now(), 0, 0, 0, 0, 0, 0, 0)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
@@ -204,10 +204,10 @@ public class GameDBDAO implements GameDAO{
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
-        values.add(String.valueOf(game.getNumCoffees())); types.add("int");
+        values.add(String.valueOf(game.getNumCoffees())); types.add("double");
         values.add(String.valueOf(game.getNumCoffeeMachine())); types.add("int");
         values.add(String.valueOf(game.getNumBarista())); types.add("int");
-        values.add(String.valueOf(game.getNumCafe())); types.add("double");
+        values.add(String.valueOf(game.getNumCafe())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeCoffeeMachine())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeBarista())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeCafe())); types.add("int");

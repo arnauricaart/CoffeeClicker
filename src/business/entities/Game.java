@@ -37,8 +37,8 @@ public class Game {
     }
 
     // Constructor amb tots els camps
-    public Game(int gameID, String name, int coffees, String lastAccess,
-                int numCoffeeMachine, int numBarista, double numCoffee,
+    public Game(int gameID, String name, double coffees, String lastAccess,
+                int numCoffeeMachine, int numBarista, int numCafe,
                 int numUpgradeCoffeeMachine, int numUpgradeBarista, int numUpgradeCafe, int minDuration) {
         this.gameID = gameID;
         this.name = name;
