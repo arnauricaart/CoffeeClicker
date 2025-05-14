@@ -94,7 +94,7 @@ public class GameDBDAO implements GameDAO{
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
+                    rs.getDouble("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -126,7 +126,7 @@ public class GameDBDAO implements GameDAO{
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
+                    rs.getDouble("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -159,7 +159,7 @@ public class GameDBDAO implements GameDAO{
                     rs.getString("UltimoAcceso"),
                     rs.getInt("numCoffeeMachine"),
                     rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
+                    rs.getDouble("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
                     rs.getInt("numUpgradeCafe"),
@@ -177,7 +177,7 @@ public class GameDBDAO implements GameDAO{
         String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso, " +
                       "numCoffeeMachine, numBarista, numCafe, " +
                       "numUpgradeCoffeeMachine, numUpgradeBarista, numUpgradeCafe, minDuration) " +
-                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0, 0, 0, 0, 0)";
+                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0.0, 0, 0, 0, 0)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
@@ -198,7 +198,7 @@ public class GameDBDAO implements GameDAO{
                 "numUpgradeCafe = ?, " +
                 "UltimoAcceso = Now(), " +
                 "Terminada = ?, " +
-                "minDuration = ? " +  // <--- AÑADIDO AQUÍ
+                "minDuration = ? " +
                 "WHERE IdPartida = ?";
 
         ArrayList<String> values = new ArrayList<>();
@@ -207,12 +207,12 @@ public class GameDBDAO implements GameDAO{
         values.add(String.valueOf(game.getNumCoffees())); types.add("int");
         values.add(String.valueOf(game.getNumCoffeeMachine())); types.add("int");
         values.add(String.valueOf(game.getNumBarista())); types.add("int");
-        values.add(String.valueOf(game.getNumCafe())); types.add("int");
+        values.add(String.valueOf(game.getNumCafe())); types.add("double");
         values.add(String.valueOf(game.getNumUpgradeCoffeeMachine())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeBarista())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeCafe())); types.add("int");
         values.add(game.hasEnded() ? "1" : "0"); types.add("int");
-        values.add(String.valueOf(game.getMinDuration())); types.add("int");  // <--- CORRECTA POSICIÓN
+        values.add(String.valueOf(game.getMinDuration())); types.add("int");
         values.add(String.valueOf(game.getGameID())); types.add("int");
 
         SQL_CRUD.CUD(query, values, types);

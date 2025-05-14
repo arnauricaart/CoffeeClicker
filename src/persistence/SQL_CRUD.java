@@ -1,37 +1,40 @@
 package persistence;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
-
 public class SQL_CRUD {
-    public SQL_CRUD(){
+    public SQL_CRUD() {}
 
-    }
-    public static ResultSet Select(String query, ArrayList<String> values, ArrayList<String> tipos){
+    public static ResultSet Select(String query, ArrayList<String> values, ArrayList<String> tipos) {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
         ResultSet res;
         try {
             pst = s1.getConn().prepareStatement(query);
-            for (int i = 0; i < values.size(); i++){
-                if (tipos.get(i).equals("String")){
-                    pst.setString(i +1,values.get(i));
-                } else if (tipos.get(i).equals("int") ){
-                    pst.setInt(i+1,Integer.parseInt(values.get(i)));
-                } else if (tipos.get(i).equals("float")){
-                    pst.setDouble(i+1, Double.parseDouble(values.get(i)));
-                } else if (tipos.get(i).equals("tinyint")) {
-                    if (values.get(i).equals("true")){
-                        pst.setInt(i+1,1);
-                    } else {
-                        pst.setInt(i+1,0);
-                    }
+            for (int i = 0; i < values.size(); i++) {
+                switch (tipos.get(i)) {
+                    case "String":
+                        pst.setString(i + 1, values.get(i));
+                        break;
+                    case "int":
+                        pst.setInt(i + 1, Integer.parseInt(values.get(i)));
+                        break;
+                    case "float":
+                    case "double": // <- añadido
+                        pst.setDouble(i + 1, Double.parseDouble(values.get(i)));
+                        break;
+                    case "tinyint":
+                        pst.setInt(i + 1, values.get(i).equals("true") ? 1 : 0);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Tipo no soportado en SELECT: " + tipos.get(i));
                 }
             }
             res = pst.executeQuery();
             System.out.println(query);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return res;
@@ -40,7 +43,6 @@ public class SQL_CRUD {
     private static PreparedStatement CUDpreparedStament(String query, ArrayList<String> values, ArrayList<String> tipos, boolean isInsert) {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
-        int res;
         try {
             System.out.println(query);
             if (isInsert) {
@@ -48,45 +50,51 @@ public class SQL_CRUD {
             } else {
                 pst = s1.getConn().prepareStatement(query);
             }
-            for (int i = 0; i < values.size(); i++){
-                if (tipos.get(i).equals("String")){
-                    pst.setString(i+1,values.get(i));
-                } else if (tipos.get(i).equals("int")){
-                    pst.setInt(i + 1,Integer.parseInt(values.get(i)));
-                } else if (tipos.get(i).equals("float")){
-                    pst.setDouble(i +1, Double.parseDouble(values.get(i)));
-                } else if (tipos.get(i).equals("tinyint")) {
-                    if (values.get(i).equals("true")){
-                        pst.setInt(i+1,1);
-                    } else {
-                        pst.setInt(i+1,0);
-                    }
-                } else if (tipos.get(i).equals("datetime")) {
-                    pst.setTimestamp(i +1, Timestamp.valueOf(LocalDateTime.now()));
+
+            for (int i = 0; i < values.size(); i++) {
+                switch (tipos.get(i)) {
+                    case "String":
+                        pst.setString(i + 1, values.get(i));
+                        break;
+                    case "int":
+                        pst.setInt(i + 1, Integer.parseInt(values.get(i)));
+                        break;
+                    case "float":
+                    case "double": // <- añadido
+                        pst.setDouble(i + 1, Double.parseDouble(values.get(i)));
+                        break;
+                    case "tinyint":
+                        pst.setInt(i + 1, values.get(i).equals("true") ? 1 : 0);
+                        break;
+                    case "datetime":
+                        pst.setTimestamp(i + 1, Timestamp.valueOf(LocalDateTime.now()));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Tipo no soportado en CUD: " + tipos.get(i));
                 }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return pst;
     }
 
-    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos){
+    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos) {
         int res;
         try {
-            PreparedStatement pst = CUDpreparedStament(query,values,tipos, false);
+            PreparedStatement pst = CUDpreparedStament(query, values, tipos, false);
             res = pst.executeUpdate();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new ConstraintException(e);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return res;
     }
 
-    public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos){
+    public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos) {
         try {
-            PreparedStatement pst = CUDpreparedStament(query,values,tipos, true);
+            PreparedStatement pst = CUDpreparedStament(query, values, tipos, true);
             int res = pst.executeUpdate();
             if (res > 0) {
                 ResultSet rs = pst.getGeneratedKeys();
@@ -94,12 +102,11 @@ public class SQL_CRUD {
                     return rs.getInt(1);
                 }
             }
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new ConstraintException(e);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         throw new RuntimeException("Error insertando en la base de datos");
     }
 }
-
