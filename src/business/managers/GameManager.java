@@ -5,7 +5,7 @@ import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;
-import java.text.DecimalFormat;  //Nova
+import java.text.DecimalFormat;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,7 +64,7 @@ public class GameManager implements Runnable{
         startAutoSave();
 
         run();
-        // Corrección: inicia un nuevo hilo para `run()`
+        // Corrección: inicia un nuevo hilo para run()
         //new Thread(this).start();
     }
 
@@ -123,7 +123,7 @@ public class GameManager implements Runnable{
     }
 
     public void addCoffee(double amount) {
-         game.addCoffee(amount);
+        game.addCoffee(amount);
     }
 
     public boolean canBuyCoffeeMachine() {
@@ -239,8 +239,8 @@ public class GameManager implements Runnable{
     public void updatePerSecond() {
         //perSecond = coffeeMachineNumber * 0.2 * game.getNumCoffeeMachine() + baristaNumber * 0.5 * game.getNumBarista() ;
         perSecond = (double)(game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
-                    (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
-                    (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
+                (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
+                (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
 
     public double getCoffeeCounter() {return game.getNumCoffees();}
@@ -360,4 +360,5 @@ public class GameManager implements Runnable{
         autoCoffeeThread.start();
     }
 }
+
 

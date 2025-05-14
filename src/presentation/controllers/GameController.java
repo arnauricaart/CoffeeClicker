@@ -200,7 +200,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         String name = ((Component) e.getSource()).getName();
 
         if ("COFFEEMACHINEBUTTON".equals(name)) {
-            view.setMessageText("Coffee Machine\n[price: " + model.getCoffeeMachinePrice() + "]\nAutoclicks once every 10 seconds.");
+            view.setMessageText("Coffee Machine\n[price: " + model.getCoffeeMachinePrice() + "]\nAutoclicks once every 5 seconds.");
         } else if ("BARISTABUTTON".equals(name)) {
             if (!model.isBaristaUnlocked()) {
                 view.setMessageText("This item is currently locked!");
