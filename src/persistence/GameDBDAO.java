@@ -176,8 +176,8 @@ public class GameDBDAO implements GameDAO{
     public int insertGame(String gameName, String correo) {
         String query = "INSERT INTO partida(Nombre, Cafes, Correo, Terminada, UltimoAcceso, " +
                       "numCoffeeMachine, numBarista, numCafe, " +
-                      "numUpgradeCoffeeMachine, numUpgradeBarista, numUpgradeCafe) " +
-                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0, 0, 0, 0)";
+                      "numUpgradeCoffeeMachine, numUpgradeBarista, numUpgradeCafe, minDuration) " +
+                      "VALUES(?, 0, ?, 0, Now(), 0, 0, 0, 0, 0, 0, 0)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
@@ -189,16 +189,17 @@ public class GameDBDAO implements GameDAO{
 
     public void updateGameState(Game game) {
         String query = "UPDATE partida SET " +
-                      "Cafes = ?, " +
-                      "numCoffeeMachine = ?, " +
-                      "numBarista = ?, " +
-                      "numCafe = ?, " +
-                      "numUpgradeCoffeeMachine = ?, " +
-                      "numUpgradeBarista = ?, " +
-                      "numUpgradeCafe = ?, " +
-                      "UltimoAcceso = Now(), " +
-                      "Terminada = ? " +
-                      "WHERE IdPartida = ?";
+                "Cafes = ?, " +
+                "numCoffeeMachine = ?, " +
+                "numBarista = ?, " +
+                "numCafe = ?, " +
+                "numUpgradeCoffeeMachine = ?, " +
+                "numUpgradeBarista = ?, " +
+                "numUpgradeCafe = ?, " +
+                "UltimoAcceso = Now(), " +
+                "Terminada = ?, " +
+                "minDuration = ? " +  // <--- AÑADIDO AQUÍ
+                "WHERE IdPartida = ?";
 
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
@@ -211,9 +212,11 @@ public class GameDBDAO implements GameDAO{
         values.add(String.valueOf(game.getNumUpgradeBarista())); types.add("int");
         values.add(String.valueOf(game.getNumUpgradeCafe())); types.add("int");
         values.add(game.hasEnded() ? "1" : "0"); types.add("int");
+        values.add(String.valueOf(game.getMinDuration())); types.add("int");  // <--- CORRECTA POSICIÓN
         values.add(String.valueOf(game.getGameID())); types.add("int");
 
         SQL_CRUD.CUD(query, values, types);
+
     }
 }
 
