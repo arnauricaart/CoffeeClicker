@@ -55,7 +55,7 @@ public class MenuController implements MenuNavigator{
             newGameView.setNewGameButtonListener(e -> {
                 Game nuevaPartida = newGame();
                 if (nuevaPartida != null) {
-                    gameController.playGame(partida);
+                    gameController.playGame(nuevaPartida);
                 }
             });
 

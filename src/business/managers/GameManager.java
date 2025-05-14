@@ -69,6 +69,11 @@ public class GameManager implements Runnable{
     }
 
     private void startAutoSave() {
+        if (autoSaveTimer != null) {
+            autoSaveTimer.cancel(); // Cancel existing timer if any
+        }
+        autoSaveTimer = new Timer(true); // Create a new daemon timer
+
         autoSaveTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

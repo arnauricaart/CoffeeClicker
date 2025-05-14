@@ -5,7 +5,7 @@ public class Game {
     private int gameID;
     private String name;
     private String userName;
-    private int numCoffee;
+    private double numCoffee;
 
     private int numCoffeeMachine;
     private int numBarista;
@@ -154,7 +154,7 @@ public class Game {
         return gameID;
     }
 
-    public int getNumCoffees() {
+    public double getNumCoffees() {
         return numCoffee;
     }
 
