@@ -39,7 +39,7 @@ public class Game {
     // Constructor amb tots els camps
     public Game(int gameID, String name, int coffees, String lastAccess,
                 int numCoffeeMachine, int numBarista, int numCafe,
-                int numUpgradeCoffeeMachine, int numUpgradeBarista, int numUpgradeCafe) {
+                int numUpgradeCoffeeMachine, int numUpgradeBarista, int numUpgradeCafe, int minDuration) {
         this.gameID = gameID;
         this.name = name;
         this.numCoffee = coffees;
@@ -51,6 +51,7 @@ public class Game {
         this.numUpgradeCoffeeMachine = numUpgradeCoffeeMachine;
         this.numUpgradeBarista = numUpgradeBarista;
         this.numUpgradeCafe = numUpgradeCafe;
+        this.minDuration = minDuration;
     }
 
     // Terminar partida

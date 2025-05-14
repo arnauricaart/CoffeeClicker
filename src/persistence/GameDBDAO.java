@@ -97,7 +97,8 @@ public class GameDBDAO implements GameDAO{
                     rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe")
+                    rs.getInt("numUpgradeCafe"),
+                    rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
@@ -128,7 +129,8 @@ public class GameDBDAO implements GameDAO{
                     rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe")
+                    rs.getInt("numUpgradeCafe"),
+                    rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
@@ -160,7 +162,8 @@ public class GameDBDAO implements GameDAO{
                     rs.getInt("numCafe"),
                     rs.getInt("numUpgradeCoffeeMachine"),
                     rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe")
+                    rs.getInt("numUpgradeCafe"),
+                    rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
