@@ -6,6 +6,6 @@ public interface StatsDAO {
 
     public List<Integer> getStatsByGameId(int gameID);
 
-    public int updateStats(int gameId, int cafes, int min);
+    public void updateStats(int gameId, int cafes, int min);
 
 }

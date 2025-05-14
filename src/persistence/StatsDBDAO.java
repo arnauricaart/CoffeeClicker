@@ -29,13 +29,20 @@ public class StatsDBDAO implements StatsDAO{
         return cafeCounts;
     }
 
-    public int updateStats(int gameId, int cafes, int min){
-        String query = "INSERT INTO stats VALUES (Cafes, Minuto, IdPartida) VALUES (?,?,?)";
-        ArrayList<String> valores = new ArrayList<String>();
-        valores.add(String.valueOf(cafes));
-        valores.add(String.valueOf(min));
-        valores.add(String.valueOf(gameId));
+    public void updateStats(int gameId, int cafes, int min) {
+        String query = "INSERT INTO stats (Cafes, Minuto, IdPartida) VALUES (?, ?, ?)";
+        ArrayList<String> valores = new ArrayList<>();
+        ArrayList<String> tipos = new ArrayList<>();
 
-        return 0;
+        valores.add(String.valueOf(cafes));
+        tipos.add("int");
+
+        valores.add(String.valueOf(min));
+        tipos.add("int");
+
+        valores.add(String.valueOf(gameId));
+        tipos.add("int");
+
+        SQL_CRUD.CUD(query, valores, tipos);
     }
 }
