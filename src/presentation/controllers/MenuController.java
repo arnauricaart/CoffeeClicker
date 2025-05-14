@@ -26,13 +26,29 @@ public class MenuController implements MenuNavigator{
         gameController = new GameController(this);
     }
 
+
     @Override
     public void returnToMenu() {
-        menuView = new MenuGUI();
-        menuView.setNewGameButtonListener(e -> startNewGame());
-        menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
-        menuView.setLogoutButtonListener(e -> logout());
-        menuView.setDeleteAccountButtonListener(e -> deleteAccount());
+        // 1. Eliminar la instancia anterior de menuView si existe y es visible/mostrable.
+        // Esto es crucial para evitar que la ventana anterior permanezca.
+        if (this.menuView != null && this.menuView.isDisplayable()) {
+            this.menuView.dispose();
+        }
+
+        // 2. Crear la nueva instancia de MenuGUI (como en tu código original).
+        // Esta se convertirá en la menuView activa gestionada por este controlador.
+        this.menuView = new MenuGUI();
+        // El constructor de MenuGUI ya la hace visible con setVisible(true). [cite: 4]
+
+        // 3. (Re)asignar todos los listeners necesarios a ESTA NUEVA instancia de menuView.
+        this.menuView.setNewGameButtonListener(e -> startNewGame());
+        this.menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
+        this.menuView.setLogoutButtonListener(e -> logout());
+        this.menuView.setDeleteAccountButtonListener(e -> deleteAccount());
+
+        // Nota: No necesitas llamar a menuView.setVisible(true) explícitamente aquí
+        // si el constructor de MenuGUI ya lo hace, pero ser explícito no daña.
+        // this.menuView.setVisible(true); // Opcional si el constructor ya lo maneja.
     }
 
     public void initController() {
@@ -112,21 +128,39 @@ public class MenuController implements MenuNavigator{
         removeAccountView.setVisible(true);
     }
 
+    // presentation/controllers/MenuController.java
+
     private Game newGame() {
-        String gameName = newGameView.getNewGameName();
+        String gameName = newGameView.getNewGameName(); // Obtiene el nombre del juego desde la vista
         Game game = null;
         try {
+            // Intenta insertar y obtener la nueva partida
             int gameId = partidaManager.insertGame(gameName, correo);
             game = partidaManager.getGameById(gameId);
-            //new GameController(this);
-            //newGameView.dispose();
-            //menuView.dispose();
+
+            // Si la creación de la partida y la obtención fueron exitosas (game no es null)
+            if (game != null) {
+                // Cierra la ventana de "Nueva Partida"
+                if (newGameView != null) { // Buena práctica verificar que no sea null
+                    newGameView.dispose();
+                }
+                // Cierra también la ventana del menú principal para dar foco al juego
+                if (menuView != null) { // Buena práctica verificar que no sea null
+                    menuView.dispose();
+                }
+            }
+            // La línea //new GameController(this); probablemente no sea necesaria aquí,
+            // ya que gameController ya es un miembro de la clase MenuController.
+
         } catch (ConstraintException e) {
-            if (e.getMessage().contains("partida_nombre_uk")) {
+            // Si ocurre un error (ej. nombre de partida duplicado), se muestra un mensaje
+            // y NewGameView permanece abierta para que el usuario corrija el error.
+            if (e.getMessage() != null && e.getMessage().contains("partida_nombre_uk")) {
                 newGameView.showDuplicateGameMessage();
             }
+            game = null; // Asegúrate de que game sea null si hubo un error
         }
-        return game;
+        return game; // Devuelve la partida creada o null si falló
     }
 
     private void removeAccountFromDatabase() {
