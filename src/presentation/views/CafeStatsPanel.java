@@ -72,10 +72,12 @@ public class CafeStatsPanel extends JPanel {
         //minutos en el eje X (10 valores distribuidos uniformemente)
         g2.setColor(Color.BLACK);
         int totalMinutes = data.size();
-        
+
+
         // Always show 0 and max value
-        g2.drawString("0", leftMargin - 10, height - bottomMargin + 20);
-        g2.drawString(String.valueOf(totalMinutes), width - rightMargin - 20, height - bottomMargin + 20);
+        //TODO revisar si aixo esta be
+        //g2.drawString("0", leftMargin - 10, height - bottomMargin + 20);
+        //g2.drawString(String.valueOf(totalMinutes-1), width - rightMargin - 20, height - bottomMargin + 20);
         
         // Show exactly 10 evenly distributed values between 0 and max
         if (totalMinutes > 2) {  // Only if we have more than 2 points

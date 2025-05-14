@@ -19,6 +19,8 @@ public class StatsDBDAO implements StatsDAO{
         ResultSet res = SQL_CRUD.Select(query,valores,tipos);
 
         List<Integer> cafeCounts = new ArrayList<>();
+        //cafeCounts.add(0);
+
         try {
             while (res.next()) {
                 cafeCounts.add(res.getInt("Cafes"));
