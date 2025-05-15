@@ -4,22 +4,46 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * A panel showing the cafe stats.
+ * It is used for visualizing game statistics in a graphical form.
+ */
 public class CafeStatsPanel extends JPanel {
 
+    /**
+     * List of integers representing the number of coffees served per minute
+     */
     private final List<Integer> data;
 
+    /**
+     * Constructs a CafeStatsPanel and displays it in a new JFrame.
+     *
+     * @param cafesPorMinuto List of integers, each representing the number of coffees served in a minute.
+     */
     public CafeStatsPanel(List<Integer> cafesPorMinuto) {
         this.data = cafesPorMinuto;
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(600, 500));
     }
 
+    /**
+     * Overridden method that gets called whenever the component needs to be redrawn.
+     * It delegates the drawing to drawChart
+     *
+     * @param g The Graphics object used for drawing the component.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawChart((Graphics2D) g);
     }
 
+    /**
+     * Draws the line chart using the provided Graphics2D context.
+     * Includes axes, data line, grid lines, labels, and a title.
+     *
+     * @param g2 The Graphics2D context used to render the chart.
+     */
     private void drawChart(Graphics2D g2) {
         //Cojo el tamaño del panel
         int width = getWidth();

@@ -173,5 +173,4 @@ public class MenuGUI extends JFrame {
     public void showGameExists(){
         JOptionPane.showMessageDialog(this, "You have a game started", "Info", JOptionPane.INFORMATION_MESSAGE);
     }
-
 }

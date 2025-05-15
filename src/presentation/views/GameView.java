@@ -266,19 +266,55 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * The main graphical interface of the Coffee Clicker game.
+ * Extends JFrame and manages all UI components and layouts.
+ */
 public class GameView extends JFrame {
 
+    /**
+     * Labels displaying the total number of coffees and the amount of coffees produced per second.
+     */
     private JLabel counterLabel, perSecLabel;
+    /**
+     * Buttons to click the coffee and all the generators.
+     */
     private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton;
+    /**
+     * Buttons to click the generator upgrades.
+     */
     private JButton coffeeMachineUpgradeButton, baristaUpgradeButton, cafeUpgradeButton;
+    /**
+     * Buttons to pause or end the game.
+     */
     private JButton pauseButton, endGameButton;
+    /**
+     * Text area to display messages to the player.
+     */
     private JTextArea messageText;
+    /**
+     * Fonts used.
+     */
     private Font font1, font2;
 
-    //Noves funncions
+    /**
+     * Table to display generator statistics.
+     */
     private JTable generatorStatsTable;
+
+    /**
+     * Table model backing the generator statistics table.
+     */
     private DefaultTableModel generatorStatsTableModel;
+
+    /**
+     * Scroll pane containing the generator statistics table.
+     */
     private JScrollPane generatorStatsScrollPane;
+
+    /**
+     * Column headers used in the generator statistics table.
+     */
     private final String[] generatorTableColumns = {
             "Name",      // O "Generator"
             "Qty",       // Abreviatura de Quantity
@@ -286,26 +322,45 @@ public class GameView extends JFrame {
             "Total Prod",// Abreviatura de Total Production
             "% Overall"  // O "% Total"
     };
+
+    /**
+     * Label displaying the title above the generator statistics table.
+     */
     private JLabel generatorTableTitleLabel;
 
+    /**
+     * Constructs a new GameView, initializing fonts and UI components.
+     */
     public GameView() {
         createFont();
         createUI();
     }
 
+    /**
+     * Makes the game window visible.
+     */
     public void open() {
         this.setVisible(true);
     }
 
+    /**
+     * Closes and disposes the game window.
+     */
     public void close() {
         this.dispose();
     }
 
+    /**
+     * Initializes fonts used in the interface.
+     */
     private void createFont() {
         font1 = new Font("DePixelg", Font.PLAIN, 25);
         font2 = new Font("DePixelg", Font.PLAIN, 13);
     }
 
+    /**
+     * Builds and configures all UI components, panels, and layouts.
+     */
     private void createUI() {
         this.setTitle("Coffee Clicker");
         this.setSize(1280, 720);
@@ -490,9 +545,14 @@ public class GameView extends JFrame {
         cafeUpgradeButton.setName("CAFEUPGRADEBUTTON");
     }
 
-    // --- (NUEVO) Clase para renderizar celdas con ajuste de texto ---
+    /**
+     * Renderer for table cells that enables text wrapping and automatic row height adjustment.
+     */
     class WrappingCellRenderer extends JTextArea implements TableCellRenderer {
 
+        /**
+         * Constructs a WrappingCellRenderer with line wrap and padding enabled.
+         */
         public WrappingCellRenderer() {
             setLineWrap(true);       // Activar ajuste de línea
             setWrapStyleWord(true);  // Ajustar por palabras completas
@@ -500,6 +560,18 @@ public class GameView extends JFrame {
             setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5)); // Pequeño margen interno
         }
 
+        /**
+         * Returns the component used to render a table cell,
+         * dynamically adjusting height based on content.
+         *
+         * @param table the JTable instance
+         * @param value the value to assign to the cell
+         * @param isSelected true if the cell is selected
+         * @param hasFocus true if the cell has focus
+         * @param row the row index of the cell
+         * @param column the column index of the cell
+         * @return the component used for rendering
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
@@ -527,114 +599,238 @@ public class GameView extends JFrame {
             return this;
         }
     }
-    // --- Fin de la clase WrappingCellRenderer ---
 
-    // Métodos setters...
+    /**
+     * Updates the text displayed in the message area.
+     *
+     * @param message the new message to show
+     */
     public void setMessageText(String message) {
         this.messageText.setText(message);
     }
 
+    /**
+     * Updates the text of the pause button.
+     *
+     * @param message the new label text for the pause button
+     */
     public void setPauseButtonText(String message) {
         this.pauseButton.setText(message);
     }
 
+    /**
+     * Updates the text of the coffee counter label.
+     *
+     * @param message the new label text for the coffee counter
+     */
     public void setCounterLableText(String message) {
         this.counterLabel.setText(message);
     }
 
+    /**
+     * Updates the text of the per second label.
+     *
+     * @param message the new label text for coffees produced per second
+     */
     public void setPerSecLabelText(String message) {
         this.perSecLabel.setText(message);
     }
 
+    /**
+     * Updates the text of the coffee machine purchase button.
+     *
+     * @param message the new label text for the coffee machine button
+     */
     public void setCoffeeMachineButtonText(String message) {
         this.coffeeMachineButton.setText(message);
     }
 
+    /**
+     * Updates the text of the barista purchase button.
+     *
+     * @param message the new label text for the barista button
+     */
     public void setBaristaButtonText(String message) {
         this.baristaButton.setText(message);
     }
 
+    /**
+     * Updates the text of the cafe purchase button.
+     *
+     * @param message the new label text for the cafe button
+     */
     public void setCafeButtonText(String message) {
         this.cafeButton.setText(message);
     }
 
+    /**
+     * Updates the text of the coffee machine upgrade button.
+     *
+     * @param message the new label text for the coffee machine upgrade button
+     */
     public void setCoffeeMachineUpgradeButtonText(String message) {
         this.coffeeMachineUpgradeButton.setText(message);
     }
 
+    /**
+     * Updates the text of the barista upgrade button.
+     *
+     * @param message the new label text for the barista upgrade button
+     */
     public void setBaristaUpgradeButtonText(String message) {
         this.baristaUpgradeButton.setText(message);
     }
 
+    /**
+     * Updates the text of the cafe upgrade button.
+     *
+     * @param message the new label text for the cafe upgrade button
+     */
     public void setCafeUpgradeButtonText(String message) {
         this.cafeUpgradeButton.setText(message);
     }
 
-    // Métodos de registro de listeners
+
+    /**
+     * Adds the Coffee button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addCoffeeButtonListener(ActionListener listener) {
         coffeeButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Coffee machine button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addCoffeeMachineButtonListener(ActionListener listener) {
         coffeeMachineButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Barista button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addBaristaButtonListener(ActionListener listener) {
         baristaButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Cafe button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addCafeButtonListener(ActionListener listener) {
         cafeButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Pause button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addPauseButtonListener(ActionListener listener) {
         pauseButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the End Game button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addEndGameButtonListener(ActionListener listener) {
         endGameButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Coffee machine upgrade button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addCoffeeMachineUpgradeButtonListener(ActionListener listener) {
         coffeeMachineUpgradeButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Barista upgrade button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addBaristaUpgradeButtonListener(ActionListener listener) {
         baristaUpgradeButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Cafe upgrade button listener.
+     *
+     * @param listener the ActionListener to notify
+     */
     public void addCafeUpgradeButtonListener(ActionListener listener) {
         cafeUpgradeButton.addActionListener(listener);
     }
 
+    /**
+     * Adds the Coffee machine button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener) {
         coffeeMachineButton.addMouseListener(mouseListener);
     }
 
+    /**
+     * Adds the Cafe button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addCafeButtonMouseListener(MouseListener mouseListener) {
         cafeButton.addMouseListener(mouseListener);
     }
 
+    /**
+     * Adds the Barista button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addBaristaButtonMouseListener(MouseListener mouseListener) {
         baristaButton.addMouseListener(mouseListener);
     }
 
+    /**
+     * Adds the Coffee machine upgrade button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addCoffeeMachineUpgradeButtonMouseListener(MouseListener mouseListener){
         coffeeMachineUpgradeButton.addMouseListener(mouseListener);
     }
 
+    /**
+     * Adds the Barista upgrade button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addBaristaUpgradeButtonMouseListener(MouseListener mouseListener) {
         baristaUpgradeButton.addMouseListener(mouseListener);
     }
 
+    /**
+     * Adds the Cafe upgrade button mouse listener.
+     *
+     * @param mouseListener the MouseListener to notify
+     */
     public void addCafeUpgradeButtonMouseListener(MouseListener mouseListener) {
         cafeUpgradeButton.addMouseListener(mouseListener);
     }
 
     /**
-     * (NUEVO) Actualiza los datos mostrados en la tabla de estadísticas de generadores.
-     * @param data Un array 2D de Object con los datos. Cada fila debe tener 5 elementos
-     * en el orden: {Nombre, Cantidad, Prod. Unitaria, Prod. Total, % Global}
+     * Updates the generator statistics table with new data.
+     *
+     * @param data a 2D Object array where each row contains:
+     *             {Name, Quantity, Unit Production, Total Production, Percentage Overall}
      */
     public void updateGeneratorStatsTable(Object[][] data) {
         // Limpia las filas anteriores
@@ -646,7 +842,6 @@ public class GameView extends JFrame {
                 generatorStatsTableModel.addRow(rowData);
             }
         }
-        // Si 'data' es null o vacío, la tabla simplemente quedará vacía.
     }
 
 }

@@ -8,24 +8,68 @@ import presentation.views.*;
 
 import java.util.List;
 
-
+/**
+ * Controls the main menu of the application.
+ * Handles navigation between views like New Game, Statistics, and Account Deletion.
+ * Also manages session transitions such as logout or return from the game.
+ */
 public class MenuController implements MenuNavigator{
+    /**
+     * The main menu GUI view
+     */
     private MenuGUI menuView;
+    /**
+     * View for starting a new game
+     */
     private NewGameView newGameView;
+    /**
+     * View for displaying finished games and statistics
+     */
     private ShowGamesView showGamesView;
+    /**
+     * View for handling account removal
+     */
     private RemoveAccountView removeAccountView;
+    /**
+     * Logged-in user's email
+     */
     private String correo;
+    /**
+     * Manages user-related operations like authentication and deletion
+     */
     private UserManager userManager;
+    /**
+     * Handles game persistence and retrieval
+     */
     private PartidaManager partidaManager;
+    /**
+     * Handles game-related statistics like coffees per minute
+     */
     private StatisticsManager statisticsManager;
+    /**
+     * Controls the active game session
+     */
     private GameController gameController;
 
+
+    /**
+     * Constructs a MenuController with the given menu view and user email.
+     * Initializes the GameController with a reference to this class as a navigator.
+     *
+     * @param menuView the main menu view
+     * @param correo the email of the logged-in user
+     */
     public MenuController(MenuGUI menuView, String correo) {
         this.menuView = menuView;
         this.correo = correo;
         gameController = new GameController(this);
     }
 
+
+    /**
+     * Reinitializes the main menu view after returning from another screen.
+     * Disposes the old menu window, creates a new one, and sets up all listeners again.
+     */
 
     @Override
     public void returnToMenu() {
@@ -51,6 +95,9 @@ public class MenuController implements MenuNavigator{
         // this.menuView.setVisible(true); // Opcional si el constructor ya lo maneja.
     }
 
+    /**
+     * Initializes the controller by setting up the listeners and creating managers.
+     */
     public void initController() {
         menuView.setNewGameButtonListener(e -> startNewGame());
         menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
@@ -61,6 +108,10 @@ public class MenuController implements MenuNavigator{
         statisticsManager = new StatisticsManager();
     }
 
+    /**
+     * Starts a new game if the user doesn't have one already in progress.
+     * If an existing unfinished game is found, resumes it.
+     */
     private void startNewGame() {
         Game partida = partidaManager.getStartedGame(correo);
         if (partida == null) {
@@ -85,6 +136,9 @@ public class MenuController implements MenuNavigator{
         }
     }
 
+    /**
+     * Opens a view to select a finished game and show its statistics.
+     */
     private void selectGameToShowStats() {
         showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
         showGamesView.setShowStatsActionListener(e -> {
@@ -102,11 +156,19 @@ public class MenuController implements MenuNavigator{
         showGamesView.setVisible(true);
     }
 
+    /**
+     * Displays a statistics chart for the selected game.
+     *
+     * @param gameId the ID of the game whose statistics to show
+     */
     private void openStatsForGame(int gameId) {
         List<Integer> cafesPorMinuto = statisticsManager.getStatsByGameId(gameId);
         showGamesView.updateStatsChart(cafesPorMinuto);
     }
 
+    /**
+     * Logs the user out by closing the menu and launching the login screen.
+     */
     private void logout() {
         // Lógica para cerrar sesión
 
@@ -120,6 +182,9 @@ public class MenuController implements MenuNavigator{
 
     }
 
+    /**
+     * Initiates the process of account deletion by opening a confirmation view.
+     */
     private void deleteAccount() {
         // Lógica para eliminar la cuenta
         removeAccountView = new RemoveAccountView();
@@ -128,8 +193,12 @@ public class MenuController implements MenuNavigator{
         removeAccountView.setVisible(true);
     }
 
-    // presentation/controllers/MenuController.java
-
+    /**
+     * Creates a new game in the database and returns it.
+     * Handles errors such as duplicate game names.
+     *
+     * @return the newly created Game object, or null if creation failed
+     */
     private Game newGame() {
         String gameName = newGameView.getNewGameName(); // Obtiene el nombre del juego desde la vista
         Game game = null;
@@ -163,6 +232,10 @@ public class MenuController implements MenuNavigator{
         return game; // Devuelve la partida creada o null si falló
     }
 
+    /**
+     * Validates the user's password and removes their account from the system.
+     * If successful, logs them out and shows confirmation.
+     */
     private void removeAccountFromDatabase() {
         String correo = userManager.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
         if(correo != null) {

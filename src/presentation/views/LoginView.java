@@ -5,13 +5,37 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
+/**
+ * Represents the login window of the application.
+ * Extends JFrame and provides fields for username and password input,
+ * login button, and a link to register a new user.
+ */
 public class LoginView extends JFrame {
+    /**
+     * Text field for the user to input their username or email.
+     */
     private JTextField usernameField;
+    /**
+     * Password field for the user to input their password securely.
+     */
     private JPasswordField passwordField;
+    /**
+     * Button to trigger the login process.
+     */
     private JButton loginButton;
+    /**
+     * Label acting as a clickable link to navigate to the registration screen.
+     */
     private JLabel goToRegister;
+    /**
+     * ActionListener for login button and Enter key presses on input fields.
+     */
     private ActionListener loginActionListener;
 
+
+    /**
+     * Constructs the LoginView, setting up the UI components and layout.
+     */
     public LoginView() {
         setTitle("Login");
         setSize(1280, 720);
@@ -59,7 +83,6 @@ public class LoginView extends JFrame {
         goToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(goToRegister);
 
-        // Add Enter key support
         ActionListener enterKeyListener = e -> {
             if (loginActionListener != null) {
                 loginActionListener.actionPerformed(e);
@@ -70,13 +93,40 @@ public class LoginView extends JFrame {
         passwordField.addActionListener(enterKeyListener);
     }
 
+    /**
+     * Returns the text currently entered in the username field.
+     *
+     * @return the username or email input by the user
+     */
     public String getUsername() { return usernameField.getText(); }
+
+    /**
+     * Returns the password currently entered in the password field.
+     *
+     * @return the password as a String
+     */
     public String getPassword() { return new String(passwordField.getPassword()); }
+
+    /**
+     * Sets the ActionListener for the login button and Enter key on input fields.
+     *
+     * @param al the ActionListener to handle login actions
+     */
     public void setLoginButtonListener(ActionListener al) { 
         loginActionListener = al;
         loginButton.addActionListener(al); 
     }
+
+    /**
+     * Sets the MouseListener for the register label to handle navigation to registration.
+     *
+     * @param ma the MouseAdapter to handle mouse events on the register label
+     */
     public void setRegisterLabelListener(MouseAdapter ma) { goToRegister.addMouseListener(ma); }
+
+    /**
+     * Displays an error message dialog informing the user that login failed.
+     */
     public void showLoginErrorMessage() {
         JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
     }

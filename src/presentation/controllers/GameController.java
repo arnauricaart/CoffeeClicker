@@ -11,20 +11,41 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Controller class for the game, implementing the main logic and event handling
+ * between the view (UI) and the model.
+ *
+ * Implements ActionListener, MouseListener, and GameUpdateListener to react to
+ * user input and game updates.
+ */
 public class GameController implements ActionListener, MouseListener, GameUpdateListener {
 
+    /**
+     * A GameManager instance.
+     */
     private GameManager model;
+    /**
+     * A GameView instance.
+     */
     private GameView view;
+    /**
+     * The menu navigator.
+     */
     private MenuNavigator menuNavigator;
 
-
-    //cantidad de cada uno de los generadores
-
+    /**
+     * Constructs a new GameController with the given menu navigator.
+     *
+     * @param navigator the navigator used to switch between menu and game views
+     */
     public GameController(MenuNavigator navigator) {
         model = new GameManager();
         this.menuNavigator = navigator;
     }
 
+    /**
+     * Initializes the view, registers listeners, and prepares the UI.
+     */
     private void createView(){
         view = new GameView();
 
@@ -51,28 +72,41 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         updateLabels();
     }
 
+    /**
+     * Starts a new game with the given game data, and opens the game view.
+     *
+     * @param game the game instance to start
+     */
     public void playGame(Game game){
         model.playGame(game);
         createView();
         view.open();
 
-        // Llama a onGameUpdated una vez para llenar la tabla y etiquetas iniciales
         onGameUpdated();
-        //No faltaria aqui poner el view del menu en invisible?
     }
 
+    /**
+     * Ends the current game session, closes the view and returns to the main menu.
+     */
     public void endGame(){
         model.endGame();
         view.close();
         menuNavigator.returnToMenu();
     }
 
+    /**
+     * Toggles the game state between paused and running.
+     * Closes the game view and returns to the main menu.
+     */
     public void togglePause() {
         model.pauseGame();
         view.close();
         menuNavigator.returnToMenu();
     }
 
+    /**
+     * Updates UI labels such as counters and upgrade buttons based on the current model state.
+     */
     // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,...
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> {
@@ -92,6 +126,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     }
 
 
+    /**
+     * Plays a sound effect from the specified file path.
+     *
+     * @param path path to the audio file
+     */
     private void playSound(String path) {
         try {
             File soundFile = new File(path);
@@ -104,6 +143,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         }
     }
 
+    /**
+     * Handles button clicks and processes game actions based on the command.
+     *
+     * @param e the action event triggered by a UI component
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getActionCommand();
@@ -195,6 +239,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         }
     }
 
+    /**
+     * Displays relevant information when the mouse enters a button.
+     *
+     * @param e the mouse event
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         String name = ((Component) e.getSource()).getName();
@@ -230,13 +279,23 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         }
     }
 
+    /**
+     * Erases text when the mouse exits a button.
+     *
+     * @param e the mouse event
+     */
     @Override
     public void mouseExited(MouseEvent e) {view.setMessageText("");}
 
+    // Unused MouseListener methods
     @Override public void mouseClicked(MouseEvent e) {}
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
 
+    /**
+     * Called whenever the game model is updated.
+     * Refreshes the view labels and statistics table.
+     */
     @Override
     public void onGameUpdated() {
         updateLabels();
