@@ -3,7 +3,7 @@ import business.entities.Game;
 import business.managers.PartidaManager;
 import business.managers.StatisticsManager;
 import business.managers.UserManager;
-import persistence.*;
+import persistence.persistenceExceptions.ConstraintException;
 import presentation.views.*;
 
 import java.util.List;

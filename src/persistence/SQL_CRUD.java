@@ -1,5 +1,7 @@
 package persistence;
 
+import persistence.persistenceExceptions.ConstraintException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
