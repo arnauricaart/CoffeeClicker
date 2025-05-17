@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserDBDAO implements UserDAO{
+    public UserDBDAO() {}
 
     public boolean removeUserAndData(String email){
         System.out.println("Remove user");
