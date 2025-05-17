@@ -183,115 +183,6 @@ public class Game {
     }
 
     /**
-     * Calculates the price to buy a new coffee machine.
-     *
-     * @return the price for the next coffee machine
-     */
-    public int getCoffeeMachinePrice() {
-        return 100 + (numCoffeeMachine * 20);
-        //return (int) Math.round(cursorPriceBase * Math.pow(1.07, cursorNumber));
-    }
-
-    /**
-     * Calculates the price to hire a new barista.
-     *
-     * @return the price for the next barista
-     */
-    public int getBaristaPrice() {
-        return 150 + (numBarista * 30);
-    }
-
-    /**
-     * Calculates the price to buy a new cafe.
-     *
-     * @return the price for the next cafe
-     */
-    public int getCafePrice() {
-        return 200 + (numCafe * 40);
-    }
-
-    /**
-     * Calculates the price for upgrading coffee machines.
-     *
-     * @return the coffee machine upgrade price
-     */
-    public int getCoffeeMachineUpgradePrice() {
-        return 75 + (numUpgradeCoffeeMachine * 25);
-    }
-
-    /**
-     * Calculates the price for upgrading baristas.
-     *
-     * @return the barista upgrade price
-     */
-    public int getBaristaUpgradePrice() {
-        return 125 + (numUpgradeBarista * 35);
-    }
-
-    /**
-     * Calculates the price for upgrading cafes.
-     *
-     * @return the cafe upgrade price
-     */
-    public int getCafeUpgradePrice() {
-        return 175 + (numUpgradeCafe * 45);
-    }
-
-    /**
-     * Sets the number of coffee machines.
-     *
-     * @param numCoffeeMachine the new number of coffee machines
-     */
-    public void setNumCoffeeMachine(int numCoffeeMachine) {
-        this.numCoffeeMachine = numCoffeeMachine;
-    }
-
-    /**
-     * Sets the number of baristas.
-     *
-     * @param numBarista the new number of baristas
-     */
-    public void setNumBarista(int numBarista) {
-        this.numBarista = numBarista;
-    }
-
-    /**
-     * Sets the number of cafes.
-     *
-     * @param numCafe the new number of cafes
-     */
-    public void setNumCafe(int numCafe) {
-        this.numCafe = numCafe;
-    }
-
-    /**
-     * Sets the number of coffee machine upgrades.
-     *
-     * @param numUpgradeCoffeeMachine the new number of coffee machine upgrades
-     */
-    public void setNumUpgradeCoffeeMachine(int numUpgradeCoffeeMachine) {
-        this.numUpgradeCoffeeMachine = numUpgradeCoffeeMachine;
-    }
-
-    /**
-     * Sets the number of barista upgrades.
-     *
-     * @param numUpgradeBarista the new number of barista upgrades
-     */
-    public void setNumUpgradeBarista(int numUpgradeBarista) {
-        this.numUpgradeBarista = numUpgradeBarista;
-    }
-
-    /**
-     * Sets the number of cafe upgrades.
-     *
-     * @param numUpgradeCafe the new number of cafe upgrades
-     */
-    public void setNumUpgradeCafe(int numUpgradeCafe) {
-        this.numUpgradeCafe = numUpgradeCafe;
-    }
-
-    /**
      * Retrieves the name of the game.
      *
      * @return the name of the game
@@ -396,13 +287,6 @@ public class Game {
     public String getUserName() {
         return userName;
     }
-
-    /**
-     * Retrieves the game ID (alternative getter).
-     *
-     * @return the game ID
-     */
-    public int getIdPartida() { return this.gameID;}
 
     /**
      * Retrieves the minimum duration of the game in minutes.
