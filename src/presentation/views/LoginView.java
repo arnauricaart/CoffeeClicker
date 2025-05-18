@@ -92,7 +92,7 @@ public class LoginView extends JFrame {
 
         JLabel userLabel = new JLabel("Username or Email:");
         userLabel.setBounds(440, 170, 400, 30);
-        userLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        userLabel.setFont(new Font("Arial", Font.BOLD, 16));
         userLabel.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
         // add(userLabel);
         getContentPane().add(userLabel);
