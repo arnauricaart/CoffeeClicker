@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+// No se necesita ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
+// y asumimos que tienen el tamaño correcto o no necesitamos verificarlo antes.
 
 /**
  * Represents the login window of the application.
@@ -20,7 +22,7 @@ public class LoginView extends JFrame {
      */
     private JPasswordField passwordField;
     /**
-     * Button to trigger the login process.
+     * Button to trigger the login process. NOW USES IMAGES.
      */
     private JButton loginButton;
     /**
@@ -46,7 +48,7 @@ public class LoginView extends JFrame {
         getContentPane().setBackground(Color.decode("#FFFFFF"));
 
         JLabel title = new JLabel("LOGIN", SwingConstants.CENTER);
-        title.setFont(new Font("Dialog", Font.BOLD, 36));
+        title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled" si quieres consistencia
         title.setBounds(440, 100, 400, 50);
         title.setForeground(Color.decode("#000000"));
         add(title);
@@ -71,11 +73,82 @@ public class LoginView extends JFrame {
         passwordField.setBackground(Color.decode("#D9D9D9"));
         add(passwordField);
 
-        loginButton = new JButton("Login");
-        loginButton.setBounds(515, 340, 250, 50);
-        loginButton.setBackground(Color.decode("#9E6B57"));
-        loginButton.setForeground(Color.WHITE);
-        add(loginButton);
+        // --- Configuración del loginButton con imágenes ---
+        loginButton = new JButton();
+        Dimension loginButtonSize = new Dimension(300, 50); // Tamaño original del botón
+        loginButton.setPreferredSize(loginButtonSize);
+        loginButton.setMinimumSize(loginButtonSize);
+        loginButton.setMaximumSize(loginButtonSize);
+        loginButton.setBounds(490, 340, loginButtonSize.width, loginButtonSize.height); // Posición original
+
+        String loginNormalPath = "res/button_login.png";
+        String loginRolloverPath = "res/button_login2.png";
+        boolean loginImageLoaded = false;
+
+        try {
+            System.out.println("Intentando cargar imagen normal login: " + new java.io.File(loginNormalPath).getAbsolutePath());
+            ImageIcon icon = new ImageIcon(loginNormalPath);
+            if (icon.getIconWidth() > 0) {
+                // Si las imágenes no son exactamente 250x50, descomenta y ajusta el escalado:
+                // if (icon.getIconWidth() != loginButtonSize.width || icon.getIconHeight() != loginButtonSize.height) {
+                //    Image scaledImg = icon.getImage().getScaledInstance(loginButtonSize.width, loginButtonSize.height, Image.SCALE_SMOOTH);
+                //    icon = new ImageIcon(scaledImg);
+                // }
+                loginButton.setIcon(icon);
+                loginImageLoaded = true;
+                System.out.println("Imagen normal login cargada OK: " + loginNormalPath);
+            } else {
+                System.err.println("ERROR AL CARGAR imagen normal login (ancho <=0): " + loginNormalPath);
+            }
+        } catch (Exception e) {
+            System.err.println("Excepción al cargar imagen normal login " + loginNormalPath + ": " + e.getMessage());
+        }
+
+        if (loginRolloverPath != null) {
+            try {
+                System.out.println("Intentando cargar imagen rollover login: " + new java.io.File(loginRolloverPath).getAbsolutePath());
+                ImageIcon rIcon = new ImageIcon(loginRolloverPath);
+                if (rIcon.getIconWidth() > 0) {
+                    // if (rIcon.getIconWidth() != loginButtonSize.width || rIcon.getIconHeight() != loginButtonSize.height) {
+                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(loginButtonSize.width, loginButtonSize.height, Image.SCALE_SMOOTH);
+                    //    rIcon = new ImageIcon(scaledRollover);
+                    // }
+                    loginButton.setRolloverIcon(rIcon);
+                    loginButton.setRolloverEnabled(true);
+                    System.out.println("Imagen rollover login cargada OK: " + loginRolloverPath);
+                } else {
+                    System.err.println("ERROR AL CARGAR imagen rollover login (ancho <=0): " + loginRolloverPath);
+                }
+            } catch (Exception e) {
+                System.err.println("Excepción al cargar imagen rollover login " + loginRolloverPath + ": " + e.getMessage());
+            }
+        }
+
+        if (loginImageLoaded) {
+            loginButton.setBorder(null);
+            loginButton.setBorderPainted(false);
+            loginButton.setContentAreaFilled(false);
+            loginButton.setOpaque(false);
+            // Si el texto "Login" está en la imagen, no necesitas button.setText("Login");
+            // Si quieres texto SOBRE la imagen (y no está en la imagen):
+            // loginButton.setText("Login");
+            // loginButton.setFont(new Font("Pixeled", Font.BOLD, 14)); // o la fuente que desees
+            // loginButton.setForeground(Color.WHITE_OR_BLACK); // Color que contraste con tu imagen
+            // loginButton.setHorizontalTextPosition(SwingConstants.CENTER);
+            // loginButton.setVerticalTextPosition(SwingConstants.CENTER);
+        } else {
+            // Fallback si la imagen normal no se cargó
+            loginButton.setText("Login (Error)");
+            loginButton.setBackground(Color.decode("#9E6B57")); // Color original de fallback
+            loginButton.setForeground(Color.WHITE);
+            loginButton.setOpaque(true);
+            loginButton.setContentAreaFilled(true);
+            loginButton.setBorder(BorderFactory.createEtchedBorder());
+        }
+        loginButton.setFocusPainted(false);
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(loginButton); // Añadir el botón al JFrame
+
 
         goToRegister = new JLabel("Not a user? Register Here", SwingConstants.CENTER);
         goToRegister.setBounds(515, 400, 250, 30);
@@ -88,7 +161,7 @@ public class LoginView extends JFrame {
                 loginActionListener.actionPerformed(e);
             }
         };
-        
+
         usernameField.addActionListener(enterKeyListener);
         passwordField.addActionListener(enterKeyListener);
     }
@@ -112,9 +185,11 @@ public class LoginView extends JFrame {
      *
      * @param al the ActionListener to handle login actions
      */
-    public void setLoginButtonListener(ActionListener al) { 
+    public void setLoginButtonListener(ActionListener al) {
         loginActionListener = al;
-        loginButton.addActionListener(al); 
+        if (loginButton != null) { // Buena práctica verificar
+            loginButton.addActionListener(al);
+        }
     }
 
     /**
@@ -128,6 +203,6 @@ public class LoginView extends JFrame {
      * Displays an error message dialog informing the user that login failed.
      */
     public void showLoginErrorMessage() {
-        JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Login failed. Check credentials.", "Login Error", JOptionPane.ERROR_MESSAGE);
     }
 }
