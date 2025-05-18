@@ -4,6 +4,6 @@
     "port": 3306,
     "name": "cofeeclicker_schema",
     "user": "root",
-    "password": "hola"
+    "password": ""
   }
 }

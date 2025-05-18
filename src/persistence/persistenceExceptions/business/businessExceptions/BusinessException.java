@@ -1,4 +1,4 @@
-package business.BusinessExceptions;
+package persistence.persistenceExceptions.business.businessExceptions;
 
 /**
  * Represents all the Business Exceptions that may occur when running the code. It is abstract.

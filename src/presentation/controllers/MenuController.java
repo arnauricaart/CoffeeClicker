@@ -1,8 +1,8 @@
 package presentation.controllers;
-import business.entities.Game;
-import business.managers.PartidaManager;
-import business.managers.StatisticsManager;
-import business.managers.UserManager;
+import persistence.persistenceExceptions.business.entities.Game;
+import persistence.persistenceExceptions.business.managers.PartidaManager;
+import persistence.persistenceExceptions.business.managers.StatisticsManager;
+import persistence.persistenceExceptions.business.managers.UserManager;
 import persistence.persistenceExceptions.ConstraintException;
 import presentation.views.*;
 

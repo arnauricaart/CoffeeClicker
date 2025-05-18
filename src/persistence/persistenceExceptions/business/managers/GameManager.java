@@ -1,6 +1,6 @@
-package business.managers;
+package persistence.persistenceExceptions.business.managers;
 import presentation.controllers.GameUpdateListener;
-import business.entities.Game;
+import persistence.persistenceExceptions.business.entities.Game;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
@@ -56,7 +56,7 @@ public class GameManager implements Runnable{
     /**
      * The current game.
      */
-    private business.entities.Game game;
+    private Game game;
     /**
      * The thread managing the per-second auto-coffee logic.
      */
