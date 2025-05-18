@@ -33,6 +33,10 @@ public class LoginView extends JFrame {
      * ActionListener for login button and Enter key presses on input fields.
      */
     private ActionListener loginActionListener;
+    /**
+     * Label to hold the background image.
+     */
+    private JLabel backgroundLabel; // Sigue siendo un JLabel
 
 
     /**
@@ -41,37 +45,76 @@ public class LoginView extends JFrame {
     public LoginView() {
         setTitle("Login");
         setSize(1280, 720);
-        setLayout(null);
+        // setLayout(null); // Ya no lo necesitamos en el contentPane directamente si usamos JLayeredPane para el fondo
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        getContentPane().setBackground(Color.decode("#FFFFFF"));
+
+        // Obtenemos el JLayeredPane
+        JLayeredPane layeredPane = getLayeredPane();
+        layeredPane.setLayout(null); // El layeredPane sí puede tener layout null para posicionar absoluto
+
+        // --- Configuración de la imagen de fondo ---
+        String backgroundLoginPath = "res/login.jpg"; // Ruta de tu imagen de fondo
+        try {
+            ImageIcon backgroundImgIcon = new ImageIcon(backgroundLoginPath);
+
+            if (backgroundImgIcon.getIconWidth() > 0) {
+                backgroundLabel = new JLabel(backgroundImgIcon);
+                backgroundLabel.setBounds(0, 0, getWidth(), getHeight()); // Cubre todo el frame
+                // Añadir la etiqueta de fondo a una capa inferior del JLayeredPane
+                layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // O JLayeredPane.FRAME_CONTENT_LAYER - 10
+                System.out.println("Imagen de fondo login cargada OK: " + new java.io.File(backgroundLoginPath).getAbsolutePath());
+            } else {
+                System.err.println("ERROR AL CARGAR imagen de fondo login (ancho <=0): " + new java.io.File(backgroundLoginPath).getAbsolutePath());
+                // Fallback: si la imagen no carga, usar el color de fondo blanco en el contentPane
+                getContentPane().setBackground(Color.decode("#FFFFFF"));
+            }
+        } catch (Exception e) {
+            System.err.println("Excepción al cargar imagen de fondo login " + backgroundLoginPath + ": " + e.getMessage());
+            // Fallback: si hay excepción, usar el color de fondo blanco en el contentPane
+            getContentPane().setBackground(Color.decode("#FFFFFF"));
+        }
+
+        // Hacemos el contentPane transparente para que se vea el fondo del JLayeredPane
+        ((JPanel)getContentPane()).setOpaque(false);
+        // Y el contentPane también necesita layout null para posicionar los componentes encima del fondo
+        getContentPane().setLayout(null);
+
 
         JLabel title = new JLabel("LOGIN", SwingConstants.CENTER);
         title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled" si quieres consistencia
         title.setBounds(440, 100, 400, 50);
-        title.setForeground(Color.decode("#000000"));
-        add(title);
+        title.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste con tu fondo
+        // add(title); // Se añade al contentPane
+        getContentPane().add(title);
+
 
         JLabel userLabel = new JLabel("Username or Email:");
         userLabel.setBounds(440, 170, 400, 30);
         userLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        add(userLabel);
+        userLabel.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
+        // add(userLabel);
+        getContentPane().add(userLabel);
 
         usernameField = new JTextField();
         usernameField.setBounds(440, 200, 400, 40);
         usernameField.setBackground(Color.decode("#D9D9D9"));
-        add(usernameField);
+        // add(usernameField);
+        getContentPane().add(usernameField);
 
         JLabel passLabel = new JLabel("Password:");
         passLabel.setBounds(440, 250, 400, 30);
         passLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        add(passLabel);
+        passLabel.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
+        // add(passLabel);
+        getContentPane().add(passLabel);
 
         passwordField = new JPasswordField();
         passwordField.setBounds(440, 280, 400, 40);
         passwordField.setBackground(Color.decode("#D9D9D9"));
-        add(passwordField);
+        // add(passwordField);
+        getContentPane().add(passwordField);
 
         // --- Configuración del loginButton con imágenes ---
         loginButton = new JButton();
@@ -89,11 +132,6 @@ public class LoginView extends JFrame {
             System.out.println("Intentando cargar imagen normal login: " + new java.io.File(loginNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(loginNormalPath);
             if (icon.getIconWidth() > 0) {
-                // Si las imágenes no son exactamente 250x50, descomenta y ajusta el escalado:
-                // if (icon.getIconWidth() != loginButtonSize.width || icon.getIconHeight() != loginButtonSize.height) {
-                //    Image scaledImg = icon.getImage().getScaledInstance(loginButtonSize.width, loginButtonSize.height, Image.SCALE_SMOOTH);
-                //    icon = new ImageIcon(scaledImg);
-                // }
                 loginButton.setIcon(icon);
                 loginImageLoaded = true;
                 System.out.println("Imagen normal login cargada OK: " + loginNormalPath);
@@ -109,10 +147,6 @@ public class LoginView extends JFrame {
                 System.out.println("Intentando cargar imagen rollover login: " + new java.io.File(loginRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(loginRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
-                    // if (rIcon.getIconWidth() != loginButtonSize.width || rIcon.getIconHeight() != loginButtonSize.height) {
-                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(loginButtonSize.width, loginButtonSize.height, Image.SCALE_SMOOTH);
-                    //    rIcon = new ImageIcon(scaledRollover);
-                    // }
                     loginButton.setRolloverIcon(rIcon);
                     loginButton.setRolloverEnabled(true);
                     System.out.println("Imagen rollover login cargada OK: " + loginRolloverPath);
@@ -129,17 +163,9 @@ public class LoginView extends JFrame {
             loginButton.setBorderPainted(false);
             loginButton.setContentAreaFilled(false);
             loginButton.setOpaque(false);
-            // Si el texto "Login" está en la imagen, no necesitas button.setText("Login");
-            // Si quieres texto SOBRE la imagen (y no está en la imagen):
-            // loginButton.setText("Login");
-            // loginButton.setFont(new Font("Pixeled", Font.BOLD, 14)); // o la fuente que desees
-            // loginButton.setForeground(Color.WHITE_OR_BLACK); // Color que contraste con tu imagen
-            // loginButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            // loginButton.setVerticalTextPosition(SwingConstants.CENTER);
         } else {
-            // Fallback si la imagen normal no se cargó
             loginButton.setText("Login (Error)");
-            loginButton.setBackground(Color.decode("#9E6B57")); // Color original de fallback
+            loginButton.setBackground(Color.decode("#9E6B57"));
             loginButton.setForeground(Color.WHITE);
             loginButton.setOpaque(true);
             loginButton.setContentAreaFilled(true);
@@ -147,14 +173,17 @@ public class LoginView extends JFrame {
         }
         loginButton.setFocusPainted(false);
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        add(loginButton); // Añadir el botón al JFrame
+        // add(loginButton);
+        getContentPane().add(loginButton);
 
 
         goToRegister = new JLabel("Not a user? Register Here", SwingConstants.CENTER);
         goToRegister.setBounds(515, 400, 250, 30);
-        goToRegister.setForeground(Color.decode("#000000"));
+        goToRegister.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
         goToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        add(goToRegister);
+        // add(goToRegister);
+        getContentPane().add(goToRegister);
+
 
         ActionListener enterKeyListener = e -> {
             if (loginActionListener != null) {
