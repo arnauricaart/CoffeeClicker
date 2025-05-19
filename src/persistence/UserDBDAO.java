@@ -4,17 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- */
 public class UserDBDAO implements UserDAO{
     public UserDBDAO() {}
 
-    /**
-     *
-     * @param email
-     * @return
-     */
     public boolean removeUserAndData(String email){
         System.out.println("Remove user");
         String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT IdPartida FROM partida WHERE correo = ?)";

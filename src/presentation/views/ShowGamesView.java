@@ -1,6 +1,6 @@
 package presentation.views;
 
-import persistence.persistenceExceptions.business.entities.Game;
+import business.entities.Game;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
