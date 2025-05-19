@@ -1,7 +1,7 @@
 package presentation.controllers;
 
-import business.entities.Game;
-import business.managers.GameManager;
+import persistence.persistenceExceptions.business.entities.Game;
+import persistence.persistenceExceptions.business.managers.GameManager;
 import presentation.views.GameView;
 
 import javax.sound.sampled.*;

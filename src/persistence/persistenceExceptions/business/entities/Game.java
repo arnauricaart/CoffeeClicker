@@ -1,4 +1,4 @@
-package business.entities;
+package persistence.persistenceExceptions.business.entities;
 
 /**
  * Represents a game in the business domain.
