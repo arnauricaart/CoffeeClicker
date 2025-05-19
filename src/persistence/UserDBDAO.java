@@ -5,15 +5,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
+ * This class implements the interface UserDAO.
  */
 public class UserDBDAO implements UserDAO{
+    /**
+     * Constructor of the class.
+     */
     public UserDBDAO() {}
 
+
     /**
-     *
-     * @param email
-     * @return
+     * This method removes an user and all of its information.
+     * @param email String with the User Mail.
+     * @return Returns a boolean that will tell if everything went okey.
      */
     public boolean removeUserAndData(String email){
         System.out.println("Remove user");
@@ -54,6 +58,13 @@ public class UserDBDAO implements UserDAO{
         return result > 0;
     }
 
+    /**
+     * This method registers a new User.
+     * @param username String with the User Name that will be used in the insert query.
+     * @param email String with the User Mail.
+     * @param password String with the User Password.
+     * @return Returns a boolean that will tell if everything went okey.
+     */
     public boolean registerUser(String username, String email, String password) {
         if (checkUserExists(username)) return false;
 
@@ -69,6 +80,11 @@ public class UserDBDAO implements UserDAO{
         return result > 0;
     }
 
+    /**
+     * This method checks if a user exists searching it by the User Name.
+     * @param username String with the User Name that will be used in the search.
+     * @return Returns a boolean that will tell if it exists or not.
+     */
     public boolean checkUserExists(String username) {
         String query = "SELECT * FROM users WHERE Nombre = ?";
         ArrayList<String> values = new ArrayList<>();
@@ -85,6 +101,11 @@ public class UserDBDAO implements UserDAO{
         return true;
     }
 
+    /**
+     * This method checks if a User Mail exists.
+     * @param email String with the User Mail.
+     * @return Returns a Boolean that will tell if the User Mail exists or not.
+     */
     public boolean checkEmailExists(String email) {
         String query = "SELECT COUNT(*) FROM users WHERE Correo = ?";
         ArrayList<String> values = new ArrayList<>();
@@ -102,6 +123,12 @@ public class UserDBDAO implements UserDAO{
         return false;
     }
 
+    /**
+     * This method gets the User Mail from the login.
+     * @param userOrEmail String with the User Name or User Mail.
+     * @param password String with the User Password.
+     * @return Returns a String with the User Mail.
+     */
     public String getCorreoFromLogin(String userOrEmail, String password) {
         String query = "SELECT Correo FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";
         ArrayList<String> values = new ArrayList<>();

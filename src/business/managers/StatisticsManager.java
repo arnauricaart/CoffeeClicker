@@ -1,4 +1,4 @@
-package persistence.persistenceExceptions.business.managers;
+package business.managers;
 
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;

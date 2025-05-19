@@ -1,14 +1,45 @@
 package persistence;
 
+/**
+ * Interface that will be used to retrive the user table information from the database.
+ */
 public interface UserDAO {
 
+    /**
+     * This method will implement a way to remove an user and all of its information.
+     * @param email String with the User Mail.
+     * @return Returns a boolean that will tell if everything went okey.
+     */
     public boolean removeUserAndData(String email);
 
+    /**
+     * This method will implement a way to register a new User.
+     * @param username String with the User Name that will be used in the insert query.
+     * @param email String with the User Mail.
+     * @param password String with the User Password.
+     * @return Returns a boolean that will tell if everything went okey.
+     */
     public boolean registerUser(String username, String email, String password);
 
+    /**
+     * This method will implment a way to check if a user exists searching it by the User Name.
+     * @param username String with the User Name that will be used in the search.
+     * @return Returns a boolean that will tell if it exists or not.
+     */
     public boolean checkUserExists(String username);
 
+    /**
+     * This method will implement a way to get the User Mail from the login.
+     * @param userOrEmail String with the User Name or User Mail.
+     * @param password String with the User Password.
+     * @return Returns a String with the User Mail.
+     */
     public String getCorreoFromLogin(String userOrEmail, String password);
 
+    /**
+     * This method will implement a way to check if a User Mail exists.
+     * @param email String with the User Mail.
+     * @return Returns a Boolean that will tell if the User Mail exists or not.
+     */
     boolean checkEmailExists(String email);
 }

@@ -1,6 +1,6 @@
-package persistence.persistenceExceptions.business.managers;
+package business.managers;
+import business.entities.Game;
 import presentation.controllers.GameUpdateListener;
-import persistence.persistenceExceptions.business.entities.Game;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
