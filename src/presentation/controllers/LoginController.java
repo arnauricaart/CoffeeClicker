@@ -21,7 +21,6 @@ public class LoginController {
      * The user manager responsible for authenticating users
      */
     private UserManager userManager;
-
     /**
      * Constructs a new LoginController and initializes the UserManager.
      */
