@@ -1,11 +1,11 @@
 package business.managers;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import business.entities.Game;
 import presentation.controllers.GameUpdateListener;
-=======
+//=======
 import presentation.controllers.GameUpdateListener;
 import business.entities.Game;
->>>>>>> 78bc66917c7cd6c69e5702bb75fd5aa5d7f6ebb8
+//>>>>>>> 78bc66917c7cd6c69e5702bb75fd5aa5d7f6ebb8
 import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
