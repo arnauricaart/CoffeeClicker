@@ -1,5 +1,7 @@
 package persistence;
 
+import persistence.persistenceExceptions.StatsNotFound;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class StatsDBDAO implements StatsDAO{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return cafeCounts;
     }
 

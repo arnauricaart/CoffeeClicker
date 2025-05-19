@@ -61,7 +61,10 @@ public class CafeStatsPanel extends JPanel {
         g2.drawLine(leftMargin, topMargin, leftMargin, height - bottomMargin);
 
         //Tamaño máximo del gráfico (ejes dinamicos)
-        long maxY = data.stream().max(Integer::compare).orElse(1);  // Changed to long to handle large numbers
+        long maxY = data.stream().max(Integer::compare).orElse(1);// Changed to long to handle large numbers
+        if(maxY == 0){
+            maxY = 100;
+        }
         int stepX = (width - leftMargin - rightMargin) / Math.max(1, data.size() - 1);
         int graphHeight = height - topMargin - bottomMargin;
 
