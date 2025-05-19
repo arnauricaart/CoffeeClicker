@@ -1,6 +1,6 @@
-package business.managers;
+package persistence.persistenceExceptions.business.managers;
 
-import business.entities.User;
+import persistence.persistenceExceptions.business.entities.User;
 import persistence.UserDAO;
 import persistence.UserDBDAO;
 

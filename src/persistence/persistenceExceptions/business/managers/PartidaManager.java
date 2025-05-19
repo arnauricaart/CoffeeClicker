@@ -1,6 +1,6 @@
-package business.managers;
+package persistence.persistenceExceptions.business.managers;
 
-import business.entities.Game;
+import persistence.persistenceExceptions.business.entities.Game;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
 
