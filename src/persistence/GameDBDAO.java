@@ -1,6 +1,6 @@
 package persistence;
 
-import persistence.persistenceExceptions.business.entities.Game;
+import business.entities.Game;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

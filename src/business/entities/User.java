@@ -1,4 +1,4 @@
-package persistence.persistenceExceptions.business.entities;
+package business.entities;
 
 /**
  * Represents a user in the business domain.

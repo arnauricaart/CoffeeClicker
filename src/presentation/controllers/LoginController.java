@@ -1,6 +1,6 @@
 package presentation.controllers;
 
-import persistence.persistenceExceptions.business.managers.UserManager;
+import business.managers.UserManager;
 import presentation.views.LoginView;
 import presentation.views.MenuGUI;
 
