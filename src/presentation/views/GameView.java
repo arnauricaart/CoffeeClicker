@@ -1,10 +1,11 @@
+// Archivo: presentation/views/GameView.java
 package presentation.views;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -15,12 +16,13 @@ import java.io.File;
  * Extends JFrame and manages all UI components and layouts.
  */
 public class GameView extends JFrame {
+
     // UI components used in different parts of the interface
     private JLabel counterLabel, perSecLabel;
     private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton;
     private JButton coffeeMachineUpgradeButton, baristaUpgradeButton, cafeUpgradeButton;
     private JButton pauseButton, endGameButton;
-    private JTextArea messageText;
+    private JTextArea messageText; // JTextArea to display contextual messages to the user
 
     // Fonts used for various UI elements
     private Font titleFont, subtitleFont, mainTextFont, smallTextFont, buttonShopFont, tableHeaderFont, tableContentFont;
@@ -29,13 +31,14 @@ public class GameView extends JFrame {
     private JTable generatorStatsTable;
     private DefaultTableModel generatorStatsTableModel;
     private JScrollPane generatorStatsScrollPane;
-    private final String[] generatorTableColumns = {
+    private final String[] generatorTableColumns = { // Column names for the generator statistics table
             "Name", "Qty", "Unit Prod", "Total Prod", "% Overall"
     };
     // Labels for titles and sections
-    private JLabel generatorTableTitleLabel;
-    private JLabel coffeeMakersTitleLabel, upgradesTitleLabel;
-    private JLabel shopMainTitleLabel;
+    private JLabel generatorTableTitleLabel; // Title label for the generator statistics table
+    private JLabel coffeeMakersTitleLabel, upgradesTitleLabel; // Sub-titles for shop sections
+    private JLabel shopMainTitleLabel; // Main title for the shop panel
+    private JLabel itemDetailsTitleLabel; // Title for the item details/message area
 
 
     /**
@@ -76,6 +79,7 @@ public class GameView extends JFrame {
 
     /**
      * Creates and arranges all the user interface elements in the window.
+     * This method sets up the main JFrame, panels, labels, buttons, table, and shop area.
      */
     private void createUI() {
         this.setTitle("Coffee Clicker");
@@ -84,8 +88,9 @@ public class GameView extends JFrame {
         this.getContentPane().setBackground(Color.white);
         this.setLayout(null);
         this.setResizable(false);
-        this.setLocationRelativeTo(null); // <--- LÍNEA AÑADIDA PARA CENTRAR LA VENTANA
+        this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
 
+        // Main panels for layout
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBounds(20, 20, 400, 660);
         leftPanel.setBackground(Color.white);
@@ -104,6 +109,7 @@ public class GameView extends JFrame {
         rightPanel.setOpaque(true);
         this.add(rightPanel);
 
+        // Left Panel: Coffee counter, per second, and main coffee button
         counterLabel = new JLabel("0 coffees");
         counterLabel.setForeground(Color.black);
         counterLabel.setFont(mainTextFont);
@@ -129,11 +135,28 @@ public class GameView extends JFrame {
         coffeeButton.setOpaque(false);
         coffeeButton.setContentAreaFilled(false);
         coffeeButton.setBorderPainted(false);
-        coffeeButton.setFocusPainted(false);
-        coffeeButton.setBorder(null);
+        coffeeButton.setBorder(null); // Eliminado borde por defecto
+
+        Color brownBorderColor = Color.decode("#9E6B57"); // Borde marrón para el botón de café
+        int borderThickness = 3;
+        coffeeButton.setBorder(BorderFactory.createLineBorder(brownBorderColor, borderThickness));
+
         leftPanel.add(coffeeButton);
 
-        messageText = new JTextArea();
+        // Center Panel: Item Details, Message Area, Generator Table
+        itemDetailsTitleLabel = new JLabel("ITEM DETAILS");
+        itemDetailsTitleLabel.setFont(titleFont);
+        itemDetailsTitleLabel.setForeground(Color.black);
+        itemDetailsTitleLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        int itemDetailsTitleHeight = 30;
+        int itemDetailsTitleY = 130;
+        itemDetailsTitleLabel.setBounds(5, itemDetailsTitleY, 410, itemDetailsTitleHeight);
+        centerPanel.add(itemDetailsTitleLabel);
+
+        int messageScrollPaneY = itemDetailsTitleY + itemDetailsTitleHeight + 15; // Espaciado ajustado
+        int messageAreaHeight = 170; // Altura ajustada
+
+        messageText = new JTextArea(); // Área para mostrar mensajes contextuales
         messageText.setForeground(Color.black);
         messageText.setBackground(new Color(235, 235, 235));
         messageText.setFont(smallTextFont);
@@ -147,67 +170,116 @@ public class GameView extends JFrame {
         JScrollPane messageScrollPane = new JScrollPane(messageText);
         messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         messageScrollPane.setBorder(null);
-        int messageAreaHeight = 160;
-        messageScrollPane.setBounds(5, 130, 410, messageAreaHeight);
+        messageScrollPane.setBounds(5, messageScrollPaneY, 410, messageAreaHeight);
         centerPanel.add(messageScrollPane);
 
         generatorTableTitleLabel = new JLabel("GENERATOR TABLE");
         styleTitleLabel(generatorTableTitleLabel, titleFont);
+        generatorTableTitleLabel.setBorder(new EmptyBorder(5, 0, 5, 10)); // Padding izquierdo a 0 para este título
         generatorTableTitleLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        int generatorTitleY = 130 + messageAreaHeight + 35;
+        int generatorTitleY = messageScrollPaneY + messageAreaHeight + 25;
         generatorTableTitleLabel.setBounds(5, generatorTitleY, 410, 30);
         centerPanel.add(generatorTableTitleLabel);
 
+        // Generator Statistics Table
         generatorStatsTableModel = new DefaultTableModel(generatorTableColumns, 0) {
-            @Override public boolean isCellEditable(int row, int column) { return false; }
+            @Override public boolean isCellEditable(int row, int column) { return false; } // Celdas no editables
         };
         generatorStatsTable = new JTable(generatorStatsTableModel);
         generatorStatsTable.setFont(tableContentFont);
         generatorStatsTable.getTableHeader().setFont(tableHeaderFont);
         generatorStatsTable.setRowHeight(22);
-        generatorStatsTable.setFillsViewportHeight(true);
+        generatorStatsTable.setFillsViewportHeight(true); // La tabla ocupa toda la altura del scrollpane
         generatorStatsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        generatorStatsTable.getTableHeader().setReorderingAllowed(false); // No permitir reordenar columnas
 
-        Color tableRowBg = new Color(35, 35, 35);
-        Color tableHeaderBg = new Color(20, 20, 20);
-        Color tableFg = Color.white;
-        Color tableGrid = new Color(80, 80, 80);
+        TableColumnModel columnModel = generatorStatsTable.getColumnModel();
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            columnModel.getColumn(i).setResizable(false); // No permitir redimensionar columnas
+        }
 
-        generatorStatsTable.setBackground(tableRowBg);
-        generatorStatsTable.setForeground(tableFg);
+        generatorStatsTable.setRowSelectionAllowed(false); // No permitir seleccionar filas
+        generatorStatsTable.setFocusable(false); // Que la tabla no obtenga el foco
+
+
+        // Paleta de colores marrón para la tabla
+        final Color brownRowDark = new Color(0x5D4037);
+        final Color brownRowMiddleLight = new Color(0x795548);
+        final Color tableHeaderBg = new Color(0x4E342E);
+        final Color tableFg = new Color(0xFFF8E1);
+        final Color tableGrid = Color.decode("#9E6B57");
+        final Color selectionBg = new Color(0x8D6E63);
+        final Color selectionFg = Color.white;
+
         generatorStatsTable.getTableHeader().setBackground(tableHeaderBg);
         generatorStatsTable.getTableHeader().setForeground(tableFg);
         generatorStatsTable.setGridColor(tableGrid);
-        generatorStatsTable.setOpaque(true);
+        // Los siguientes no tendrán efecto visual si la selección está deshabilitada, pero se definen.
+        generatorStatsTable.setSelectionBackground(selectionBg);
+        generatorStatsTable.setSelectionForeground(selectionFg);
 
-        DefaultTableCellRenderer darkCenterRenderer = new DefaultTableCellRenderer();
-        darkCenterRenderer.setHorizontalAlignment(JLabel.CENTER);
-        darkCenterRenderer.setBackground(tableRowBg);
-        darkCenterRenderer.setForeground(tableFg);
+        // Renderizadores como clases anónimas para colores de fila específicos
+        DefaultTableCellRenderer themedLeftRenderer = new DefaultTableCellRenderer() {
+            {
+                setOpaque(true);
+                setHorizontalAlignment(JLabel.LEFT);
+            }
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                // isSelected y hasFocus se ignoran ya que la selección está deshabilitada
+                super.getTableCellRendererComponent(table, value, false, false, row, column);
+                if (row == 1) { // Fila del medio (Barista)
+                    setBackground(brownRowMiddleLight);
+                } else { // Filas exteriores (Coffee Machine y Cafe)
+                    setBackground(brownRowDark);
+                }
+                setForeground(tableFg);
+                return this;
+            }
+        };
 
-        DefaultTableCellRenderer darkLeftRenderer = new DefaultTableCellRenderer();
-        darkLeftRenderer.setHorizontalAlignment(JLabel.LEFT);
-        darkLeftRenderer.setBackground(tableRowBg);
-        darkLeftRenderer.setForeground(tableFg);
+        DefaultTableCellRenderer themedCenterRenderer = new DefaultTableCellRenderer() {
+            {
+                setOpaque(true);
+                setHorizontalAlignment(JLabel.CENTER);
+            }
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                super.getTableCellRendererComponent(table, value, false, false, row, column);
+                if (row == 1) {
+                    setBackground(brownRowMiddleLight);
+                } else {
+                    setBackground(brownRowDark);
+                }
+                setForeground(tableFg);
+                return this;
+            }
+        };
 
-        generatorStatsTable.getColumnModel().getColumn(0).setCellRenderer(darkLeftRenderer);
+        generatorStatsTable.getColumnModel().getColumn(0).setCellRenderer(themedLeftRenderer);
         for (int i = 1; i < generatorTableColumns.length; i++) {
-            generatorStatsTable.getColumnModel().getColumn(i).setCellRenderer(darkCenterRenderer);
+            generatorStatsTable.getColumnModel().getColumn(i).setCellRenderer(themedCenterRenderer);
         }
 
-        int numRowsInTable = 3;
+        int numRowsInTable = 3; // Asumiendo 3 generadores fijos
         int dataRowHeight = generatorStatsTable.getRowHeight();
         int headerHeight = generatorStatsTable.getTableHeader().getPreferredSize().height;
         int tableActualHeight = headerHeight + (numRowsInTable * dataRowHeight);
 
         generatorStatsScrollPane = new JScrollPane(generatorStatsTable);
-        generatorStatsScrollPane.getViewport().setBackground(tableRowBg);
+        generatorStatsScrollPane.getViewport().setBackground(brownRowDark);
         generatorStatsScrollPane.setOpaque(true);
-        generatorStatsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        int tableY = generatorTitleY + 30 + 10;
+        generatorStatsScrollPane.setBorder(BorderFactory.createLineBorder(tableGrid));
+        generatorStatsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); // Sin scroll vertical
+        int tableY = generatorTitleY + 30 + 15; // Espaciado igual al de itemDetails
         generatorStatsScrollPane.setBounds(5, tableY, 410, tableActualHeight + 2);
         centerPanel.add(generatorStatsScrollPane);
 
+        // Right Panel: Shop
         shopMainTitleLabel = new JLabel("SHOP");
         styleTitleLabel(shopMainTitleLabel, titleFont);
         shopMainTitleLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -226,20 +298,20 @@ public class GameView extends JFrame {
         styleTitleLabel(coffeeMakersTitleLabel, subtitleFont);
         coffeeMakersTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopItemsContainerPanel.add(coffeeMakersTitleLabel);
-        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
         coffeeMachineButton = new JButton();
-        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png", "Coffee Machine (0)");
+        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png", "COFFEE MACHINE");
         shopItemsContainerPanel.add(coffeeMachineButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         baristaButton = new JButton();
-        configureImageButton(baristaButton, "res/button_barista.png", "res/button_barista2.png", "???");
+        configureImageButton(baristaButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
         shopItemsContainerPanel.add(baristaButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         cafeButton = new JButton();
-        configureImageButton(cafeButton, "res/button_cafe.png", "res/button_cafe2.png", "???");
+        configureImageButton(cafeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
         shopItemsContainerPanel.add(cafeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
@@ -247,35 +319,36 @@ public class GameView extends JFrame {
         styleTitleLabel(upgradesTitleLabel, subtitleFont);
         upgradesTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         shopItemsContainerPanel.add(upgradesTitleLabel);
-        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
         coffeeMachineUpgradeButton = new JButton();
-        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png", "Upgrade Machine (0)");
+        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png", "QUICK CLEAN");
         shopItemsContainerPanel.add(coffeeMachineUpgradeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         baristaUpgradeButton = new JButton();
-        configureImageButton(baristaUpgradeButton, "res/button_u2.png", "res/button_u2.2.png", "???");
+        configureImageButton(baristaUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
         shopItemsContainerPanel.add(baristaUpgradeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         cafeUpgradeButton = new JButton();
-        configureImageButton(cafeUpgradeButton, "res/button_u3.png", "res/button_u3.2.png", "???");
+        configureImageButton(cafeUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
         shopItemsContainerPanel.add(cafeUpgradeButton);
 
-        shopItemsContainerPanel.add(Box.createVerticalGlue());
+        shopItemsContainerPanel.add(Box.createVerticalGlue()); // Empuja los botones de pausa/fin hacia abajo
 
         pauseButton = new JButton();
         configureImageButton(pauseButton, "res/button_pause.png", "res/button_pause2.png", "Pause Game");
         shopItemsContainerPanel.add(pauseButton);
-        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
         endGameButton = new JButton();
         configureImageButton(endGameButton, "res/button_end.png", "res/button_end2.png", "End Game");
         shopItemsContainerPanel.add(endGameButton);
 
-        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,10))); // Pequeño margen inferior
 
+        // Action Commands para identificación en el controller
         coffeeButton.setActionCommand("COFFEEBUTTON");
         coffeeMachineButton.setActionCommand("COFFEEMACHINEBUTTON");
         baristaButton.setActionCommand("BARISTABUTTON");
@@ -286,6 +359,7 @@ public class GameView extends JFrame {
         pauseButton.setActionCommand("PAUSEBUTTON");
         endGameButton.setActionCommand("ENDGAMEBUTTON");
 
+        // Nombres para identificación en eventos de ratón (MouseListener)
         coffeeMachineButton.setName("COFFEEMACHINEBUTTON");
         baristaButton.setName("BARISTABUTTON");
         cafeButton.setName("CAFEBUTTON");
@@ -305,23 +379,22 @@ public class GameView extends JFrame {
         label.setForeground(Color.black);
         label.setBackground(Color.white);
         label.setOpaque(true);
-        label.setBorder(new EmptyBorder(5, 10, 5, 10));
+        label.setBorder(new EmptyBorder(5,10,5,10)); // Padding por defecto para títulos
     }
 
     /**
-     * Configures a button with image icons and fallback text in case of missing files.
+     * Configures a button with image icons and fallback text.
+     * If images are loaded, Java-rendered text is cleared.
      *
      * @param button        The JButton to configure.
      * @param normalPath    The path to the normal icon image.
      * @param rolloverPath  The path to the rollover (hover) icon image.
-     * @param fallbackText  Text to display if the icon is missing.
+     * @param fallbackText  Text to display if the icon is missing or fails to load.
      */
     private void configureImageButton(JButton button, String normalPath, String rolloverPath, String fallbackText) {
         button.setFont(this.buttonShopFont);
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        button.setVerticalTextPosition(SwingConstants.CENTER);
 
         Dimension buttonDim = new Dimension(300, 36);
         button.setPreferredSize(buttonDim);
@@ -353,19 +426,19 @@ public class GameView extends JFrame {
                     button.setRolloverIcon(iconRollover);
                     button.setRolloverEnabled(true);
                 }
-                button.setText("");
+                button.setText(""); // No mostrar texto de Java si la imagen se carga (texto está en la imagen)
                 button.setBorder(null);
                 button.setBorderPainted(false);
                 button.setContentAreaFilled(false);
                 button.setOpaque(false);
             } else {
-                button.setText(fallbackText);
-                configureShopButtonLookAndFeel(button, true);
+                button.setText(fallbackText); // Mostrar texto de fallback si la imagen no se carga
+                configureShopButtonLookAndFeel(button, true); // Aplicar estilo de botón de texto
             }
         } catch (Exception e) {
             System.err.println("Error cargando imágenes para botón (" + fallbackText + "): " + e.getMessage());
             e.printStackTrace();
-            button.setText(fallbackText);
+            button.setText(fallbackText); // Asegurar texto en caso de error
             configureShopButtonLookAndFeel(button, true);
         }
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -373,10 +446,10 @@ public class GameView extends JFrame {
 
 
     /**
-     * Configures the look and feel of shop-related buttons.
+     * Configures the look and feel of shop-related buttons when images are not used (fallback).
      *
      * @param button The JButton to configure.
-     * @param isShopItem Determines the button's style: true for regular shop item, false for upgrade item.
+     * @param isShopItem Determines the button's style: true for regular shop item, false for action buttons like Pause/End.
      */
     private void configureShopButtonLookAndFeel(JButton button, boolean isShopItem) {
         button.setFont(this.buttonShopFont);
@@ -390,17 +463,19 @@ public class GameView extends JFrame {
         button.setMinimumSize(buttonDim);
         button.setMaximumSize(buttonDim);
 
-        if (isShopItem) {
-            button.setBackground(new Color(50, 50, 50));
+        // Define colores de fallback para los botones de texto
+        if (isShopItem) { // Para botones de compra/mejora de la tienda
+            button.setBackground(new Color(50, 50, 50)); // Un gris oscuro
             button.setForeground(Color.white);
             button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 1));
-        } else {
-            button.setBackground(new Color(100, 30, 30));
+        } else { // Para botones de acción como Pausa, Fin de Juego
+            button.setBackground(new Color(100, 30, 30)); // Un rojo oscuro
             button.setForeground(Color.white);
             button.setBorder(BorderFactory.createLineBorder(new Color(70,10,10), 1));
         }
-        button.setOpaque(true);
+        button.setOpaque(true); // Asegurar que el fondo se pinte para botones de texto
 
+        // Efecto hover simple para botones de texto
         Color originalBg = button.getBackground();
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -412,245 +487,123 @@ public class GameView extends JFrame {
         });
     }
 
-    /** Updates the main message text in the UI.
-     *
-     * @param message The message to display
-     * */
+    /** Updates the main message text in the UI, ensuring it runs on the EDT.
+     * @param message The message to display.
+     */
     public void setMessageText(String message) { SwingUtilities.invokeLater(() -> this.messageText.setText(message)); }
 
-
-    /** Updates the counter label text in the UI.
-     *
-     * @param message The message to display
-     * */
+    /** Updates the counter label text in the UI, ensuring it runs on the EDT.
+     * @param message The text to display for the counter.
+     */
     public void setCounterLableText(String message) { SwingUtilities.invokeLater(() -> this.counterLabel.setText(message)); }
 
-    /** Updates the "per second" rate label in the UI.
-     *
-     * @param message The message to display
-     * */
+    /** Updates the "per second" rate label in the UI, ensuring it runs on the EDT.
+     * @param message The text to display for the per second rate.
+     */
     public void setPerSecLabelText(String message) { SwingUtilities.invokeLater(() -> this.perSecLabel.setText(message)); }
 
-    /** Updates the coffee machine button's text
-     *
-     * @param message The message to display
-     * */
-    public void setCoffeeMachineButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if (coffeeMachineButton.getIcon() == null || !"".equals(coffeeMachineButton.getText())) coffeeMachineButton.setText(message);
-    }); }
+    // --- Métodos para actualizar la apariencia completa de los botones de la tienda ---
+    // Estos métodos son llamados por GameController para cambiar icono y texto (o fallback)
+    // basados en el estado del juego (ej. bloqueado/desbloqueado).
 
-    /** Updates the barista button's text
-     *
-     * @param message The message to display
-     * */
-    public void setBaristaButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if ("???".equals(message) || baristaButton.getIcon() == null) {
-            baristaButton.setText(message);
-        } else if (!"".equals(baristaButton.getText())) {
-            baristaButton.setText(message);
-        }
-    }); }
+    /** Updates the appearance of the Coffee Machine button. */
+    public void updateCoffeeMachineButtonAppearance() {
+        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png", "COFFEE MACHINE");
+    }
 
-    /** Updates the café button's text
-     *
-     * @param message The message to display
-     * */
-    public void setCafeButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if ("???".equals(message) || cafeButton.getIcon() == null) {
-            cafeButton.setText(message);
-        } else if (!"".equals(cafeButton.getText())) {
-            cafeButton.setText(message);
-        }
-    }); }
+    /** Updates the appearance of the Coffee Machine upgrade button. */
+    public void updateCoffeeMachineUpgradeButtonAppearance() {
+        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png", "QUICK CLEAN");
+    }
 
-    /** Updates the coffee machine upgrade button's text
-     *
-     * @param message The message to display
-     * */
-    public void setCoffeeMachineUpgradeButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if (coffeeMachineUpgradeButton.getIcon() == null || !"".equals(coffeeMachineUpgradeButton.getText())) coffeeMachineUpgradeButton.setText(message);
-    }); }
+    /** Updates the appearance of the Barista button based on its unlocked state.
+     * @param unlocked True if the barista is unlocked, false otherwise.
+     */
+    public void updateBaristaButtonAppearance(boolean unlocked) {
+        String nameIfNoImage = unlocked ? "BARISTA" : "???";
+        String normalIcon = unlocked ? "res/button_barista.png" : "res/button_interrogant.png";
+        String rolloverIcon = unlocked ? "res/button_barista2.png" : "res/button_interrogant2.png";
+        configureImageButton(baristaButton, normalIcon, rolloverIcon, nameIfNoImage);
+    }
 
-    /** Updates the barista upgrade button's text
-     *
-     * @param message The message to display
-     * */
-    public void setBaristaUpgradeButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if ("???".equals(message) || baristaUpgradeButton.getIcon() == null) {
-            baristaUpgradeButton.setText(message);
-        } else if (!"".equals(baristaUpgradeButton.getText())) {
-            baristaUpgradeButton.setText(message);
-        }
-    }); }
+    /** Updates the appearance of the Cafe button based on its unlocked state.
+     * @param unlocked True if the cafe is unlocked, false otherwise.
+     */
+    public void updateCafeButtonAppearance(boolean unlocked) {
+        String nameIfNoImage = unlocked ? "CAFE" : "???";
+        String normalIcon = unlocked ? "res/button_cafe.png" : "res/button_interrogant.png";
+        String rolloverIcon = unlocked ? "res/button_cafe2.png" : "res/button_interrogant2.png";
+        configureImageButton(cafeButton, normalIcon, rolloverIcon, nameIfNoImage);
+    }
 
-    /** Updates the café upgrade button's text
-     *
-     * @param message The message to display
-     * */
-    public void setCafeUpgradeButtonText(String message) { SwingUtilities.invokeLater(() -> {
-        if ("???".equals(message) || cafeUpgradeButton.getIcon() == null) {
-            cafeUpgradeButton.setText(message);
-        } else if (!"".equals(cafeUpgradeButton.getText())) {
-            cafeUpgradeButton.setText(message);
-        }
-    }); }
+    /** Updates the appearance of the Barista upgrade button based on its unlocked state.
+     * @param unlocked True if the barista upgrade is unlocked, false otherwise.
+     */
+    public void updateBaristaUpgradeButtonAppearance(boolean unlocked) {
+        String nameIfNoImage = unlocked ? "SWIFT HANDS" : "???";
+        String normalIcon = unlocked ? "res/button_u2.png" : "res/button_interrogant.png";
+        String rolloverIcon = unlocked ? "res/button_u2.2.png" : "res/button_interrogant2.png";
+        configureImageButton(baristaUpgradeButton, normalIcon, rolloverIcon, nameIfNoImage);
+    }
 
+    /** Updates the appearance of the Cafe upgrade button based on its unlocked state.
+     * @param unlocked True if the cafe upgrade is unlocked, false otherwise.
+     */
+    public void updateCafeUpgradeButtonAppearance(boolean unlocked) {
+        String nameIfNoImage = unlocked ? "HAPPY HOUR" : "???";
+        String normalIcon = unlocked ? "res/button_u3.png" : "res/button_interrogant.png";
+        String rolloverIcon = unlocked ? "res/button_u3.2.png" : "res/button_interrogant2.png";
+        configureImageButton(cafeUpgradeButton, normalIcon, rolloverIcon, nameIfNoImage);
+    }
 
     /**
      * Updates the generator statistics table with new data.
-     * Clears the table and fills it row by row.
+     * Clears the table and fills it row by row, ensuring it runs on the EDT.
+     * @param data A 2D array of Objects representing the table data.
      */
     public void updateGeneratorStatsTable(Object[][] data) {
         SwingUtilities.invokeLater(() -> {
-            generatorStatsTableModel.setRowCount(0);
+            generatorStatsTableModel.setRowCount(0); // Limpia filas existentes
             if (data != null) {
                 for (Object[] rowData : data) {
-                    generatorStatsTableModel.addRow(rowData);
+                    generatorStatsTableModel.addRow(rowData); // Añade nuevas filas
                 }
             }
         });
     }
 
     //  Methods to add Action Listeners
-
-    /** Adds an ActionListener to the main coffee button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the main coffee button. @param listener The action listener. */
     public void addCoffeeButtonListener(ActionListener listener) { coffeeButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the coffee machine purchase button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the coffee machine purchase button. @param listener The action listener. */
     public void addCoffeeMachineButtonListener(ActionListener listener) { coffeeMachineButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the barista purchase button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the barista purchase button. @param listener The action listener. */
     public void addBaristaButtonListener(ActionListener listener) { baristaButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the café purchase button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the café purchase button. @param listener The action listener. */
     public void addCafeButtonListener(ActionListener listener) { cafeButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the pause button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the pause button. @param listener The action listener. */
     public void addPauseButtonListener(ActionListener listener) { pauseButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the end game button.
-     *
-     * @param listener The action listener
-     * */
-
+    /** Adds an ActionListener to the end game button. @param listener The action listener. */
     public void addEndGameButtonListener(ActionListener listener) { endGameButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the coffee machine upgrade button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the coffee machine upgrade button. @param listener The action listener. */
     public void addCoffeeMachineUpgradeButtonListener(ActionListener listener) { coffeeMachineUpgradeButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the barista upgrade button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the barista upgrade button. @param listener The action listener. */
     public void addBaristaUpgradeButtonListener(ActionListener listener) { baristaUpgradeButton.addActionListener(listener); }
-
-    /** Adds an ActionListener to the café upgrade button.
-     *
-     * @param listener The action listener
-     * */
+    /** Adds an ActionListener to the café upgrade button. @param listener The action listener. */
     public void addCafeUpgradeButtonListener(ActionListener listener) { cafeUpgradeButton.addActionListener(listener); }
 
-
-    //  Methods to add Mouse Listeners
-    /** Adds a MouseListener to the barista purchase button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    //  Methods to add Mouse Listeners for contextual help
+    /** Adds a MouseListener to the coffee machine purchase button. @param mouseListener The mouse listener. */
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener) { coffeeMachineButton.addMouseListener(mouseListener); }
-
-    /** Adds a MouseListener to the barista purchase button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    /** Adds a MouseListener to the barista purchase button. @param mouseListener The mouse listener. */
     public void addBaristaButtonMouseListener(MouseListener mouseListener) { baristaButton.addMouseListener(mouseListener); }
-
-    /** Adds a MouseListener to the café purchase button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    /** Adds a MouseListener to the café purchase button. @param mouseListener The mouse listener. */
     public void addCafeButtonMouseListener(MouseListener mouseListener) { cafeButton.addMouseListener(mouseListener); }
-
-    /** Adds a MouseListener to the coffee machine upgrade button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    /** Adds a MouseListener to the coffee machine upgrade button. @param mouseListener The mouse listener. */
     public void addCoffeeMachineUpgradeButtonMouseListener(MouseListener mouseListener) { coffeeMachineUpgradeButton.addMouseListener(mouseListener); }
-
-    /** Adds a MouseListener to the barista upgrade button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    /** Adds a MouseListener to the barista upgrade button. @param mouseListener The mouse listener. */
     public void addBaristaUpgradeButtonMouseListener(MouseListener mouseListener) { baristaUpgradeButton.addMouseListener(mouseListener); }
-
-    /** Adds a MouseListener to the café upgrade button.
-     *
-     * @param mouseListener The mouse listener
-     * */
+    /** Adds a MouseListener to the café upgrade button. @param mouseListener The mouse listener. */
     public void addCafeUpgradeButtonMouseListener(MouseListener mouseListener) { cafeUpgradeButton.addMouseListener(mouseListener); }
 
-
-    //ToDo cambiar esta clase de lugar!!!!!!!!!!!
-    // --- Clase interna WrappingCellRenderer ---
-    /**
-     * Custom cell renderer that allows text to wrap inside table cells.
-     * Useful for displaying long descriptions or tooltips in a neat format.
-     */
-    private class WrappingCellRenderer extends JTextArea implements TableCellRenderer {
-
-        /**
-         * Constructor that configures the JTextArea for line wrapping and sets it to opaque.
-         * Enables automatic wrapping of words to fit within the cell boundaries.
-         */
-        public WrappingCellRenderer() {
-            setLineWrap(true);
-            setWrapStyleWord(true);
-            setOpaque(true);
-        }
-
-
-        /**
-         * Returns the component used for drawing the cell.
-         * It adjusts appearance based on selection state and wraps long text.
-         *
-         * @param table The JTable that uses this renderer
-         * @param value The value to assign to the cell
-         * @param isSelected True if the cell is selected
-         * @param hasFocus True if the cell has focus
-         * @param row The row of the cell to render
-         * @param column The column of the cell to render
-         * @return The component used to render the cell
-         */
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText((value == null) ? "" : value.toString());
-            setFont(table.getFont());
-
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
-            } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
-            }
-            return this;
-        }
-    }
 }
