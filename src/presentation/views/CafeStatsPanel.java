@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * A panel showing the cafe stats.
+ * A panel showing the coffee stats.
  * It is used for visualizing game statistics in a graphical form.
  */
 public class CafeStatsPanel extends JPanel {
