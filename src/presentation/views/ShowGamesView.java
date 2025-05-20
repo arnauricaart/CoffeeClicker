@@ -138,7 +138,7 @@ public class ShowGamesView extends JFrame {
     public void updateTableData(List<Game> games) {
         tableModel.setRowCount(0);
         for (Game game : games) {
-            Object[] row = {game.getGameID(), game.getUserName(), game.getName(), game.getNumCoffees(), game.getLastAccess()};
+            Object[] row = {game.getGameID(), game.getUserName(), game.getName(), (int)game.getNumCoffees(), game.getLastAccess()};
             tableModel.addRow(row);
         }
     }
