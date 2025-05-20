@@ -153,9 +153,19 @@ public class GameManager implements Runnable{
      */
     public void endGame() {
         running = false;
-        game.endGame();
+
+
+        if (game != null && statDAO != null) {
+            statDAO.updateStats(game.getGameID(), (int)game.getNumCoffees(), game.getMinDuration());
+        }
+        if (game != null) {
+            game.endGame();
+        }
         saveGameState();
-        autoSaveTimer.cancel();
+
+        if (autoSaveTimer != null) {
+            autoSaveTimer.cancel();
+        }
     }
 
     /**
