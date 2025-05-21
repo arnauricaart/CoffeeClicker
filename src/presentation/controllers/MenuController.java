@@ -4,6 +4,7 @@ import business.managers.PartidaManager;
 import business.managers.StatisticsManager;
 import business.managers.UserManager;
 import persistence.persistenceExceptions.ConstraintException;
+import persistence.persistenceExceptions.GameNotFound;
 import presentation.views.*;
 
 import java.util.List;
@@ -85,7 +86,13 @@ public class MenuController implements MenuNavigator{
         // El constructor de MenuGUI ya la hace visible con setVisible(true). [cite: 4]
 
         // 3. (Re)asignar todos los listeners necesarios a ESTA NUEVA instancia de menuView.
-        this.menuView.setNewGameButtonListener(e -> startNewGame());
+        this.menuView.setNewGameButtonListener(e -> {
+            try {
+                startNewGame();
+            } catch (GameNotFound ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         this.menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
         this.menuView.setLogoutButtonListener(e -> logout());
         this.menuView.setDeleteAccountButtonListener(e -> deleteAccount());
@@ -99,7 +106,13 @@ public class MenuController implements MenuNavigator{
      * Initializes the controller by setting up the listeners and creating managers.
      */
     public void initController() {
-        menuView.setNewGameButtonListener(e -> startNewGame());
+        menuView.setNewGameButtonListener(e -> {
+            try {
+                startNewGame();
+            } catch (GameNotFound ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
         menuView.setLogoutButtonListener(e -> logout());
         menuView.setDeleteAccountButtonListener(e -> deleteAccount());
@@ -112,7 +125,7 @@ public class MenuController implements MenuNavigator{
      * Starts a new game if the user doesn't have one already in progress.
      * If an existing unfinished game is found, resumes it.
      */
-    private void startNewGame() {
+    private void startNewGame() throws GameNotFound {
         Game partida = partidaManager.getStartedGame(correo);
         if (partida == null) {
             newGameView = new NewGameView();
@@ -200,7 +213,12 @@ public class MenuController implements MenuNavigator{
      * @return the newly created Game object, or null if creation failed
      */
     private Game newGame() {
+
         String gameName = newGameView.getNewGameName(); // Obtiene el nombre del juego desde la vista
+        if (gameName == null || gameName.isEmpty()) {
+            newGameView.showEmptyGameMessage();
+            return null;
+        }
         Game game = null;
         try {
             // Intenta insertar y obtener la nueva partida
@@ -230,6 +248,7 @@ public class MenuController implements MenuNavigator{
             game = null; // Asegúrate de que game sea null si hubo un error
         }
         return game; // Devuelve la partida creada o null si falló
+
     }
 
     /**

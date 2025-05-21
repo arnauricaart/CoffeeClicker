@@ -26,7 +26,7 @@ public class GameDBDAO implements GameDAO{
      * This method gets a list of games finished with their user from the database.
      * @return Returns a List object with the finished games.
      */
-    public List<Game> getGamesFinishedForStats() throws StatsNotFound {
+    public List<Game> getGamesFinishedForStats(){// throws StatsNotFound {
         List<Game> games = new ArrayList<>();
 
         String query = "SELECT p.*, u.Nombre as UserName FROM partida p JOIN users u ON p.Correo = u.Correo WHERE p.Terminada = 1";
@@ -42,7 +42,8 @@ public class GameDBDAO implements GameDAO{
                 String formatedDate = formato.format(ultimoAcceso);
                 games.add(new Game(res.getInt("IdPartida"), res.getString("UserName"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
-                throw new StatsNotFound();
+                //throw new StatsNotFound();
+
             }
         }
 
@@ -55,7 +56,7 @@ public class GameDBDAO implements GameDAO{
      * @param gameNameSearch Name of the game tha will be used in the search.
      * @return Returns a List object with the finished games.
      */
-    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch) throws GameNotFound {
+    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch){// throws GameNotFound {
         List<Game> games = new ArrayList<>();
 
         String query = "SELECT p.*, u.Nombre as UserName FROM partida p " +
@@ -86,7 +87,7 @@ public class GameDBDAO implements GameDAO{
                 String formatedDate = formato.format(ultimoAcceso);
                 games.add(new Game(res.getInt("IdPartida"), res.getString("UserName"), res.getString("Nombre"), res.getInt("Cafes"), formatedDate));
             } catch (SQLException e) {
-                throw new GameNotFound();
+                //throw new GameNotFound();
             }
         }
 
@@ -99,7 +100,7 @@ public class GameDBDAO implements GameDAO{
      * @return Returns a Game instance.
      */
     @Override
-    public Game getStartedGame(String correo) throws GameNotFound {
+    public Game getStartedGame(String correo) { //throws GameNotFound
         String query = "SELECT * FROM partida WHERE Correo = ? AND Terminada = 0";
         ArrayList<String> values = new ArrayList<String>();
         values.add(correo);
@@ -125,7 +126,7 @@ public class GameDBDAO implements GameDAO{
                 );
             }
         } catch (SQLException e) {
-            throw new GameNotFound();
+            //throw new GameNotFound();
         }
         return null;
     }
@@ -136,7 +137,7 @@ public class GameDBDAO implements GameDAO{
      * @return Returns a Game instance.
      */
     @Override
-    public Game getGameById(int gameID) throws GameNotFound {
+    public Game getGameById(int gameID){// throws GameNotFound {
         String query = "SELECT * FROM partida WHERE IdPartida=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(String.valueOf(gameID));
@@ -162,7 +163,7 @@ public class GameDBDAO implements GameDAO{
                 );
             }
         } catch (SQLException e) {
-            throw new GameNotFound();
+            //throw new GameNotFound();
         }
         return null;
     }
@@ -174,7 +175,7 @@ public class GameDBDAO implements GameDAO{
      * @return Returns a Game instance.
      */
     @Override
-    public Game getGameByNameAndGame(String gameName, String userId) throws GameNotFound {
+    public Game getGameByNameAndGame(String gameName, String userId){// throws GameNotFound {
         String query = "SELECT * FROM partida WHERE NombrePartida=? AND Nombre=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(gameName);
@@ -201,7 +202,7 @@ public class GameDBDAO implements GameDAO{
                 );
             }
         } catch (SQLException e) {
-            throw new GameNotFound();
+            //throw new GameNotFound();
         }
         return null;
     }

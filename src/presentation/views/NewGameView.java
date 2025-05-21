@@ -1,5 +1,8 @@
 package presentation.views;
 
+import presentation.presentationExceptions.EmptyNameException;
+import presentation.presentationExceptions.PresentationException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -224,5 +227,9 @@ public class NewGameView extends BaseForm {
 
     public void showDuplicateGameMessage() {
         JOptionPane.showMessageDialog(this, "This game already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showEmptyGameMessage() {
+        JOptionPane.showMessageDialog(this, "You must enter the name for the game.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
