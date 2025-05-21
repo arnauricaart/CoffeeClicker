@@ -13,7 +13,6 @@ public class UserDBDAO implements UserDAO{
      */
     public UserDBDAO() {}
 
-
     /**
      * This method removes an user and all of its information.
      * @param email String with the User Mail.

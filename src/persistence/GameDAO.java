@@ -1,6 +1,8 @@
 package persistence;
 
 import business.entities.Game;
+import persistence.persistenceExceptions.GameNotFound;
+import persistence.persistenceExceptions.StatsNotFound;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ public interface GameDAO {
      * This method will implement a way to get a list of games finished with their user from the database.
      * @return Returns a List object with the finished games.
      */
-    public List<Game> getGamesFinishedForStats();
+    public List<Game> getGamesFinishedForStats() throws StatsNotFound;
 
     /**
      * This method will implement a way to get a list of the games finished by a user name or game name from the database.
@@ -20,14 +22,14 @@ public interface GameDAO {
      * @param gameNameSearch Name of the game tha will be used in the search.
      * @return Returns a List object with the finished games.
      */
-    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch);
+    public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch) throws GameNotFound;
 
     /**
      * This method will implement a way to get a Game instance with its Game Id.
      * @param gameID Number of the Game Id that will be used in the search.
      * @return Returns a Game instance.
      */
-    public Game getGameById(int gameID);
+    public Game getGameById(int gameID) throws GameNotFound;
 
     /**
      * This method will implement a way to get a Game instance by the Game Name or the User Id.
@@ -35,7 +37,7 @@ public interface GameDAO {
      * @param userId String of the User Id that will be used in the search.
      * @return Returns a Game instance.
      */
-    public Game getGameByNameAndGame(String gameName, String userId);
+    public Game getGameByNameAndGame(String gameName, String userId) throws GameNotFound;
 
     /**
      * This method will implement a way to make a register in the database to make a new game with a Game Name and the Users Mail
@@ -50,7 +52,7 @@ public interface GameDAO {
      * @param correo String with the User Mail that will be used in the search.
      * @return Returns a Game instance.
      */
-    public Game getStartedGame(String correo);
+    public Game getStartedGame(String correo) throws GameNotFound;
 
     /**
      * This method will implement a way to update the game state.

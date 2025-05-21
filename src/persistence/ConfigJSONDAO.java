@@ -1,8 +1,11 @@
 package persistence;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import persistence.persistenceExceptions.FileNotFound;
 
 /**
  * This class allows to get information for the connection to the database from a JSON file.
@@ -20,12 +23,12 @@ public class ConfigJSONDAO {
     /**
      * Constructor of the class.
      */
-    public ConfigJSONDAO() {
+    public ConfigJSONDAO() throws FileNotFound {
         try (FileReader reader = new FileReader(CONFIG_PATH)) {
             Gson gson = new Gson();
             config = gson.fromJson(reader, JsonObject.class);
         } catch (IOException e) {
-            throw new RuntimeException("Error reading the configuration file");
+            throw new FileNotFound();
         }
     }
 
