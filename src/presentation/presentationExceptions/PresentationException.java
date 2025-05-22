@@ -3,6 +3,9 @@ package presentation.presentationExceptions;
      * Represents all the Presentation Exceptions that may occur when running the code. It is abstract.
      */
 public abstract class PresentationException extends Exception {
+        /**
+         * String that contains the message that will be shown when the exception gets activated.
+         */
         private static String message;
 
         /**

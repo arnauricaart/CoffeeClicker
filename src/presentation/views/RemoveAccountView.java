@@ -4,24 +4,48 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * This class extends from BaseForm. This class implements a view to let the user remove his account.
+ */
 public class RemoveAccountView extends BaseForm {
     // Estas constantes de color ya no se usarán para los botones si tienen imágenes,
     // pero las dejamos por si el título o el fondo del passwordField las necesitan
     // o para los botones de fallback si las imágenes no cargan.
+    /**
+     * Instance of the Color class that will set the text color.
+     */
     private static final Color TEXT_COLOR = Color.decode("#000000");
+    /**
+     * Instance of the Color class that will set the secondary Color.
+     */
     private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9"); // Usado para el fondo del passwordField
     // private static final Color BUTTON_COLOR = Color.decode("#9E6B57"); // No se usa para removeButton con imagen
     // private static final Color PRIMARY_COLOR = Color.WHITE; // No se usa para el texto de removeButton con imagen
 
+    /**
+     * JButton that will remove the account.
+     */
     private JButton removeButton;
+    /**
+     * JButton that will cancel the account removing.
+     */
     private JButton cancelButton;
+    /**
+     * JPasswordField where the user will have to put his password to be able to delete the account.
+     */
     private JPasswordField passwordField;
 
+    /**
+     * Constructor of the class. It sets the view's title and initiates the components of the view.
+     */
     public RemoveAccountView() {
         super("Remove Account"); // Llama al constructor de BaseForm
         initComponents();
     }
 
+    /**
+     * This method will initiate the components of the view.
+     */
     private void initComponents() {
         // Las dimensiones y posiciones se mantienen como las tenías
         int formWidth = 400;
@@ -194,18 +218,33 @@ public class RemoveAccountView extends BaseForm {
         add(removeButton);
     }
 
+    /**
+     * This method sets an action listener to the remove account button.
+     * @param al Action Listener that tells the button what to do when pressed.
+     */
     public void setRemoveAccButtonListener(ActionListener al) {
         if (removeButton != null) removeButton.addActionListener(al);
     }
-
+    /**
+     * This method sets an action listener to the cancel button.
+     * @param al Action Listener that tells the button what to do when pressed.
+     */
     public void setCancelButtonListener(ActionListener al) {
         if (cancelButton != null) cancelButton.addActionListener(al);
     }
 
+    /**
+     * Getter of the user's password.
+     * @return String with the user's password.
+     */
     public String getPassword() {
         return new String(passwordField.getPassword());
     }
 
+    /**
+     * This method will show a message dialog that will say if the account removing went okey or not.
+     * @param success Boolean that will tell the method if the account was deleted or not.
+     */
     public void showRemoveUserMessage(boolean success) {
         JOptionPane.showMessageDialog(this, success ? "User removed successfully." : "Invalid password. User not removed.",
                 success ? "Success" : "Error",

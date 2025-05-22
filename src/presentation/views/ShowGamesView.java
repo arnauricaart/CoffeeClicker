@@ -18,19 +18,57 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * This class extends from JFrame, the class implements a view that will let the user see his played games stats.
+ */
 public class ShowGamesView extends JFrame {
 
+    /**
+     * JTable where the list of games will be.
+     */
     private JTable gameTable;
+    /**
+     * JTextField where the user will put the user name to filter the games.
+     */
     private JTextField userSearchField;
+    /**
+     * JTextField where the user will put the game name to filter the games.
+     */
     private JTextField gameSearchField;
+    /**
+     * JButton that will start the search.
+     */
     private JButton searchButton;
+    /**
+     * Action Listener that will show the stats.
+     */
     private ActionListener showStatsActionListener;
+    /**
+     * Actio Listener that will search the games.
+     */
     private ActionListener searchActionListener;
+    /**
+     * Default Table Model
+     */
     private DefaultTableModel tableModel;
+    /**
+     * Table Row Sorter to sort the tableModel atribute.
+     */
     private TableRowSorter<DefaultTableModel> sorter;
+    /**
+     * JPanel where the stats will be shown.
+     */
     private JPanel statsPanel;
+    /**
+     * JSplitPane that lets us divide the view in 2 parts, the search of the game and the stats.
+     */
     private JSplitPane splitPane;
 
+    /**
+     * Constructor of the class.
+     * @param games List of games.
+     * @param isFinishedGames Boolean that tells if the game is finished or not.
+     */
     public ShowGamesView(List<Game> games, boolean isFinishedGames) {
         setTitle("Game Statistics");
         setSize(1200, 700);
@@ -135,6 +173,10 @@ public class ShowGamesView extends JFrame {
         add(splitPane, BorderLayout.CENTER);
     }
 
+    /**
+     * This method updates the datable data to show the new games (after filtering).
+     * @param games List of the new games that will show in the table.
+     */
     public void updateTableData(List<Game> games) {
         tableModel.setRowCount(0);
         for (Game game : games) {
@@ -143,6 +185,10 @@ public class ShowGamesView extends JFrame {
         }
     }
 
+    /**
+     * This method updates the stats chart.
+     * @param cafesPorMinuto List with number (coffes) in every minute.
+     */
     public void updateStatsChart(List<Integer> cafesPorMinuto) {
         statsPanel.removeAll();
         CafeStatsPanel statsChart = new CafeStatsPanel(cafesPorMinuto);
@@ -151,14 +197,26 @@ public class ShowGamesView extends JFrame {
         statsPanel.repaint();
     }
 
+    /**
+     * This method gets the user search text.
+     * @return Returns a string with the user name.
+     */
     public String getUserSearchText() {
         return userSearchField.getText().trim();
     }
 
+    /**
+     * This method gets the game name for the search.
+     * @return Returns a string with the game name.
+     */
     public String getGameSearchText() {
         return gameSearchField.getText().trim();
     }
 
+    /**
+     * This method sets an action listener to the search button.
+     * @param l Action Listener that will tell the search button what to do.
+     */
     public void setSearchActionListener(ActionListener l) {
         searchButton.addActionListener(l);
         
@@ -168,6 +226,10 @@ public class ShowGamesView extends JFrame {
         gameSearchField.addActionListener(al);
     }
 
+    /**
+     * This method returns the selected game's id.
+     * @return Returns a number with the game id.
+     */
     public int getCurrentPartidaId(){
         int selectedRow = gameTable.getSelectedRow();
         if (selectedRow != -1) {
@@ -178,10 +240,18 @@ public class ShowGamesView extends JFrame {
         return -1;
     }
 
+    /**
+     * This method sets an action listener to the show stats atribute.
+     * @param l Action listener that will be saved on showStats.
+     */
     public void setShowStatsActionListener(ActionListener l) {
         this.showStatsActionListener = l;
     }
 
+    /**
+     * This method returns the selected game's name.
+     * @return Returns a string with the game name.
+     */
     public String getSelectedGameName()  {
         int selectedRow = gameTable.getSelectedRow();
         String gameName = null;
@@ -191,14 +261,34 @@ public class ShowGamesView extends JFrame {
         return gameName;
     }
 
+    /**
+     * Class that extends from DefaultTableCellRenderer.
+     */
     private static class AlternatingColorRenderer extends DefaultTableCellRenderer {
+        /**
+         * Number with the alignment.
+         */
         private final int alignment;
 
+        /**
+         * Constructor of the class.
+         * @param alignment
+         */
         public AlternatingColorRenderer(int alignment) {
             this.alignment = alignment;
             setHorizontalAlignment(alignment);
         }
 
+        /**
+         * This method gets the table cell renderer component.
+         * @param table  the <code>JTable</code>
+         * @param value  the value to assign to the cell at <code>[row, column]</code>
+         * @param isSelected true if cell is selected
+         * @param hasFocus true if cell has focus
+         * @param row  the row of the cell to render
+         * @param column the column of the cell to render
+         * @return Returns a Component.
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                        boolean hasFocus, int row, int column) {

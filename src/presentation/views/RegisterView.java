@@ -7,15 +7,42 @@ import java.awt.event.MouseAdapter;
 // No se necesita ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
 // y asumimos que tienen el tamaño correcto.
 
+/**
+ * This class extends from JFrame, this class implements a view that will let the user register.
+ */
 public class RegisterView extends JFrame {
+    /**
+     * Text Field where the user will put his user name.
+     */
     private JTextField usernameField;
+    /**
+     * Text Field where the user will put the user's mail.
+     */
     private JTextField emailField;
+    /**
+     * Password Field where the user will put the password.
+     */
     private JPasswordField passwordField;
+    /**
+     * Password field where the user will have to repeat the password.
+     */
     private JPasswordField repasswordField;
+    /**
+     * Button that will let the user register himself.
+     */
     private JButton registerButton; // Ahora usará imágenes
+    /**
+     * Pressable label that will let the user go back to the login view.
+     */
     private JLabel goToLogin;
+    /**
+     * Label that will have the background image.
+     */
     private JLabel backgroundLabel; // Para la imagen de fondo
 
+    /**
+     * Constructor of the class. Sets everything in the view, from the title to the background image.
+     */
     public RegisterView() {
         setTitle("Register");
         setSize(1280, 720);
@@ -170,22 +197,57 @@ public class RegisterView extends JFrame {
         getContentPane().add(goToLogin);
     }
 
+    /**
+     * Getter of the user name.
+     * @return String with the user name.
+     */
     public String getUsername() { return usernameField.getText(); }
+
+    /**
+     * Getter of the user mail.
+     * @return String with the user mail.
+     */
     public String getEmail() { return emailField.getText(); }
+
+    /**
+     * Getter of the user's password.
+     * @return String with the user's password.
+     */
     public String getPassword() { return new String(passwordField.getPassword()); }
+
+    /**
+     * Getter of the user's repassword.
+     * @return String with the user's repassword.
+     */
     public String getRepassword() { return new String(repasswordField.getPassword()); }
 
+    /**
+     * This method sets an action listener to the register button.
+     * @param al Action Listener that tells the button what to do when pressed.
+     */
     public void setRegisterButtonListener(ActionListener al) {
         if (registerButton != null) { // Buena práctica verificar
             registerButton.addActionListener(al);
         }
     }
+    /**
+     * This method sets an action listener to the login label.
+     * @param al Action Listener that tells the login label what to do when pressed.
+     */
     public void setLoginLabelListener(MouseAdapter ma) { goToLogin.addMouseListener(ma); }
 
+    /**
+     * This method shows a message dialog for the error messages.
+     * @param message String with the message to be shown.
+     */
     public void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * This method shows a message dialog for the register result.
+     * @param b Boolean that will tell this method if the register went succesfully or not.
+     */
     public void showRegisterResultMessage(boolean b) {
         // Podrías querer mostrar un JOptionPane aquí también para el éxito.
         // Por ejemplo:

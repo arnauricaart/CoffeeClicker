@@ -12,9 +12,8 @@ public class MenuGUI extends JFrame {
     private final Color TITLE_TEXT_COLOR = Color.BLACK;
 
     /**
-     * Constructor de MenuGUI.
-     * Configura la ventana principal del menú. Toda la inicialización de componentes
-     * y carga de imágenes se hace directamente aquí.
+     * Constructor of the MenuGUI Class.
+     * It configures the principal menu screen. The component initialization and load of images is made here.
      */
     public MenuGUI() {
         // --- Configuración General de la Ventana (JFrame) ---
@@ -266,11 +265,32 @@ public class MenuGUI extends JFrame {
     // Ya no hay método configureButtonWithImages
 
     // Setters para Listeners
+
+    /**
+     * This method sets an action listener in the New Game button of the view.
+     * @param l Action Listener that will be used when the button is pressed.
+     */
     public void setNewGameButtonListener(ActionListener l) { if(newGameButton != null) newGameButton.addActionListener(l); }
+
+    /**
+     * This method sets an action listener in the Statistics button of the view.
+     * @param l Action Listener that will be used when the button is pressed.
+     */
     public void setStatisticsButtonListener(ActionListener l) { if(statisticsButton != null) statisticsButton.addActionListener(l); }
+    /**
+     * This method sets an action listener in the Logout button of the view.
+     * @param l Action Listener that will be used when the button is pressed.
+     */
     public void setLogoutButtonListener(ActionListener l) { if(logoutButton != null) logoutButton.addActionListener(l); }
+    /**
+     * This method sets an action listener in the Delete Account button of the view.
+     * @param l Action Listener that will be used when the button is pressed.
+     */
     public void setDeleteAccountButtonListener(ActionListener l) { if(deleteAccountButton != null) deleteAccountButton.addActionListener(l); }
 
+    /**
+     * This method shows a message dialog in the case that the user had a started a game.
+     */
     public void showGameExists(){
         JOptionPane.showMessageDialog(this, "You have a game started", "Info", JOptionPane.INFORMATION_MESSAGE);
     }

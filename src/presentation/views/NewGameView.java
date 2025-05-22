@@ -7,23 +7,47 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * NewGameView class extends from BaseForm class. This class will generate a view where the user will be capable of introducing the new game's name.
+ */
 public class NewGameView extends BaseForm {
     // Estas constantes de color ya no se usarán para los botones si tienen imágenes,
     // pero las dejamos por si otros elementos las necesitan o para el fallback.
+    /**
+     * Color used by the JLabels.
+     */
     private static final Color TEXT_COLOR = Color.decode("#000000"); // Usado por JLabels
+    /**
+     * Secondary color.
+     */
     private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9"); // Usado por newGameName
     // private static final Color BUTTON_COLOR = Color.decode("#9E6B57"); // No se usa para newGameButton con imagen
     // private static final Color PRIMARY_COLOR = Color.WHITE; // No se usa para texto de newGameButton con imagen
 
+    /**
+     * Text Field where the user will put the game's name.
+     */
     private JTextField newGameName;
+    /**
+     * Button that will create the new game.
+     */
     private JButton newGameButton;  // Usará imágenes
+    /**
+     * Button that will cancel the creation of the new game.
+     */
     private JButton cancelButton;   // Usará imágenes
 
+    /**
+     * Class constructor. Sets the view's title and initiates the components.
+     */
     public NewGameView() {
         super("New Game"); // Llama al constructor de BaseForm
         initComponents();
     }
 
+    /**
+     * Method that initiates the components.
+     */
     private void initComponents() {
         int formWidth = 400;
         int fieldWidth = 400;
@@ -185,7 +209,7 @@ public class NewGameView extends BaseForm {
     }
 
     /**
-     * Aplica estilos comunes a un botón que usa una imagen como su apariencia principal.
+     * Applies common styles to a button that uses an image as it's principal looks.
      */
     private void makeButtonLookLikeImage(JButton button) {
         button.setBorder(null);
@@ -195,7 +219,7 @@ public class NewGameView extends BaseForm {
     }
 
     /**
-     * Aplica estilos comunes a un botón de texto (fallback).
+     * Applies common styles to a text button (fallback).
      */
     private void applyTextButtonStyles(JButton button) {
         button.setOpaque(true);
@@ -204,7 +228,7 @@ public class NewGameView extends BaseForm {
     }
 
     /**
-     * Aplica configuración común a los botones de esta vista.
+     * Applies a common configuration to this view's buttons.
      */
     private void commonButtonViewSetup(JButton button) {
         button.setFocusPainted(false);

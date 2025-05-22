@@ -10,6 +10,10 @@ import java.awt.Component; // Necesario para el parentComponent
 public class MessageDialogs {
 
     // Constructor privado para evitar que se instancie la clase (solo métodos estáticos)
+
+    /**
+     * Constructor of the class, not used.
+     */
     private MessageDialogs() {
     }
 
