@@ -213,42 +213,58 @@ public class MenuController implements MenuNavigator{
      * @return the newly created Game object, or null if creation failed
      */
     private Game newGame() {
-
-        String gameName = newGameView.getNewGameName(); // Obtiene el nombre del juego desde la vista
+        String gameName = newGameView.getNewGameName();
         if (gameName == null || gameName.isEmpty()) {
-            newGameView.showEmptyGameMessage();
+            // Usando tu MessageDialogs centralizado
             return null;
         }
+
         Game game = null;
         try {
-            // Intenta insertar y obtener la nueva partida
+            System.out.println("[DEBUG] Intentando crear partida: " + gameName + " para usuario: " + correo);
             int gameId = partidaManager.insertGame(gameName, correo);
-            game = partidaManager.getGameById(gameId);
+            System.out.println("[DEBUG] Partida insertada con ID: " + gameId);
 
-            // Si la creación de la partida y la obtención fueron exitosas (game no es null)
+            if (gameId <= 0) { // Validar si el gameId es positivo
+                System.err.println("[ERROR] partidaManager.insertGame devolvió un ID inválido: " + gameId);
+                return null;
+            }
+
+            game = partidaManager.getGameById(gameId);
+            System.out.println("[DEBUG] partidaManager.getGameById(gameId) devolvió: " + (game != null ? "Objeto Game" : "null"));
+
             if (game != null) {
-                // Cierra la ventana de "Nueva Partida"
-                if (newGameView != null) { // Buena práctica verificar que no sea null
+                // Creación exitosa
+                if (newGameView != null) {
                     newGameView.dispose();
                 }
-                // Cierra también la ventana del menú principal para dar foco al juego
-                if (menuView != null) { // Buena práctica verificar que no sea null
+                if (menuView != null) {
                     menuView.dispose();
                 }
+            } else {
+                // Si game es null aquí, significa que getGameById falló silenciosamente
+                // o el insertGame devolvió un ID que no se pudo encontrar.
+                System.err.println("[ERROR] No se pudo recuperar la partida (ID: " + gameId + ") después de la inserción.");
+                // No establezcas game = null aquí porque ya lo es.
             }
-            // La línea //new GameController(this); probablemente no sea necesaria aquí,
-            // ya que gameController ya es un miembro de la clase MenuController.
 
         } catch (ConstraintException e) {
-            // Si ocurre un error (ej. nombre de partida duplicado), se muestra un mensaje
-            // y NewGameView permanece abierta para que el usuario corrija el error.
-            if (e.getMessage() != null && e.getMessage().contains("partida_nombre_uk")) {
-                newGameView.showDuplicateGameMessage();
-            }
-            game = null; // Asegúrate de que game sea null si hubo un error
-        }
-        return game; // Devuelve la partida creada o null si falló
+            System.err.println("[ERROR] ConstraintException: " + e.getMessage()); // Imprime el mensaje completo para depurar
+            if (e.getMessage() != null && e.getMessage().contains("partida_nombre_usuario_uk")) {
+                // Esto es para cuando EL MISMO usuario intenta crear una partida con un nombre que YA TIENE.
+            } else {
 
+            }
+            game = null; // Importante: asegurar que game sea null si hay excepción
+        } catch (RuntimeException re) { // Capturar otras RuntimeException que podrían venir de SQL_CRUD
+            re.printStackTrace();
+            game = null;
+        } catch (Exception ex) { // Captura genérica por si acaso
+            System.err.println("[ERROR] Exception inesperada durante la creación de la partida: " + ex.getMessage());
+            ex.printStackTrace();
+            game = null;
+        }
+        return game;
     }
 
     /**
