@@ -65,7 +65,7 @@ CREATE TABLE `partida` (
   `numUpgradeCafe` int DEFAULT '0',
   `minDuration` int DEFAULT '0',
   PRIMARY KEY (`IdPartida`),
-  UNIQUE KEY `partida_nombre_uk` (`Nombre`),
+  UNIQUE KEY `partida_nombre_uk` (`Correo`, `Nombre`),
   KEY `Correo` (`Correo`),
   CONSTRAINT `partida_ibfk_1` FOREIGN KEY (`Correo`) REFERENCES `users` (`Correo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
