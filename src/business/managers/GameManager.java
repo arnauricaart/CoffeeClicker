@@ -69,8 +69,7 @@ public class GameManager implements Runnable {
     /**
      * Controls whether the game is actively running.
      */
-    // ToDo: Cuando se haga bien el Game en el codigo principal canviar a FALSE (Comentario original)
-    private boolean running = true;
+    private boolean running = false;
     /**
      * Listener for UI updates related to game state changes.
      */

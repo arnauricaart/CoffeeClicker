@@ -121,7 +121,6 @@ public class MenuController implements MenuNavigator{
             partidaManager = new PartidaManager();
             statisticsManager = new StatisticsManager();
         }catch (BusinessException e){
-            //ToDo: No sabemos que hacer aqui. Cmambiar?
             new PopUpView(e.getExceptionMessage());
             menuView.dispose();
         }
@@ -310,8 +309,7 @@ public class MenuController implements MenuNavigator{
 
             return;
         }catch(BusinessException e) {
-            //ToDo: Cambiar a pop-up
-            //System.err.println(e.getExceptionMessage());
+            new PopUpView(e.getExceptionMessage());
         }
     }
 }

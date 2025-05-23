@@ -2,6 +2,7 @@ package presentation.controllers;
 
 import business.businessExceptions.BusinessException;
 import business.managers.UserManager;
+import presentation.views.PopUpView;
 import presentation.views.RegisterView;
 
 import java.awt.event.MouseAdapter;
@@ -111,8 +112,7 @@ public class RegisterController {
             }
 
         }catch(BusinessException e){
-            //ToDo: Cambiar a pop-up
-            System.out.println(e.getExceptionMessage());
+            new PopUpView(e.getExceptionMessage());
         }
 
     }

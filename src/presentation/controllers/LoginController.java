@@ -33,7 +33,6 @@ public class LoginController {
             start();
         }catch(BusinessException e) {
             new PopUpView(e.getExceptionMessage());
-            //view.dispose();
         }
     }
 
@@ -69,7 +68,6 @@ public class LoginController {
         String usernameOrEmail = view.getUsername();
         String password = view.getPassword();
 
-        //ToDo: Crear pop up al catchear la excepcion
         try{
             String correo = userManager.getCorreoFromLogin(usernameOrEmail, password);
             if(correo == null) {

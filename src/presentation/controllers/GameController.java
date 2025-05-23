@@ -4,6 +4,7 @@ import business.businessExceptions.BusinessException;
 import business.entities.Game;
 import business.managers.GameManager;
 import presentation.views.GameView;
+import presentation.views.PopUpView;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -91,7 +92,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
 
             onGameUpdated(); // Llama a onGameUpdated para asegurar que la UI esté sincronizada desde el inicio
         }catch(BusinessException e){
-            //ToDo: arreglar pantalla y pop up
+            new PopUpView(e.getExceptionMessage());
         }
     }
 
@@ -104,7 +105,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             view.close(); // Cierra la ventana del juego
             menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
         }catch(BusinessException e){
-            //ToDo: cambiar a pop up
+            new PopUpView(e.getExceptionMessage());
         }
     }
 
@@ -119,7 +120,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             view.close(); // Cierra la ventana del juego
             menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
         } catch (BusinessException e){
-            // ToDo: PopUp
+            new PopUpView(e.getExceptionMessage());
         }
     }
 
@@ -127,7 +128,6 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      * Updates UI labels such as counters and upgrade buttons based on the current model state.
      * Este metodo es llamado por onGameUpdated o cuando se necesita refrescar la UI.
      */
-    // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,... (Comentario original mantenido)
     private void updateLabels() {
         SwingUtilities.invokeLater(() -> { // Asegura que las actualizaciones de UI se hagan en el Event Dispatch Thread
             // Actualiza el contador de cafés y cafés por segundo
@@ -342,7 +342,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     /**
      * Called whenever the game model is updated.
      * Refreshes the view labels and statistics table.
-     * (Este método es llamado por el GameManager a través de la interfaz GameUpdateListener)
+     * (Este metodo es llamado por el GameManager a través de la interfaz GameUpdateListener)
      */
     @Override
     public void onGameUpdated() {
