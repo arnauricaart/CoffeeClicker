@@ -1,7 +1,10 @@
 package business.managers;
 
+import business.businessExceptions.BusinessException;
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
 
 import java.util.List;
 
@@ -28,7 +31,13 @@ public class StatisticsManager {
      * @param gameId the ID of the game for which statistics are requested
      * @return a list of integers representing the game's statistics
      */
-    public List<Integer> getStatsByGameId(int gameId){
-        return statsDAO.getStatsByGameId(gameId);
+    public List<Integer> getStatsByGameId(int gameId) throws BusinessException {
+        try {
+            return statsDAO.getStatsByGameId(gameId);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getMessage());
+        }
     }
 }

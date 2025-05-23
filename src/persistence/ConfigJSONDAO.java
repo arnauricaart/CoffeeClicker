@@ -23,12 +23,12 @@ public class ConfigJSONDAO {
     /**
      * Constructor of the class.
      */
-    public ConfigJSONDAO() {//throws FileNotFound {
+    public ConfigJSONDAO() throws FileNotFound {
         try (FileReader reader = new FileReader(CONFIG_PATH)) {
             Gson gson = new Gson();
             config = gson.fromJson(reader, JsonObject.class);
         } catch (IOException e) {
-            //throw new FileNotFound();
+            throw new FileNotFound();
         }
     }
 

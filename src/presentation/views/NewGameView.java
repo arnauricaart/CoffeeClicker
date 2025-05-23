@@ -236,15 +236,26 @@ public class NewGameView extends BaseForm {
         // No se necesita setAlignmentX para botones posicionados con setBounds.
     }
 
-
+    /**
+     * Getter method of the Game Name.
+     * @return Returns a String with the Game Name.
+     */
     public String getNewGameName() {
         return newGameName.getText();
     }
 
+    /**
+     * Setter of listeners in the new game button.
+     * @param al Action Listener that will tell what to do when pressed.
+     */
     public void setNewGameButtonListener(ActionListener al) {
         if (newGameButton != null) newGameButton.addActionListener(al);
     }
 
+    /**
+     * Setter of listeners in the cancel button.
+     * @param al Action Listener that will tell what to do when pressed.
+     */
     public void setCancelButtonListener(ActionListener al) {
         if (cancelButton != null) cancelButton.addActionListener(al);
     }

@@ -1,5 +1,6 @@
 package presentation.controllers;
 
+import business.businessExceptions.BusinessException;
 import business.entities.Game;
 import business.managers.GameManager;
 import presentation.views.GameView;
@@ -83,20 +84,28 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      * @param game the game instance to start
      */
     public void playGame(Game game){
-        model.playGame(game); // Le dice al modelo que inicie el juego
-        createView(); // Crea la interfaz gráfica del juego
-        view.open(); // Hace visible la ventana del juego
+        try {
+            model.playGame(game); // Le dice al modelo que inicie el juego
+            createView(); // Crea la interfaz gráfica del juego
+            view.open(); // Hace visible la ventana del juego
 
-        onGameUpdated(); // Llama a onGameUpdated para asegurar que la UI esté sincronizada desde el inicio
+            onGameUpdated(); // Llama a onGameUpdated para asegurar que la UI esté sincronizada desde el inicio
+        }catch(BusinessException e){
+            //ToDo: arreglar pantalla y pop up
+        }
     }
 
     /**
      * Ends the current game session, closes the view and returns to the main menu.
      */
     public void endGame(){
-        model.endGame(); // Le dice al modelo que termine el juego (guardar, etc.)
-        view.close(); // Cierra la ventana del juego
-        menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+        try {
+            model.endGame(); // Le dice al modelo que termine el juego (guardar, etc.)
+            view.close(); // Cierra la ventana del juego
+            menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+        }catch(BusinessException e){
+            //ToDo: cambiar a pop up
+        }
     }
 
     /**
@@ -105,14 +114,18 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      * (Actualmente solo pausa y regresa al menú)
      */
     public void togglePause() {
-        model.pauseGame(); // Le dice al modelo que pause el juego (guardar estado)
-        view.close(); // Cierra la ventana del juego
-        menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+        try {
+            model.pauseGame(); // Le dice al modelo que pause el juego (guardar estado)
+            view.close(); // Cierra la ventana del juego
+            menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+        } catch (BusinessException e){
+            // ToDo: PopUp
+        }
     }
 
     /**
      * Updates UI labels such as counters and upgrade buttons based on the current model state.
-     * Este método es llamado por onGameUpdated o cuando se necesita refrescar la UI.
+     * Este metodo es llamado por onGameUpdated o cuando se necesita refrescar la UI.
      */
     // ToDo: Cambiar el tamaño de los botones y sustituir U2 por Barista Upgrade,... (Comentario original mantenido)
     private void updateLabels() {

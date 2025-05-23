@@ -1,5 +1,7 @@
 package persistence;
 
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
 import persistence.persistenceExceptions.StatsNotFound;
 
 import java.sql.ResultSet;
@@ -23,7 +25,7 @@ public class StatsDBDAO implements StatsDAO{
      * @param gameID Number with the Game Id used in the search.
      * @return Returns a List object with the finished games.
      */
-    public List<Integer> getStatsByGameId(int gameID){
+    public List<Integer> getStatsByGameId(int gameID) throws FileNotFound, DBGeneralException {
         String query = "Select * FROM stats WHERE IdPartida = ? ORDER BY Minuto ASC";
         ArrayList<String> valores = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();
@@ -51,7 +53,7 @@ public class StatsDBDAO implements StatsDAO{
      * @param cafes Number of coffees of the game at the instant that the new register is made.
      * @param min Number with the minute of the game.
      */
-    public void updateStats(int gameId, int cafes, int min) {
+    public void updateStats(int gameId, int cafes, int min) throws DBGeneralException {
         String query = "INSERT INTO stats (Cafes, Minuto, IdPartida) VALUES (?, ?, ?)";
         ArrayList<String> valores = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();

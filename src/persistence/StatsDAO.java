@@ -1,5 +1,8 @@
 package persistence;
 
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+
 import java.util.List;
 
 /**
@@ -11,7 +14,7 @@ public interface StatsDAO {
      * @param gameID Number with the Game Id used in the search.
      * @return List of numbers, those numbers are the coffes of the game at every minute.
      */
-    public List<Integer> getStatsByGameId(int gameID);
+    public List<Integer> getStatsByGameId(int gameID) throws FileNotFound, DBGeneralException;
 
     /**
      * This method will implement a way to generate a new register in the Stats table.
@@ -19,6 +22,6 @@ public interface StatsDAO {
      * @param cafes Number of coffees of the game at the instant that the new register is made.
      * @param min Number with the minute of the game.
      */
-    public void updateStats(int gameId, int cafes, int min);
+    public void updateStats(int gameId, int cafes, int min) throws DBGeneralException;
 
 }

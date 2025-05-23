@@ -1,11 +1,16 @@
 package business.managers;
-// Tus imports originales
+import business.businessExceptions.BusinessException;
+import business.businessExceptions.DBGeneralException;
 import business.entities.Game;
+//import com.sun.tools.javac.tree.JCTree;
+import persistence.persistenceExceptions.PersistenceException;
 import presentation.controllers.GameUpdateListener;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;
+import presentation.views.PopUpView;
+
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -103,7 +108,7 @@ public class GameManager implements Runnable {
      *
      * @param game the game instance to be played
      */
-    public void playGame(Game game) {
+    public void playGame(Game game) throws BusinessException {
         this.game = game;
 
         // --- INICIO DE LÍNEAS MODIFICADAS/AÑADIDAS PARA CORREGIR ESTADO EN NUEVA PARTIDA ---
@@ -139,6 +144,7 @@ public class GameManager implements Runnable {
      * Starts the automatic saving mechanism that persists game state at fixed intervals.
      */
     private void startAutoSave() {
+
         if (autoSaveTimer != null) {
             autoSaveTimer.cancel();
         }
@@ -148,7 +154,12 @@ public class GameManager implements Runnable {
             @Override
             public void run() {
                 if (running && game != null) {
-                    saveGameState();
+                    try {
+                        saveGameState();
+                    } catch (DBGeneralException e) {
+                        System.out.println("Error saving the game progress: " + e.getExceptionMessage() + ". The game will be ended");
+                        game.endGame();
+                    }
                 }
             }
         }, AUTO_SAVE_INTERVAL, AUTO_SAVE_INTERVAL);
@@ -157,36 +168,44 @@ public class GameManager implements Runnable {
     /**
      * Saves the current state of the game to the database.
      */
-    private void saveGameState() {
-        if (game != null) { // Mantenida la verificación de nulidad aquí por seguridad al interactuar con DAO
-            gameDAO.updateGameState(game);
+    private void saveGameState() throws business.businessExceptions.DBGeneralException {
+        try {
+            if (game != null) { // Mantenida la verificación de nulidad aquí por seguridad al interactuar con DAO
+                gameDAO.updateGameState(game);
+            }
+        }catch (PersistenceException e){
+            throw new business.businessExceptions.DBGeneralException("Constraint DB error. Please try again later.");
         }
     }
 
     /**
      * Ends the current game session and performs final save operations.
      */
-    public void endGame() {
-        running = false;
+    public void endGame() throws BusinessException {
+        try {
+            running = false;
 
-        if (game != null && statDAO != null) { // Mantenida la verificación
-            statDAO.updateStats(game.getGameID(), (int)game.getNumCoffees(), game.getMinDuration());
-        }
-        if (game != null) { // Mantenida la verificación
-            game.endGame();
-        }
-        saveGameState();
+            if (game != null && statDAO != null) { // Mantenida la verificación
+                statDAO.updateStats(game.getGameID(), (int) game.getNumCoffees(), game.getMinDuration());
+            }
+            if (game != null) { // Mantenida la verificación
+                game.endGame();
+            }
+            saveGameState();
 
-        if (autoSaveTimer != null) {
-            autoSaveTimer.cancel();
+            if (autoSaveTimer != null) {
+                autoSaveTimer.cancel();
+            }
+            // No se interrumpe explícitamente autoCoffeeThread, se dependerá de 'running = false'
+        } catch(PersistenceException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
         }
-        // No se interrumpe explícitamente autoCoffeeThread, se dependerá de 'running = false'
     }
 
     /**
      * Pauses the game session and saves the current state.
      */
-    public void pauseGame(){
+    public void pauseGame() throws BusinessException {
         running = false;
         saveGameState();
         // No se interrumpe explícitamente autoCoffeeThread
@@ -486,15 +505,18 @@ public class GameManager implements Runnable {
      * Adds coffee per second, checks unlock conditions, and updates the UI.
      */
     @Override
-    public void run() {
-        // No se interrumpe explícitamente un hilo anterior aquí, como estaba originalmente.
+    public void run() throws RuntimeException{
         autoCoffeeThread = new Thread(() -> {
             Timer statsTimer = new Timer(true);
             statsTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     if (running && game != null) {
-                        statDAO.updateStats(game.getGameID(), (int)game.getNumCoffees(), game.getMinDuration());
+                        try {
+                            statDAO.updateStats(game.getGameID(), (int) game.getNumCoffees(), game.getMinDuration());
+                        } catch (persistence.persistenceExceptions.DBGeneralException e) {
+                            throw new RuntimeException(e);
+                        }
                         game.increaseMinDuration();
                     } else {
                         this.cancel();
@@ -536,5 +558,6 @@ public class GameManager implements Runnable {
 
         autoCoffeeThread.setDaemon(true);
         autoCoffeeThread.start();
+
     }
 }

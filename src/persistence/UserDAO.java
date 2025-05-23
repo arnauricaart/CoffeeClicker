@@ -1,5 +1,8 @@
 package persistence;
 
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+
 /**
  * Interface that will be used to retrive the user table information from the database.
  */
@@ -10,7 +13,7 @@ public interface UserDAO {
      * @param email String with the User Mail.
      * @return Returns a boolean that will tell if everything went okey.
      */
-    public boolean removeUserAndData(String email);
+    public boolean removeUserAndData(String email) throws DBGeneralException;
 
     /**
      * This method will implement a way to register a new User.
@@ -19,14 +22,14 @@ public interface UserDAO {
      * @param password String with the User Password.
      * @return Returns a boolean that will tell if everything went okey.
      */
-    public boolean registerUser(String username, String email, String password);
+    public boolean registerUser(String username, String email, String password) throws FileNotFound, DBGeneralException;
 
     /**
      * This method will implment a way to check if a user exists searching it by the User Name.
      * @param username String with the User Name that will be used in the search.
      * @return Returns a boolean that will tell if it exists or not.
      */
-    public boolean checkUserExists(String username);
+    public boolean checkUserExists(String username) throws FileNotFound, DBGeneralException;
 
     /**
      * This method will implement a way to get the User Mail from the login.
@@ -34,12 +37,12 @@ public interface UserDAO {
      * @param password String with the User Password.
      * @return Returns a String with the User Mail.
      */
-    public String getCorreoFromLogin(String userOrEmail, String password);
+    public String getCorreoFromLogin(String userOrEmail, String password) throws FileNotFound, DBGeneralException;
 
     /**
      * This method will implement a way to check if a User Mail exists.
      * @param email String with the User Mail.
      * @return Returns a Boolean that will tell if the User Mail exists or not.
      */
-    boolean checkEmailExists(String email);
+    boolean checkEmailExists(String email) throws FileNotFound, DBGeneralException;
 }

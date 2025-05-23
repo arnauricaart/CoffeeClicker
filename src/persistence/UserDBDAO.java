@@ -1,5 +1,9 @@
 package persistence;
 
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+import persistence.persistenceExceptions.PersistenceException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,20 +15,23 @@ public class UserDBDAO implements UserDAO{
     /**
      * Constructor of the class.
      */
-    public UserDBDAO() {}
+    public UserDBDAO() throws PersistenceException {
+        Singleton.getInstance().getConn();
+    }
 
     /**
      * This method removes an user and all of its information.
      * @param email String with the User Mail.
      * @return Returns a boolean that will tell if everything went okey.
      */
-    public boolean removeUserAndData(String email){
+    public boolean removeUserAndData(String email) throws DBGeneralException {
         System.out.println("Remove user");
         String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT IdPartida FROM partida WHERE correo = ?)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
-        values.add(email); types.add("String");
+        values.add(email);
+        types.add("String");
 
         int result = SQL_CRUD.CUD(queryPartidaGenerador, values, types);
 
@@ -32,7 +39,8 @@ public class UserDBDAO implements UserDAO{
         values = new ArrayList<>();
         types = new ArrayList<>();
 
-        values.add(email); types.add("String");
+        values.add(email);
+        types.add("String");
 
         result = SQL_CRUD.CUD(queryStats, values, types);
 
@@ -40,7 +48,8 @@ public class UserDBDAO implements UserDAO{
         values = new ArrayList<>();
         types = new ArrayList<>();
 
-        values.add(email); types.add("String");
+        values.add(email);
+        types.add("String");
 
         result = SQL_CRUD.CUD(queryPartida, values, types);
 
@@ -48,10 +57,11 @@ public class UserDBDAO implements UserDAO{
         values = new ArrayList<>();
         types = new ArrayList<>();
 
-        values.add(email); types.add("String");
+        values.add(email);
+        types.add("String");
 
         result = SQL_CRUD.CUD(queryUsers, values, types);
-        if(result <= 0){
+        if (result <= 0) {
             System.out.println("error user");
         }
         return result > 0;
@@ -64,7 +74,7 @@ public class UserDBDAO implements UserDAO{
      * @param password String with the User Password.
      * @return Returns a boolean that will tell if everything went okey.
      */
-    public boolean registerUser(String username, String email, String password) {
+    public boolean registerUser(String username, String email, String password) throws FileNotFound, DBGeneralException {
         if (checkUserExists(username)) return false;
 
         String query = "INSERT INTO users (Nombre, Correo, Contrasena) VALUES (?, ?, ?)";
@@ -84,7 +94,7 @@ public class UserDBDAO implements UserDAO{
      * @param username String with the User Name that will be used in the search.
      * @return Returns a boolean that will tell if it exists or not.
      */
-    public boolean checkUserExists(String username) {
+    public boolean checkUserExists(String username) throws FileNotFound, DBGeneralException {
         String query = "SELECT * FROM users WHERE Nombre = ?";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
@@ -105,7 +115,7 @@ public class UserDBDAO implements UserDAO{
      * @param email String with the User Mail.
      * @return Returns a Boolean that will tell if the User Mail exists or not.
      */
-    public boolean checkEmailExists(String email) {
+    public boolean checkEmailExists(String email) throws FileNotFound, DBGeneralException {
         String query = "SELECT COUNT(*) FROM users WHERE Correo = ?";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> tipos = new ArrayList<>();
@@ -128,7 +138,7 @@ public class UserDBDAO implements UserDAO{
      * @param password String with the User Password.
      * @return Returns a String with the User Mail.
      */
-    public String getCorreoFromLogin(String userOrEmail, String password) {
+    public String getCorreoFromLogin(String userOrEmail, String password) throws FileNotFound, DBGeneralException {
         String query = "SELECT Correo FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();

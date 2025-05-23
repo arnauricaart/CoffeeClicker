@@ -10,4 +10,13 @@ public class FileNotFound extends PersistenceException {
    * Constructs an instance of FileNotFound.
    */
   public FileNotFound() {}
+
+  /**
+   * This method allows us to get the Exception message.
+   *
+   * @return returns the message indicating the exception occurred.
+   */
+  public String getExceptionMessage() {
+    return message;
+  }
 }

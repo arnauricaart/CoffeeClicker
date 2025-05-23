@@ -6,13 +6,20 @@ public class DBGeneralException extends PersistenceException {
   /**
    * Variable containing the message of the exception.
    */
-  private static String message;
+  private static String message = "There was an error connecting to the database";
   /**
    * Constructs an instance of DBGeneralException.
-   *
-   * @param message the message regarding the DB exception
    */
-  public DBGeneralException(String message) {
-    this.message = message;
+  public DBGeneralException() {
+  }
+
+  /**
+   * This method allows us to get the Exception message.
+   *
+   * @return returns the message indicating the exception occurred.
+   */
+  public String getExceptionMessage() {
+    return message;
   }
 }
+

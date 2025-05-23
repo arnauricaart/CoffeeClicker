@@ -22,7 +22,7 @@ public final class Singleton {
     /**
      * Constructor of the class, it will use the ConfigJSONDAO class to get the information to make the connection to the database.
      */
-    private Singleton() {//throws FileNotFound {
+    private Singleton() throws DBGeneralException, FileNotFound {
         ConfigJSONDAO config = new ConfigJSONDAO();
         String url = "jdbc:mysql://" + config.getDatabaseHost() + ":" + config.getDatabasePort() + "/" + config.getDatabaseName();
         String driver = "com.mysql.cj.jdbc.Driver";
@@ -33,8 +33,7 @@ public final class Singleton {
             this.conn = DriverManager.getConnection(url, usuario, password);
         }
         catch(ClassNotFoundException | SQLException e){
-            //throw new DBGeneralException("Hol");
-            e.printStackTrace();
+            throw new DBGeneralException();
         }
     }
 
@@ -42,7 +41,7 @@ public final class Singleton {
      * This method is the one used in any other class to get an instance of the Singleton class.
      * @return Returns an instance of the class Singleton.
      */
-    public static Singleton getInstance() {
+    public static Singleton getInstance() throws FileNotFound, DBGeneralException {
 
         Singleton result = instance;
         if (result != null) {

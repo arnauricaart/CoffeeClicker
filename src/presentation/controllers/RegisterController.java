@@ -1,5 +1,6 @@
 package presentation.controllers;
 
+import business.businessExceptions.BusinessException;
 import business.managers.UserManager;
 import presentation.views.RegisterView;
 
@@ -63,50 +64,57 @@ public class RegisterController {
         String pass = view.getPassword();
         String repass = view.getRepassword();
 
-        if (user.length() < 6) {
-            view.showErrorMessage("Username must be at least 6 characters long.");
-            return;
+        try {
+            if (user.length() < 6) {
+                view.showErrorMessage("Username must be at least 6 characters long.");
+                return;
+            }
+
+            if (email.isEmpty() || !email.contains("@")) {
+                view.showErrorMessage("Invalid email address.");
+                return;
+            }
+            if (model.checkUserExists(user)) {
+                view.showErrorMessage("Username already exists.");
+                return;
+            }
+
+            if (model.checkEmailExists(email)) {
+                view.showErrorMessage("Email is already registered.");
+                return;
+            }
+
+
+            if (!pass.equals(repass)) {
+                view.showErrorMessage("Passwords do not match.");
+                return;
+            }
+
+            if (pass.length() < 8) {
+                view.showErrorMessage("Password must be at least 8 characters long.");
+                return;
+            }
+
+            if (!pass.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+                view.showErrorMessage("Password must contain uppercase, lowercase, and a number.");
+                return;
+            }
+
+            boolean success = model.register(user, email, pass);
+            if (success) {
+                view.showRegisterResultMessage(true);
+                view.dispose();
+                LoginController loginController = new LoginController();
+                loginController.start();
+            } else {
+                view.showErrorMessage("Registration failed. User may already exist.");
+            }
+
+        }catch(BusinessException e){
+            //ToDo: Cambiar a pop-up
+            System.out.println(e.getExceptionMessage());
         }
 
-        if (email.isEmpty() || !email.contains("@")) {
-            view.showErrorMessage("Invalid email address.");
-            return;
-        }
-        if (model.checkUserExists(user)) {
-            view.showErrorMessage("Username already exists.");
-            return;
-        }
-
-        if (model.checkEmailExists(email)) {
-            view.showErrorMessage("Email is already registered.");
-            return;
-        }
-
-
-        if (!pass.equals(repass)) {
-            view.showErrorMessage("Passwords do not match.");
-            return;
-        }
-
-        if (pass.length() < 8) {
-            view.showErrorMessage("Password must be at least 8 characters long.");
-            return;
-        }
-
-        if (!pass.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
-            view.showErrorMessage("Password must contain uppercase, lowercase, and a number.");
-            return;
-        }
-
-        boolean success = model.register(user, email, pass);
-        if (success) {
-            view.showRegisterResultMessage(true);
-            view.dispose();
-            LoginController loginController = new LoginController();
-            loginController.start();
-        } else {
-            view.showErrorMessage("Registration failed. User may already exist.");
-        }
     }
 
 }

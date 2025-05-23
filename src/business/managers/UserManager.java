@@ -1,8 +1,12 @@
 package business.managers;
 
+import business.businessExceptions.BusinessException;
 import business.entities.User;
 import persistence.UserDAO;
 import persistence.UserDBDAO;
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+import persistence.persistenceExceptions.PersistenceException;
 
 /**
  * Manages user-related operations in the business domain.
@@ -22,8 +26,12 @@ public class UserManager {
     /**
      * Constructs a UserManager and initializes the userDAO with a UserDBDAO implementation.
      */
-    public UserManager() {
-        this.userDAO = new UserDBDAO();
+    public UserManager() throws business.businessExceptions.DBGeneralException {
+        try {
+            this.userDAO = new UserDBDAO();
+        }catch(PersistenceException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -52,8 +60,14 @@ public class UserManager {
      * @param password the password for the new user
      * @return true if registration was successful, false otherwise
      */
-    public boolean register(String username, String email, String password) {
-        return userDAO.registerUser(username, email, password);
+    public boolean register(String username, String email, String password) throws BusinessException {
+        try{
+            return userDAO.registerUser(username, email, password);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getMessage());
+        }
     }
 
     /**
@@ -63,8 +77,14 @@ public class UserManager {
      * @param password the password provided during login
      * @return the email of the user if login is successful, null otherwise
      */
-    public String getCorreoFromLogin(String input, String password) {
-        return userDAO.getCorreoFromLogin(input, password);
+    public String getCorreoFromLogin(String input, String password) throws BusinessException {
+        try{
+            return userDAO.getCorreoFromLogin(input, password);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -73,8 +93,14 @@ public class UserManager {
      * @param username the username to check
      * @return true if the user exists, false otherwise
      */
-    public boolean checkUserExists(String username){
-        return userDAO.checkUserExists(username);
+    public boolean checkUserExists(String username) throws BusinessException{
+        try {
+            return userDAO.checkUserExists(username);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -83,8 +109,12 @@ public class UserManager {
      * @param email the email of the user to remove
      * @return true if the user was successfully removed, false otherwise
      */
-    public boolean removeUserAndData(String email){
-        return userDAO.removeUserAndData(email);
+    public boolean removeUserAndData(String email) throws BusinessException{
+        try {
+            return userDAO.removeUserAndData(email);
+        }catch(PersistenceException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -93,6 +123,13 @@ public class UserManager {
      * @param email the email to check
      * @return true if the email exists, false otherwise
      */
-    public boolean checkEmailExists(String email) { return userDAO.checkEmailExists(email);
+    public boolean checkEmailExists(String email) throws BusinessException{
+        try{
+            return userDAO.checkEmailExists(email);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 }

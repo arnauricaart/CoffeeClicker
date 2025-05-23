@@ -1,8 +1,13 @@
 package business.managers;
 
+import business.businessExceptions.BusinessException;
 import business.entities.Game;
+//import com.sun.tools.jdeps.Dependencies;
 import persistence.GameDAO;
 import persistence.GameDBDAO;
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+import persistence.persistenceExceptions.PersistenceException;
 
 import java.util.List;
 
@@ -29,8 +34,14 @@ public class PartidaManager {
      *
      * @return a list of finished {@link Game} instances
      */
-    public List<Game> getGamesFinished(){
-        return gameDAO.getGamesFinishedForStats();
+    public List<Game> getGamesFinished() throws BusinessException {
+        try {
+            return gameDAO.getGamesFinishedForStats();
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -40,8 +51,14 @@ public class PartidaManager {
      * @param gameSearch the game name to filter the search
      * @return a list of {@link Game} objects matching the search criteria
      */
-    public List<Game> searchGamesFinished(String userSearch, String gameSearch){
-        return gameDAO.searchGamesFinished(userSearch, gameSearch);
+    public List<Game> searchGamesFinished(String userSearch, String gameSearch) throws BusinessException {
+        try{
+            return gameDAO.searchGamesFinished(userSearch, gameSearch);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -51,8 +68,12 @@ public class PartidaManager {
      * @param correo the email of the user
      * @return the ID of the newly created game
      */
-    public int insertGame(String userName, String correo){
-        return gameDAO.insertGame(userName, correo);
+    public int insertGame(String userName, String correo) throws business.businessExceptions.DBGeneralException {
+        try {
+            return gameDAO.insertGame(userName, correo);
+        }catch(PersistenceException e){
+               throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -61,8 +82,14 @@ public class PartidaManager {
      * @param userName the username of the player
      * @return the {@link Game} that is currently started for the user, or null if none is found
      */
-    public Game getStartedGame(String userName){
-        return gameDAO.getStartedGame(userName);
+    public Game getStartedGame(String userName) throws BusinessException {
+        try {
+            return gameDAO.getStartedGame(userName);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -71,7 +98,13 @@ public class PartidaManager {
      * @param id the ID of the game
      * @return the {@link Game} with the specified ID, or null if not found
      */
-    public Game getGameById(int id) {
-        return gameDAO.getGameById(id);
+    public Game getGameById(int id) throws BusinessException{
+        try {
+            return gameDAO.getGameById(id);
+        }catch (DBGeneralException e){
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+        }catch(FileNotFound e){
+            throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
+        }
     }
 }

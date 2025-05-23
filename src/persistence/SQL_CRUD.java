@@ -1,6 +1,8 @@
 package persistence;
 
-import persistence.persistenceExceptions.ConstraintException;
+import persistence.persistenceExceptions.DBGeneralException;
+import persistence.persistenceExceptions.FileNotFound;
+import persistence.persistenceExceptions.PersistenceException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class SQL_CRUD {
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a ResultSet object that lets the user retrive the information that the query gave.
      */
-    public static ResultSet Select(String query, ArrayList<String> values, ArrayList<String> tipos) {
+    public static ResultSet Select(String query, ArrayList<String> values, ArrayList<String> tipos) throws FileNotFound, DBGeneralException {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
         ResultSet res;
@@ -63,7 +65,7 @@ public class SQL_CRUD {
      * @param isInsert Boolean that lets the user know if the petition is an insert.
      * @return Returns a PreparedStatement object.
      */
-    private static PreparedStatement CUDpreparedStament(String query, ArrayList<String> values, ArrayList<String> tipos, boolean isInsert) {
+    private static PreparedStatement CUDpreparedStament(String query, ArrayList<String> values, ArrayList<String> tipos, boolean isInsert) throws FileNotFound, DBGeneralException {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
         try {
@@ -109,15 +111,15 @@ public class SQL_CRUD {
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a number with the status of the petition.
      */
-    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos) {
+    public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos) throws DBGeneralException {
         int res;
         try {
             PreparedStatement pst = CUDpreparedStament(query, values, tipos, false);
             res = pst.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new ConstraintException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DBGeneralException();
+        } catch (SQLException | FileNotFound | DBGeneralException e) {
+            throw new DBGeneralException();
         }
         return res;
     }
@@ -129,7 +131,7 @@ public class SQL_CRUD {
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a number with the id of the new register generated.
      */
-    public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos) {
+    public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos) throws PersistenceException {
         try {
             PreparedStatement pst = CUDpreparedStament(query, values, tipos, true);
             int res = pst.executeUpdate();
@@ -140,10 +142,10 @@ public class SQL_CRUD {
                 }
             }
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new ConstraintException(e);
-        } catch (SQLException e) {
+            throw new DBGeneralException();
+        } catch (SQLException | FileNotFound | DBGeneralException e) {
             throw new RuntimeException(e);
         }
-        throw new RuntimeException("Error insertando en la base de datos");
+        throw new RuntimeException("Error inserting the DataBase");
     }
 }

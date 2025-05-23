@@ -1,9 +1,12 @@
 package presentation.controllers;
 
+import business.businessExceptions.BusinessException;
 import business.managers.UserManager;
 import presentation.views.LoginView;
 import presentation.views.MenuGUI;
+import presentation.views.PopUpView;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -25,7 +28,13 @@ public class LoginController {
      * Constructs a new LoginController and initializes the UserManager.
      */
     public LoginController() {
-        this.userManager = new UserManager();
+        try {
+            this.userManager = new UserManager();
+            start();
+        }catch(BusinessException e) {
+            new PopUpView(e.getExceptionMessage());
+            //view.dispose();
+        }
     }
 
     /**
@@ -60,16 +69,22 @@ public class LoginController {
         String usernameOrEmail = view.getUsername();
         String password = view.getPassword();
 
-        String correo = userManager.getCorreoFromLogin(usernameOrEmail, password);
-        if(correo == null) {
-            view.showLoginErrorMessage();
-        }
+        //ToDo: Crear pop up al catchear la excepcion
+        try{
+            String correo = userManager.getCorreoFromLogin(usernameOrEmail, password);
+            if(correo == null) {
+                view.showLoginErrorMessage();
+            }
 
-        if (correo != null) {
+            if (correo != null) {
+                view.dispose();
+                MenuGUI menuView = new MenuGUI();
+                MenuController menuController = new MenuController(menuView, correo);
+                menuController.initController();
+            }
+        }catch(BusinessException e){
+            new PopUpView(e.getExceptionMessage());
             view.dispose();
-            MenuGUI menuView = new MenuGUI();
-            MenuController menuController = new MenuController(menuView, correo);
-            menuController.initController();
         }
     }
 }

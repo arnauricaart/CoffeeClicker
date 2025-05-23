@@ -1,9 +1,9 @@
 package presentation.controllers;
+import business.businessExceptions.BusinessException;
 import business.entities.Game;
 import business.managers.PartidaManager;
 import business.managers.StatisticsManager;
 import business.managers.UserManager;
-import persistence.persistenceExceptions.ConstraintException;
 import persistence.persistenceExceptions.GameNotFound;
 import presentation.views.*;
 
@@ -106,19 +106,25 @@ public class MenuController implements MenuNavigator{
      * Initializes the controller by setting up the listeners and creating managers.
      */
     public void initController() {
-        menuView.setNewGameButtonListener(e -> {
-            try {
-                startNewGame();
-            } catch (GameNotFound ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
-        menuView.setLogoutButtonListener(e -> logout());
-        menuView.setDeleteAccountButtonListener(e -> deleteAccount());
-        userManager = new UserManager();
-        partidaManager = new PartidaManager();
-        statisticsManager = new StatisticsManager();
+        try {
+            menuView.setNewGameButtonListener(e -> {
+                try {
+                    startNewGame();
+                } catch (GameNotFound ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
+            menuView.setLogoutButtonListener(e -> logout());
+            menuView.setDeleteAccountButtonListener(e -> deleteAccount());
+            userManager = new UserManager();
+            partidaManager = new PartidaManager();
+            statisticsManager = new StatisticsManager();
+        }catch (BusinessException e){
+            //ToDo: No sabemos que hacer aqui. Cmambiar?
+            new PopUpView(e.getExceptionMessage());
+            menuView.dispose();
+        }
     }
 
     /**
@@ -126,26 +132,30 @@ public class MenuController implements MenuNavigator{
      * If an existing unfinished game is found, resumes it.
      */
     private void startNewGame() throws GameNotFound {
-        Game partida = partidaManager.getStartedGame(correo);
-        if (partida == null) {
-            newGameView = new NewGameView();
-            //newGameView.setNewGameButtonListener(e -> newGame());
+        try {
+            Game partida = partidaManager.getStartedGame(correo);
+            if (partida == null) {
+                newGameView = new NewGameView();
+                //newGameView.setNewGameButtonListener(e -> newGame());
 
-            //Parece que el error de la primera partida se encuetra aqui
-            newGameView.setNewGameButtonListener(e -> {
-                Game nuevaPartida = newGame();
-                if (nuevaPartida != null) {
-                    gameController.playGame(nuevaPartida);
-                }
-            });
+                //Parece que el error de la primera partida se encuetra aqui
+                newGameView.setNewGameButtonListener(e -> {
+                    Game nuevaPartida = newGame();
+                    if (nuevaPartida != null) {
+                        gameController.playGame(nuevaPartida);
+                    }
+                });
 
-            newGameView.setCancelButtonListener(e -> newGameView.dispose());
-            newGameView.setVisible(true);
-        } else {
-            //AQUI YA EXISTE
-            menuView.showGameExists();
-            gameController.playGame(partida);
-            menuView.dispose();
+                newGameView.setCancelButtonListener(e -> newGameView.dispose());
+                newGameView.setVisible(true);
+            } else {
+                //AQUI YA EXISTE
+                menuView.showGameExists();
+                gameController.playGame(partida);
+                menuView.dispose();
+            }
+        } catch (BusinessException e) {
+            new PopUpView(e.getExceptionMessage());
         }
     }
 
@@ -153,20 +163,29 @@ public class MenuController implements MenuNavigator{
      * Opens a view to select a finished game and show its statistics.
      */
     private void selectGameToShowStats() {
-        showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
-        showGamesView.setShowStatsActionListener(e -> {
-            int currentPartidaId = showGamesView.getCurrentPartidaId();
-            if (currentPartidaId != -1) {
-                openStatsForGame(currentPartidaId);
-            }
-        });
-        showGamesView.setSearchActionListener(e -> {
-            String userSearch = showGamesView.getUserSearchText();
-            String gameSearch = showGamesView.getGameSearchText();
-            List<Game> searchResults = partidaManager.searchGamesFinished(userSearch, gameSearch);
-            showGamesView.updateTableData(searchResults);
-        });
-        showGamesView.setVisible(true);
+        try {
+            showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
+            showGamesView.setShowStatsActionListener(e -> {
+                int currentPartidaId = showGamesView.getCurrentPartidaId();
+                if (currentPartidaId != -1) {
+                    openStatsForGame(currentPartidaId);
+                }
+            });
+            showGamesView.setSearchActionListener(e -> {
+                String userSearch = showGamesView.getUserSearchText();
+                String gameSearch = showGamesView.getGameSearchText();
+                List<Game> searchResults = null;
+                try {
+                    searchResults = partidaManager.searchGamesFinished(userSearch, gameSearch);
+                } catch (BusinessException ex) {
+                    new PopUpView(ex.getExceptionMessage());
+                }
+                showGamesView.updateTableData(searchResults);
+            });
+            showGamesView.setVisible(true);
+        }catch (BusinessException e){
+            new PopUpView(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -175,8 +194,12 @@ public class MenuController implements MenuNavigator{
      * @param gameId the ID of the game whose statistics to show
      */
     private void openStatsForGame(int gameId) {
-        List<Integer> cafesPorMinuto = statisticsManager.getStatsByGameId(gameId);
-        showGamesView.updateStatsChart(cafesPorMinuto);
+        try {
+            List<Integer> cafesPorMinuto = statisticsManager.getStatsByGameId(gameId);
+            showGamesView.updateStatsChart(cafesPorMinuto);
+        }catch(BusinessException e) {
+            new PopUpView(e.getExceptionMessage());
+        }
     }
 
     /**
@@ -248,7 +271,7 @@ public class MenuController implements MenuNavigator{
                 // No establezcas game = null aquí porque ya lo es.
             }
 
-        } catch (ConstraintException e) {
+        } catch (BusinessException e) {
             System.err.println("[ERROR] ConstraintException: " + e.getMessage()); // Imprime el mensaje completo para depurar
             if (e.getMessage() != null && e.getMessage().contains("partida_nombre_usuario_uk")) {
                 // Esto es para cuando EL MISMO usuario intenta crear una partida con un nombre que YA TIENE.
@@ -272,18 +295,23 @@ public class MenuController implements MenuNavigator{
      * If successful, logs them out and shows confirmation.
      */
     private void removeAccountFromDatabase() {
-        String correo = userManager.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
-        if(correo != null) {
-            userManager.removeUserAndData(this.correo);
-            removeAccountView.showRemoveUserMessage(true);
-            removeAccountView.dispose();
-            menuView.dispose();
-            LoginController loginController = new LoginController();
-            loginController.start();
-        } else{
-            removeAccountView.showRemoveUserMessage(false);
-        }
+        try {
+            String correo = userManager.getCorreoFromLogin(this.correo, removeAccountView.getPassword());
+            if (correo != null) {
+                userManager.removeUserAndData(this.correo);
+                removeAccountView.showRemoveUserMessage(true);
+                removeAccountView.dispose();
+                menuView.dispose();
+                LoginController loginController = new LoginController();
+                loginController.start();
+            } else {
+                removeAccountView.showRemoveUserMessage(false);
+            }
 
-        return;
+            return;
+        }catch(BusinessException e) {
+            //ToDo: Cambiar a pop-up
+            //System.err.println(e.getExceptionMessage());
+        }
     }
 }

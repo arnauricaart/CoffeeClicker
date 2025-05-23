@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 // No se necesitan ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
 
+/**
+ * Class that extends from JFrame, this class will be used to make the Menu view.
+ */
 public class MenuGUI extends JFrame {
 
     // --- Componentes UI ---

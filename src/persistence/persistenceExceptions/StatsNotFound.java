@@ -10,4 +10,13 @@ public class StatsNotFound extends PersistenceException {
    * Constructs an instance of FileNotFound.
    */
   public StatsNotFound() {}
+
+  /**
+   * This method allows us to get the Exception message.
+   *
+   * @return returns the message indicating the exception occurred.
+   */
+  public String getExceptionMessage() {
+    return message;
+  }
 }
