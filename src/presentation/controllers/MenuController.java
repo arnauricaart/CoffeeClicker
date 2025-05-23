@@ -213,7 +213,6 @@ public class MenuController implements MenuNavigator{
             // obrir la pantalla de login
 
             LoginController loginController = new LoginController();
-            loginController.start();
 
     }
 
@@ -238,6 +237,7 @@ public class MenuController implements MenuNavigator{
         String gameName = newGameView.getNewGameName();
         if (gameName == null || gameName.isEmpty()) {
             // Usando tu MessageDialogs centralizado
+            newGameView.showEmptyGameMessage();
             return null;
         }
 
@@ -271,9 +271,11 @@ public class MenuController implements MenuNavigator{
             }
 
         } catch (BusinessException e) {
+            newGameView.showDuplicateGameMessage();
             System.err.println("[ERROR] ConstraintException: " + e.getMessage()); // Imprime el mensaje completo para depurar
             if (e.getMessage() != null && e.getMessage().contains("partida_nombre_usuario_uk")) {
                 // Esto es para cuando EL MISMO usuario intenta crear una partida con un nombre que YA TIENE.
+                //newGameView.showDuplicateGameMessage();
             } else {
 
             }

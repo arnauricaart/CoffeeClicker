@@ -50,7 +50,6 @@ public class RegisterController {
             public void mouseClicked(MouseEvent e) {
                 view.dispose();
                 LoginController loginController = new LoginController();
-                loginController.start();
             }
         });
     }
@@ -106,7 +105,6 @@ public class RegisterController {
                 view.showRegisterResultMessage(true);
                 view.dispose();
                 LoginController loginController = new LoginController();
-                loginController.start();
             } else {
                 view.showErrorMessage("Registration failed. User may already exist.");
             }
