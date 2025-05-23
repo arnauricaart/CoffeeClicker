@@ -10,6 +10,7 @@ import persistence.GameDBDAO;
 import persistence.StatsDAO;
 import persistence.StatsDBDAO;
 import presentation.views.PopUpView;
+import business.results.ButtonActionResult;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -497,6 +498,102 @@ public class GameManager implements Runnable {
             data[i][4] = dfPercent.format(percentage) + "%";
         }
         return data;
+    }
+
+    public ButtonActionResult handleButtonAction(String buttonCommand) {
+        switch (buttonCommand) {
+            case "COFFEEBUTTON":
+                addCoffee(1);
+                return new ButtonActionResult(true, "", false);
+
+            case "COFFEEMACHINEBUTTON":
+                if (canBuyCoffeeMachine()) {
+                    buyCoffeeMachine();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            case "COFFEEMACHINEUPGRADEBUTTON":
+                if (canBuyCoffeeMachineUpgrade()) {
+                    buyCoffeeMachineUpgrade();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            case "BARISTABUTTON":
+                if (!isBaristaUnlocked()) {
+                    return new ButtonActionResult(false, "This item is currently locked!", true);
+                }
+                if (canBuyBarista()) {
+                    buyBarista();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            case "BARISTAUPGRADEBUTTON":
+                if (!isBaristaUpgradeUnlocked()) {
+                    return new ButtonActionResult(false, "This item is currently locked!", true);
+                }
+                if (canBuyBaristaUpgrade()) {
+                    buyBaristaUpgrade();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            case "CAFEBUTTON":
+                if (!isCafeUnlocked()) {
+                    return new ButtonActionResult(false, "This item is currently locked!", true);
+                }
+                if (canBuyCafe()) {
+                    buyCafe();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            case "CAFEUPGRADEBUTTON":
+                if (!isCafeUpgradeUnlocked()) {
+                    return new ButtonActionResult(false, "This item is currently locked!", true);
+                }
+                if (canBuyCafeUpgrade()) {
+                    buyCafeUpgrade();
+                    return new ButtonActionResult(true, "", false);
+                }
+                return new ButtonActionResult(false, "You need more coffees!", true);
+
+            default:
+                return new ButtonActionResult(false, "", false);
+        }
+    }
+
+    public String getButtonDescription(String buttonName) {
+        switch (buttonName) {
+            case "COFFEEMACHINEBUTTON":
+                return String.format("Coffee Machine\n[price: %d]\nAutoclicks once every 10 seconds.", getCoffeeMachinePrice());
+            case "BARISTABUTTON":
+                if (!isBaristaUnlocked()) {
+                    return "This item is currently locked!";
+                }
+                return String.format("Barista\n[price: %d]\nProduces 1 coffee every 2 seconds.", getBaristaPrice());
+            case "CAFEBUTTON":
+                if (!isCafeUnlocked()) {
+                    return "This item is currently locked!";
+                }
+                return String.format("Cafe\n[price: %d]\nProduces 1 coffee every second.", getCafePrice());
+            case "COFFEEMACHINEUPGRADEBUTTON":
+                return String.format("Coffee Machine Upgrade\n[price: %d]\nIncreases CoffeeMachine production by %d.", getCoffeeMachineUpgradePrice(), getCoffeeMachineUpgradeNumber() + 1);
+            case "BARISTAUPGRADEBUTTON":
+                if (!isBaristaUpgradeUnlocked()) {
+                    return "This item is currently locked!";
+                }
+                return String.format("Barista Upgrade\n[price: %d]\nIncreases Barista production by %d.", getBaristaUpgradePrice(), getBaristaUpgradeNumber() + 1);
+            case "CAFEUPGRADEBUTTON":
+                if (!isCafeUpgradeUnlocked()) {
+                    return "This item is currently locked!";
+                }
+                return String.format("Cafe Upgrade\n[price: %d]\nIncreases Cafe production by %d.", getCafeUpgradePrice(), getCafeUpgradeNumber() + 1);
+            default:
+                return "";
+        }
     }
 
     /**

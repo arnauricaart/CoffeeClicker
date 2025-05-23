@@ -72,9 +72,7 @@ public class LoginController {
             String correo = userManager.getCorreoFromLogin(usernameOrEmail, password);
             if(correo == null) {
                 view.showLoginErrorMessage();
-            }
-
-            if (correo != null) {
+            } else {
                 view.dispose();
                 MenuGUI menuView = new MenuGUI();
                 MenuController menuController = new MenuController(menuView, correo);

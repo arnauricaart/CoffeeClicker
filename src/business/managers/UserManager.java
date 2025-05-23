@@ -2,6 +2,7 @@ package business.managers;
 
 import business.businessExceptions.BusinessException;
 import business.entities.User;
+import business.results.RegistrationResult;
 import persistence.UserDAO;
 import persistence.UserDBDAO;
 import persistence.persistenceExceptions.DBGeneralException;
@@ -131,5 +132,42 @@ public class UserManager {
         }catch(FileNotFound e){
             throw new business.businessExceptions.FileNotFound(e.getExceptionMessage());
         }
+    }
+
+    public RegistrationResult validateAndRegister(String username, String email, String password, String confirmPassword) throws BusinessException {
+        if (username.length() < 6) {
+            return new RegistrationResult(false, "Username must be at least 6 characters long.");
+        }
+
+        if (email.isEmpty() || !email.contains("@")) {
+            return new RegistrationResult(false, "Invalid email address.");
+        }
+
+        if (checkUserExists(username)) {
+            return new RegistrationResult(false, "Username already exists.");
+        }
+
+        if (checkEmailExists(email)) {
+            return new RegistrationResult(false, "Email is already registered.");
+        }
+
+        if (!password.equals(confirmPassword)) {
+            return new RegistrationResult(false, "Passwords do not match.");
+        }
+
+        if (password.length() < 8) {
+            return new RegistrationResult(false, "Password must be at least 8 characters long.");
+        }
+
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            return new RegistrationResult(false, "Password must contain uppercase, lowercase, and a number.");
+        }
+
+        boolean success = register(username, email, password);
+        if (!success) {
+            return new RegistrationResult(false, "Registration failed. User may already exist.");
+        }
+
+        return new RegistrationResult(true, null);
     }
 }

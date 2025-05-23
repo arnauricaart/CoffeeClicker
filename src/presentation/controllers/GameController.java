@@ -3,6 +3,7 @@ package presentation.controllers;
 import business.businessExceptions.BusinessException;
 import business.entities.Game;
 import business.managers.GameManager;
+import business.results.ButtonActionResult;
 import presentation.views.GameView;
 import presentation.views.PopUpView;
 
@@ -171,105 +172,20 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getActionCommand(); // Obtiene el comando de acción del botón presionado
-
-        // Lógica para el botón de hacer café manualmente
-        if (source.equals("COFFEEBUTTON")) {
-            model.addCoffee(1); // Añade 1 café al modelo
-            view.setCounterLableText((int) model.getCoffeeCounter() + " coffees");
+        String command = e.getActionCommand();
+        ButtonActionResult result = model.handleButtonAction(command);
+        
+        if (result.getMessage() != null && !result.getMessage().isEmpty()) {
+            view.setMessageText(result.getMessage());
         }
-
-        // Lógica para comprar Coffee Machine
-        if (source.equals("COFFEEMACHINEBUTTON")) {
-            if (model.canBuyCoffeeMachine()) {
-                model.buyCoffeeMachine();
-                playSound("res/ding.wav");
-            } else {
-                view.setMessageText("You need more coffees!");
-                playSound("res/error.wav");
-            }
+        
+        if (result.shouldPlayErrorSound()) {
+            playSound("res/error.wav");
+        } else if (result.isSuccess()) {
+            playSound("res/ding.wav");
         }
-
-        // Lógica para comprar mejora de Coffee Machine
-        if (source.equals("COFFEEMACHINEUPGRADEBUTTON")) {
-            if (model.canBuyCoffeeMachineUpgrade()) {
-                model.buyCoffeeMachineUpgrade();
-                playSound("res/ding.wav");
-            } else {
-                view.setMessageText("You need more coffees!");
-                playSound("res/error.wav");
-            }
-        }
-
-        // Lógica para comprar Barista
-        if (source.equals("BARISTABUTTON")) {
-            if (!model.isBaristaUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-                playSound("res/error.wav");
-                return;
-            } else {
-                if (model.canBuyBarista()) {
-                    model.buyBarista();
-                    playSound("res/ding.wav");
-                } else {
-                    view.setMessageText("You need more coffees!");
-                    playSound("res/error.wav");
-                }
-            }
-        }
-
-        // Lógica para comprar mejora de Barista
-        if (source.equals("BARISTAUPGRADEBUTTON")) {
-            if (!model.isBaristaUpgradeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-                playSound("res/error.wav");
-                return;
-            } else {
-                if (model.canBuyBaristaUpgrade()) {
-                    model.buyBaristaUpgrade();
-                    playSound("res/ding.wav");
-                } else {
-                    view.setMessageText("You need more coffees!");
-                    playSound("res/error.wav");
-                }
-            }
-        }
-
-        // Lógica para comprar Cafe
-        if (source.equals("CAFEBUTTON")) {
-            if (!model.isCafeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-                playSound("res/error.wav");
-                return;
-            }else{
-                if (model.canBuyCafe()) {
-                    model.buyCafe();
-                    playSound("res/ding.wav");
-                }else{
-                    view.setMessageText("You need more coffees!");
-                    playSound("res/error.wav");
-                }
-            }
-        }
-
-        // Lógica para comprar mejora de Cafe
-        if (source.equals("CAFEUPGRADEBUTTON")) {
-            if (!model.isCafeUpgradeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-                playSound("res/error.wav");
-                return;
-            }
-            if (model.canBuyCafeUpgrade()) {
-                model.buyCafeUpgrade();
-                playSound("res/ding.wav");
-            } else {
-                view.setMessageText("You need more coffees!");
-                playSound("res/error.wav");
-            }
-        }
-        // No es necesario llamar a updateLabels() explícitamente después de cada acción de compra si
-        // el GameManager va a llamar a listener.onGameUpdated() poco después,
-        // lo que a su vez ya llama a updateLabels().
+        
+        updateLabels();
     }
 
     /**
@@ -279,51 +195,8 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        String name = ((Component) e.getSource()).getName(); // Obtiene el nombre del componente (botón)
-
-        // Muestra información para Coffee Machine
-        if ("COFFEEMACHINEBUTTON".equals(name)) {
-            double cmProductionPerUnit = 0.2 * (model.getCoffeeMachineUpgradeNumber() + 1);
-            view.setMessageText("COFFEE MACHINE\n[Price: " + model.getCoffeeMachinePrice() + "]\nProduces: " + String.format("%.1f", cmProductionPerUnit) + " c/s each.");
-        }
-        // Muestra información para Barista
-        else if ("BARISTABUTTON".equals(name)) {
-            if (!model.isBaristaUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-            } else {
-                double baristaProductionPerUnit = 1.0 * (model.getBaristaUpgradeNumber() + 1);
-                view.setMessageText("BARISTA\n[Price: " + model.getBaristaPrice() + "]\nProduces: " + String.format("%.1f", baristaProductionPerUnit) + " c/s each.");
-            }
-        }
-        // Muestra información para Cafe
-        else if ("CAFEBUTTON".equals(name)) {
-            if (!model.isCafeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-            } else {
-                double cafeProductionPerUnit = 5.0 * (model.getCafeUpgradeNumber() + 1);
-                view.setMessageText("CAFE\n[Price: " + model.getCafePrice() + "]\nProduces: " + String.format("%.1f", cafeProductionPerUnit) + " c/s each.");
-            }
-        }
-        // Muestra información para la mejora de Coffee Machine ("QUICK CLEAN")
-        else if ("COFFEEMACHINEUPGRADEBUTTON".equals(name)) {
-            view.setMessageText("QUICK CLEAN (CM Upgrade)\n[Price: " + model.getCoffeeMachineUpgradePrice() + "]\nDoubles Coffee Machine production.");
-        }
-        // Muestra información para la mejora de Barista ("SWIFT HANDS")
-        else if ("BARISTAUPGRADEBUTTON".equals(name)) {
-            if (!model.isBaristaUpgradeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-            } else {
-                view.setMessageText("SWIFT HANDS (Barista Upgrade)\n[Price: " + model.getBaristaUpgradePrice() + "]\nDoubles Barista production.");
-            }
-        }
-        // Muestra información para la mejora de Cafe ("HAPPY HOUR")
-        else if ("CAFEUPGRADEBUTTON".equals(name)) {
-            if (!model.isCafeUpgradeUnlocked()) {
-                view.setMessageText("This item is currently locked!");
-            } else {
-                view.setMessageText("HAPPY HOUR (Cafe Upgrade)\n[Price: " + model.getCafeUpgradePrice() + "]\nDoubles Cafe production.");
-            }
-        }
+        String name = ((Component) e.getSource()).getName();
+        view.setMessageText(model.getButtonDescription(name));
     }
 
     /**
