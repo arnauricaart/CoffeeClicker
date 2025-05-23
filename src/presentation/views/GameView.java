@@ -40,6 +40,8 @@ public class GameView extends JFrame {
     private JLabel shopMainTitleLabel; // Main title for the shop panel
     private JLabel itemDetailsTitleLabel; // Title for the item details/message area
 
+    private JButton instructionsButton; // NUEVA DECLARACIÓN DEL BOTÓN DE INSTRUCCIONES
+
 
     /**
      * Constructs the main game view and initializes all fonts and UI components.
@@ -142,6 +144,66 @@ public class GameView extends JFrame {
         coffeeButton.setBorder(BorderFactory.createLineBorder(brownBorderColor, borderThickness));
 
         leftPanel.add(coffeeButton);
+
+        // --- INICIO: CÓDIGO AÑADIDO PARA EL BOTÓN DE INSTRUCCIONES ---
+        instructionsButton = new JButton("Instructions");
+        instructionsButton.setFont(this.buttonShopFont);
+        instructionsButton.setFocusPainted(false);
+        instructionsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Dimension instructionsButtonDim = new Dimension(150, 36);
+        instructionsButton.setPreferredSize(instructionsButtonDim);
+        instructionsButton.setMinimumSize(instructionsButtonDim);
+        instructionsButton.setMaximumSize(instructionsButtonDim);
+        instructionsButton.setBounds(20, leftPanel.getHeight() - instructionsButtonDim.height - 20, instructionsButtonDim.width, instructionsButtonDim.height);
+
+        String instructionsNormalPath = "res/button_instructions.png";
+        String instructionsRolloverPath = "res/button_instructions2.png";
+        boolean instructionImagesLoaded = false;
+        try {
+            ImageIcon iconNormalIns = new ImageIcon(instructionsNormalPath);
+            ImageIcon iconRolloverIns = null;
+            if (new File(instructionsRolloverPath).exists()) {
+                iconRolloverIns = new ImageIcon(instructionsRolloverPath);
+            }
+
+            if (iconNormalIns.getIconWidth() > 0) {
+                instructionsButton.setIcon(iconNormalIns);
+                if (iconRolloverIns != null && iconRolloverIns.getIconWidth() > 0) {
+                    instructionsButton.setRolloverIcon(iconRolloverIns);
+                    instructionsButton.setRolloverEnabled(true);
+                }
+                instructionsButton.setText("");
+                instructionsButton.setBorder(null);
+                instructionsButton.setBorderPainted(false);
+                instructionsButton.setContentAreaFilled(false);
+                instructionsButton.setOpaque(false);
+                instructionImagesLoaded = true;
+            }
+        } catch (Exception e) {
+            // No se imprime error si la imagen es opcional o se prefiere manejarlo silenciosamente.
+        }
+
+        if (!instructionImagesLoaded) {
+            instructionsButton.setText("Instructions");
+            instructionsButton.setBackground(new Color(210, 210, 225));
+            instructionsButton.setForeground(Color.BLACK);
+            instructionsButton.setOpaque(true);
+            instructionsButton.setContentAreaFilled(true);
+            instructionsButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
+            final Color originalBgIns = instructionsButton.getBackground();
+            instructionsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    if (instructionsButton.isEnabled()) instructionsButton.setBackground(originalBgIns.brighter());
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    if (instructionsButton.isEnabled()) instructionsButton.setBackground(originalBgIns);
+                }
+            });
+        }
+        instructionsButton.addActionListener(e -> showInstructionsPopup());
+        leftPanel.add(instructionsButton);
+        // --- FIN: CÓDIGO AÑADIDO PARA EL BOTÓN DE INSTRUCCIONES ---
 
         // Center Panel: Item Details, Message Area, Generator Table
         itemDetailsTitleLabel = new JLabel("ITEM DETAILS");
@@ -397,6 +459,7 @@ public class GameView extends JFrame {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Dimension buttonDim = new Dimension(300, 36);
+
         button.setPreferredSize(buttonDim);
         button.setMinimumSize(buttonDim);
         button.setMaximumSize(buttonDim);
@@ -433,13 +496,15 @@ public class GameView extends JFrame {
                 button.setOpaque(false);
             } else {
                 button.setText(fallbackText); // Mostrar texto de fallback si la imagen no se carga
-                configureShopButtonLookAndFeel(button, true); // Aplicar estilo de botón de texto
+                //  CORREGIDO: El segundo parámetro de configureShopButtonLookAndFeel determina si es un item de tienda o de acción
+                //  Antes se pasaba 'true' indiscriminadamente, ahora se ajusta.
+                configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
             }
         } catch (Exception e) {
             System.err.println("Error cargando imágenes para botón (" + fallbackText + "): " + e.getMessage());
             e.printStackTrace();
             button.setText(fallbackText); // Asegurar texto en caso de error
-            configureShopButtonLookAndFeel(button, true);
+            configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
         }
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
@@ -458,6 +523,8 @@ public class GameView extends JFrame {
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.CENTER);
 
+        //  CORREGIDO: Se asegura que el tamaño sea el correcto (300x36) para los botones de texto de fallback
+        //  ya que configureImageButton ya lo establece, pero es bueno ser explícito o consistente.
         Dimension buttonDim = new Dimension(300, 36);
         button.setPreferredSize(buttonDim);
         button.setMinimumSize(buttonDim);
@@ -477,15 +544,90 @@ public class GameView extends JFrame {
 
         // Efecto hover simple para botones de texto
         Color originalBg = button.getBackground();
+        // Remueve listeners previos para evitar duplicados si este método es llamado múltiples veces.
+        for(MouseListener ml : button.getMouseListeners()){
+            if(ml.getClass().isAnonymousClass() && ml instanceof java.awt.event.MouseAdapter){
+                button.removeMouseListener(ml);
+            }
+        }
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(originalBg.brighter());
+                if(button.isEnabled()) button.setBackground(originalBg.brighter());
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(originalBg);
+                if(button.isEnabled()) button.setBackground(originalBg);
             }
         });
     }
+
+    /**
+     * Displays the game instructions in a pop-up dialog using a JTextArea.
+     * Text is plain, and a JScrollPane is used for scrollability.
+     */
+    private void showInstructionsPopup() {
+        String instructionsTitle = "How to Play Coffee Clicker";
+        String instructionsMessage =
+                "Welcome to Coffee Clicker!\n\n" +
+                        "The main goal is to produce as many coffees as you can, as quickly as possible! \n" +
+                        "The game saves your progress automatically every minute.\n\n" +
+                        "Gameplay Basics:\n" +
+                        "--------------------\n" +
+                        "- Manual Clicks: Click the large coffee cup icon on the left to manually produce 1 coffee per click.\n" +
+                        "  This can be upgraded later.\n" +
+                        "- Coffee Counter: Your current coffee total is displayed at the top-left. \n" +
+                        "  Below it, you'll see your 'coffees per second' rate from automatic generators.\n\n" +
+                        "The Shop (Right Panel):\n" +
+                        "--------------------------\n" +
+                        "Use your coffees to buy items from the shop. Hover over an item to see its details \n" +
+                        "(cost, production) in the 'ITEM DETAILS' area (center panel).\n\n" +
+                        "Coffee Makers (Generators):\n" +
+                        "These items automatically produce coffee for you over time.\n" +
+                        "- Coffee Machine: Base cost 10 coffees, produces 0.2 c/s. Cost increases by 1.07x each.\n" +
+                        "- Barista: Base cost 150 coffees, produces 1.0 c/s. Cost increases by 1.15x each.\n" +
+                        "  Unlocks when affordable.\n" +
+                        "- Cafe: Base cost 2000 coffees, produces 15 c/s. Cost increases by 1.12x each.\n" +
+                        "  Unlocks when affordable.\n" +
+                        "The cost for the next generator of a type increases with each purchase according to the formula: \n" +
+                        "cost_next_generator = base_cost * increment_cost^number_generators_type.\n\n" +
+                        "Upgrades:\n" +
+                        "These enhance the production of your Coffee Makers. Upgrades affect both existing and \n" +
+                        "future generators of that type.\n" +
+                        "- Quick Clean (Coffee Machine Upgrade): Doubles Coffee Machine production.\n" +
+                        "  Cost is (Base CM Price) * (Upgrades Owned + 1).\n" +
+                        "- Swift Hands (Barista Upgrade): Doubles Barista production.\n" +
+                        "  Cost is (Base Barista Price) * (Upgrades Owned + 1). Unlocks with Barista.\n" +
+                        "- Happy Hour (Cafe Upgrade): Doubles Cafe production.\n" +
+                        "  Cost is (Base Cafe Price) * (Upgrades Owned + 1). Unlocks with Cafe.\n\n" +
+                        "Generator Table (Center Panel):\n" +
+                        "----------------------------------\n" +
+                        "This table shows real-time statistics about your purchased generators:\n" +
+                        "- Name: Type of generator.\n" +
+                        "- Qty: How many of that type you own.\n" +
+                        "- Unit Prod: Coffees per second from one generator of this type (including upgrades).\n" +
+                        "- Total Prod: Coffees per second from all generators of this type.\n" +
+                        "- % Overall: This type's contribution to your total coffees per second.\n\n" +
+                        "Game Controls (Bottom Right of Shop):\n" +
+                        "------------------------------------------\n" +
+                        "- Pause Game: Saves your current game progress and returns you to the main menu.\n" +
+                        "  You can resume your game by selecting 'Start Game' again from the menu.\n" +
+                        "- End Game: Finishes your current game. All game data (coffees, duration) is saved \n" +
+                        "  for the statistics screen (accessible from the main menu).\n" +
+                        "  After ending, you'll need to start a new game from scratch if you wish to play again.\n\n" +
+                        "The game has no predefined end; play as long as you like!";
+
+        JTextArea textArea = new JTextArea(instructionsMessage);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        textArea.setBackground(UIManager.getColor("Panel.background"));
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(550, 450));
+
+        JOptionPane.showMessageDialog(this, scrollPane, instructionsTitle, JOptionPane.INFORMATION_MESSAGE);
+    }
+
 
     /** Updates the main message text in the UI, ensuring it runs on the EDT.
      * @param message The message to display.
