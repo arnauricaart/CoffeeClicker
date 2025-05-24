@@ -12,16 +12,18 @@ import persistence.persistenceExceptions.FileNotFound;
  */
 public class ConfigJSONDAO {
     /**
-     * String atribute with the route to the JSON file.
+     * String attribute with the route to the JSON file.
      */
     private final String CONFIG_PATH = "data/ConfigurationFile.json";
     /**
-     * JsonObject used to call methods to retrive information from the JSON file.
+     * JsonObject used to call methods to retrieve information from the JSON file.
      */
     private JsonObject config;
 
     /**
      * Constructor of the class.
+     *
+     * @throws FileNotFound if the configuration file cannot be found or read.
      */
     public ConfigJSONDAO() throws FileNotFound {
         try (FileReader reader = new FileReader(CONFIG_PATH)) {
@@ -34,6 +36,7 @@ public class ConfigJSONDAO {
 
     /**
      * This method returns the database port that will be used in the connection.
+     *
      * @return Returns a number with the port used in the connection.
      */
     public int getDatabasePort() {
@@ -42,6 +45,7 @@ public class ConfigJSONDAO {
 
     /**
      * This method returns the database ip that will be used in the connection.
+     *
      * @return Returns a string with the ip used in the connection.
      */
     public String getDatabaseHost() {
@@ -50,6 +54,7 @@ public class ConfigJSONDAO {
 
     /**
      * This method returns the database name that will be used in the connection.
+     *
      * @return Returns a string with the database name used in the connection.
      */
     public String getDatabaseName() {
@@ -58,6 +63,7 @@ public class ConfigJSONDAO {
 
     /**
      * This method returns the database user that will be used in the connection.
+     *
      * @return Returns a string with the user used in the connection.
      */
     public String getDatabaseUser() {
@@ -66,6 +72,7 @@ public class ConfigJSONDAO {
 
     /**
      * This method returns the database password that will be used in the connection.
+     *
      * @return Returns a string with the database password used in the connection.
      */
     public String getDatabasePassword() {

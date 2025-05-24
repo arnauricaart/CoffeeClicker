@@ -64,6 +64,10 @@ public class ShowGamesView extends JFrame {
      */
     private JSplitPane splitPane;
 
+    private JButton returnButton;
+
+    private ActionListener returnActionListener;
+
     /**
      * Constructor of the class.
      * @param games List of games.
@@ -73,29 +77,41 @@ public class ShowGamesView extends JFrame {
         setTitle("Game Statistics");
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Create left panel for game list
         JPanel leftPanel = new JPanel(new BorderLayout());
 
+        // --- Nuevo botón "Volver al menú" ---
+        returnButton = new JButton("Volver al menú");
+        // Añade tu lógica aquí
+
+
         // Search panel
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         JLabel userSearchLabel = new JLabel("User name:");
         userSearchField = new JTextField(15);
         JLabel gameSearchLabel = new JLabel("Game name:");
         gameSearchField = new JTextField(15);
         searchButton = new JButton("Search");
-        
+
         searchPanel.add(userSearchLabel);
         searchPanel.add(userSearchField);
         searchPanel.add(gameSearchLabel);
         searchPanel.add(gameSearchField);
         searchPanel.add(searchButton);
-        
-        leftPanel.add(searchPanel, BorderLayout.NORTH);
+
+// --- Contenedor para botón + panel de búsqueda ---
+        JPanel topLeftPanel = new JPanel();
+        topLeftPanel.setLayout(new BorderLayout());
+        topLeftPanel.add(returnButton, BorderLayout.NORTH);
+        topLeftPanel.add(searchPanel, BorderLayout.CENTER);
+
+        leftPanel.add(topLeftPanel, BorderLayout.NORTH);
+
 
         // Table setup
         String[] columnNames = {"IdPartida", "User name", "Game name", "Coffees", "Last Access"};
@@ -246,6 +262,15 @@ public class ShowGamesView extends JFrame {
      */
     public void setShowStatsActionListener(ActionListener l) {
         this.showStatsActionListener = l;
+    }
+
+    /**
+     * This method sets an action listener to the return button.
+     * @param l Action listener that will be saved on this class.
+     */
+    public void setReturnActionListener(ActionListener l) {
+        this.returnActionListener = l;
+        returnButton.addActionListener(l);
     }
 
     /**

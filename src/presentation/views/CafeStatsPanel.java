@@ -102,7 +102,6 @@ public class CafeStatsPanel extends JPanel {
 
 
         // Always show 0 and max value
-        //TODO revisar si aixo esta be
         //g2.drawString("0", leftMargin - 10, height - bottomMargin + 20);
         //g2.drawString(String.valueOf(totalMinutes-1), width - rightMargin - 20, height - bottomMargin + 20);
         

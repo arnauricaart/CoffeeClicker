@@ -30,6 +30,8 @@ public class StatisticsManager {
      *
      * @param gameId the ID of the game for which statistics are requested
      * @return a list of integers representing the game's statistics
+     * @throws business.businessExceptions.DBGeneralException if a database error occurs during retrieval
+     * @throws business.businessExceptions.FileNotFound if the requested statistics are not found
      */
     public List<Integer> getStatsByGameId(int gameId) throws BusinessException {
         try {

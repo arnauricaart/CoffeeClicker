@@ -26,6 +26,8 @@ public class UserManager {
 
     /**
      * Constructs a UserManager and initializes the userDAO with a UserDBDAO implementation.
+     *
+     * @throws business.businessExceptions.DBGeneralException if persistence layer initialization fails.
      */
     public UserManager() throws business.businessExceptions.DBGeneralException {
         try {
@@ -60,6 +62,8 @@ public class UserManager {
      * @param email    the email address for the new user
      * @param password the password for the new user
      * @return true if registration was successful, false otherwise
+     * @throws business.businessExceptions.DBGeneralException if database error occurs during registration
+     * @throws business.businessExceptions.FileNotFound if required files are not found
      */
     public boolean register(String username, String email, String password) throws BusinessException {
         try{
@@ -77,6 +81,8 @@ public class UserManager {
      * @param input    the username or email provided during login
      * @param password the password provided during login
      * @return the email of the user if login is successful, null otherwise
+     * @throws business.businessExceptions.DBGeneralException if database error occurs during login
+     * @throws business.businessExceptions.FileNotFound if required files are not found
      */
     public String getCorreoFromLogin(String input, String password) throws BusinessException {
         try{
@@ -93,6 +99,8 @@ public class UserManager {
      *
      * @param username the username to check
      * @return true if the user exists, false otherwise
+     * @throws business.businessExceptions.DBGeneralException if database error occurs during check
+     * @throws business.businessExceptions.FileNotFound if required files are not found
      */
     public boolean checkUserExists(String username) throws BusinessException{
         try {
@@ -109,6 +117,7 @@ public class UserManager {
      *
      * @param email the email of the user to remove
      * @return true if the user was successfully removed, false otherwise
+     * @throws business.businessExceptions.DBGeneralException if database error occurs during removal
      */
     public boolean removeUserAndData(String email) throws BusinessException{
         try {
@@ -123,6 +132,8 @@ public class UserManager {
      *
      * @param email the email to check
      * @return true if the email exists, false otherwise
+     * @throws business.businessExceptions.DBGeneralException if database error occurs during check
+     * @throws business.businessExceptions.FileNotFound if required files are not found
      */
     public boolean checkEmailExists(String email) throws BusinessException{
         try{
@@ -134,6 +145,16 @@ public class UserManager {
         }
     }
 
+    /**
+     * Validates user registration inputs and registers the user if valid.
+     *
+     * @param username the username input
+     * @param email the email input
+     * @param password the password input
+     * @param confirmPassword confirmation of the password
+     * @return RegistrationResult with success status and error messages if any
+     * @throws BusinessException if an error occurs during registration checks or persistence
+     */
     public RegistrationResult validateAndRegister(String username, String email, String password, String confirmPassword) throws BusinessException {
         if (username.length() < 6) {
             return new RegistrationResult(false, "Username must be at least 6 characters long.");

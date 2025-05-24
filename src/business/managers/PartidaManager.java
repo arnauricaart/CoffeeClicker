@@ -33,6 +33,8 @@ public class PartidaManager {
      * Retrieves a list of games that have finished.
      *
      * @return a list of finished {@link Game} instances
+     * @throws business.businessExceptions.DBGeneralException if a database error occurs during retrieval
+     * @throws business.businessExceptions.FileNotFound if no finished games are found
      */
     public List<Game> getGamesFinished() throws BusinessException {
         try {
@@ -50,6 +52,8 @@ public class PartidaManager {
      * @param userSearch the username to filter the search
      * @param gameSearch the game name to filter the search
      * @return a list of {@link Game} objects matching the search criteria
+     * @throws business.businessExceptions.DBGeneralException if a database error occurs during search
+     * @throws business.businessExceptions.FileNotFound if no matching games are found
      */
     public List<Game> searchGamesFinished(String userSearch, String gameSearch) throws BusinessException {
         try{
@@ -67,12 +71,13 @@ public class PartidaManager {
      * @param userName the username associated with the new game
      * @param correo the email of the user
      * @return the ID of the newly created game
+     * @throws business.businessExceptions.DBGeneralException if a persistence error occurs during insertion
      */
     public int insertGame(String userName, String correo) throws business.businessExceptions.DBGeneralException {
         try {
             return gameDAO.insertGame(userName, correo);
         }catch(PersistenceException e){
-               throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
+            throw new business.businessExceptions.DBGeneralException(e.getExceptionMessage());
         }
     }
 
@@ -81,6 +86,8 @@ public class PartidaManager {
      *
      * @param userName the username of the player
      * @return the {@link Game} that is currently started for the user, or null if none is found
+     * @throws business.businessExceptions.DBGeneralException if a database error occurs during retrieval
+     * @throws business.businessExceptions.FileNotFound if no started game is found for the user
      */
     public Game getStartedGame(String userName) throws BusinessException {
         try {
@@ -97,6 +104,8 @@ public class PartidaManager {
      *
      * @param id the ID of the game
      * @return the {@link Game} with the specified ID, or null if not found
+     * @throws business.businessExceptions.DBGeneralException if a database error occurs during retrieval
+     * @throws business.businessExceptions.FileNotFound if no game with the specified ID is found
      */
     public Game getGameById(int id) throws BusinessException{
         try {

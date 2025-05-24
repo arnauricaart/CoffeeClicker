@@ -98,8 +98,7 @@ public class RemoveAccountView extends BaseForm {
                 cancelImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal cancel " + cancelNormalPath + ": " + e.getMessage());
-        }
+            new PopUpView("There was an error loading the image");        }
 
         if (cancelRolloverPath != null) {
             try {
@@ -113,8 +112,7 @@ public class RemoveAccountView extends BaseForm {
                     cancelButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover cancel " + cancelRolloverPath + ": " + e.getMessage());
-            }
+                new PopUpView("There was an error loading the image");            }
         }
 
         if (cancelImageLoaded) {
@@ -163,8 +161,7 @@ public class RemoveAccountView extends BaseForm {
                 removeImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal remove " + removeNormalPath + ": " + e.getMessage());
-        }
+            new PopUpView("There was an error loading the image");        }
 
         if (removeRolloverPath != null) {
             try {
@@ -178,8 +175,7 @@ public class RemoveAccountView extends BaseForm {
                     removeButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover remove " + removeRolloverPath + ": " + e.getMessage());
-            }
+                new PopUpView("There was an error loading the image");            }
         }
 
         if (removeImageLoaded) {

@@ -21,6 +21,8 @@ public final class Singleton {
 
     /**
      * Constructor of the class, it will use the ConfigJSONDAO class to get the information to make the connection to the database.
+     * @throws DBGeneralException if the JDBC driver is not found or the connection fails.
+     * @throws FileNotFound if the database configuration file is not found.
      */
     private Singleton() throws DBGeneralException, FileNotFound {
         ConfigJSONDAO config = new ConfigJSONDAO();
@@ -40,6 +42,8 @@ public final class Singleton {
     /**
      * This method is the one used in any other class to get an instance of the Singleton class.
      * @return Returns an instance of the class Singleton.
+     * @throws FileNotFound if the database configuration file is not found.
+     * @throws DBGeneralException if the JDBC driver is not found or the connection fails.
      */
     public static Singleton getInstance() throws FileNotFound, DBGeneralException {
 

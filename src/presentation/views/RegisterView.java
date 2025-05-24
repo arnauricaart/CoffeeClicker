@@ -62,14 +62,11 @@ public class RegisterView extends JFrame {
             ImageIcon backgroundImgIcon = new ImageIcon(backgroundRegisterPath);
             if (backgroundImgIcon.getIconWidth() > 0) {
                 backgroundLabel = new JLabel(backgroundImgIcon);
-                backgroundLabel.setBounds(0, 0, getWidth(), getHeight()); // Cubre todo el frame
+                backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
                 layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // Capa más profunda
-            } else {
-                getContentPane().setBackground(Color.decode("#FFFFFF")); // ToDo: Poner esto en los otros toDos
             }
         } catch (Exception e) {
-            getContentPane().setBackground(Color.decode("#FFFFFF")); // Fallback
-        }
+            new PopUpView("There was an error loading the image");        }
 
         // Hacemos el contentPane transparente y con layout null
         ((JPanel)getContentPane()).setOpaque(false);
@@ -145,7 +142,7 @@ public class RegisterView extends JFrame {
                 registerImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal register " + registerNormalPath + ": " + e.getMessage());
+            new PopUpView("There was an error loading the image");
         }
 
         if (registerRolloverPath != null) {
@@ -156,8 +153,7 @@ public class RegisterView extends JFrame {
                     registerButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover register " + registerRolloverPath + ": " + e.getMessage());
-            }
+                new PopUpView("There was an error loading the image");            }
         }
 
         if (registerImageLoaded) {

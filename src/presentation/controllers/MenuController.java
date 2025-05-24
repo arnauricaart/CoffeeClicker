@@ -134,6 +134,7 @@ public class MenuController implements MenuNavigator{
         try {
             Game partida = partidaManager.getStartedGame(correo);
             if (partida == null) {
+                menuView.setVisible(false);
                 newGameView = new NewGameView();
                 //newGameView.setNewGameButtonListener(e -> newGame());
 
@@ -145,7 +146,7 @@ public class MenuController implements MenuNavigator{
                     }
                 });
 
-                newGameView.setCancelButtonListener(e -> newGameView.dispose());
+                newGameView.setCancelButtonListener(e -> {newGameView.dispose(); menuView.setVisible(true);});
                 newGameView.setVisible(true);
             } else {
                 //AQUI YA EXISTE
@@ -163,6 +164,7 @@ public class MenuController implements MenuNavigator{
      */
     private void selectGameToShowStats() {
         try {
+            menuView.setVisible(false);
             showGamesView = new ShowGamesView(partidaManager.getGamesFinished(), true);
             showGamesView.setShowStatsActionListener(e -> {
                 int currentPartidaId = showGamesView.getCurrentPartidaId();
@@ -181,6 +183,9 @@ public class MenuController implements MenuNavigator{
                 }
                 showGamesView.updateTableData(searchResults);
             });
+
+            showGamesView.setReturnActionListener(e -> {showGamesView.dispose(); menuView.setVisible(true);});
+
             showGamesView.setVisible(true);
         }catch (BusinessException e){
             new PopUpView(e.getExceptionMessage());
@@ -222,8 +227,9 @@ public class MenuController implements MenuNavigator{
     private void deleteAccount() {
         // Lógica para eliminar la cuenta
         removeAccountView = new RemoveAccountView();
+        menuView.setVisible(false);
         removeAccountView.setRemoveAccButtonListener(e -> removeAccountFromDatabase());
-        removeAccountView.setCancelButtonListener(e -> removeAccountView.dispose());
+        removeAccountView.setCancelButtonListener(e -> {removeAccountView.dispose();menuView.setVisible(true);});
         removeAccountView.setVisible(true);
     }
 
@@ -234,7 +240,6 @@ public class MenuController implements MenuNavigator{
      * @return the newly created Game object, or null if creation failed
      */
     private Game newGame() {
-        //ToDo: Quitar los comentarios de debug y comprobar esta logica
         String gameName = newGameView.getNewGameName();
         if (gameName == null || gameName.isEmpty()) {
             // Usando tu MessageDialogs centralizado
@@ -260,10 +265,6 @@ public class MenuController implements MenuNavigator{
                 if (menuView != null) {
                     menuView.dispose();
                 }
-            } else {
-                // Si game es null aquí, significa que getGameById falló silenciosamente
-                // o el insertGame devolvió un ID que no se pudo encontrar.
-                // No establezcas game = null aquí porque ya lo es.
             }
 
         } catch (BusinessException e) {
@@ -275,12 +276,6 @@ public class MenuController implements MenuNavigator{
 
             }
             game = null; // Importante: asegurar que game sea null si hay excepción
-        } catch (RuntimeException re) { // Capturar otras RuntimeException que podrían venir de SQL_CRUD
-            re.printStackTrace();
-            game = null;
-        } catch (Exception ex) { // Captura genérica por si acaso
-            ex.printStackTrace();
-            game = null;
         }
         return game;
     }

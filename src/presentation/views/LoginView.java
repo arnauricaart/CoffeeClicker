@@ -61,7 +61,7 @@ public class LoginView extends JFrame {
 
             if (backgroundImgIcon.getIconWidth() > 0) {
                 backgroundLabel = new JLabel(backgroundImgIcon);
-                backgroundLabel.setBounds(0, 0, getWidth(), getHeight()); // Cubre todo el frame
+                backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
                 // Añadir la etiqueta de fondo a una capa inferior del JLayeredPane
                 layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // O JLayeredPane.FRAME_CONTENT_LAYER - 10
             } else {
@@ -132,7 +132,7 @@ public class LoginView extends JFrame {
                 loginImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal login " + loginNormalPath + ": " + e.getMessage());
+            new PopUpView("There was an error loading the image");
         }
 
         if (loginRolloverPath != null) {
@@ -143,7 +143,7 @@ public class LoginView extends JFrame {
                     loginButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover login " + loginRolloverPath + ": " + e.getMessage());
+                new PopUpView("There was an error loading the image");
             }
         }
 

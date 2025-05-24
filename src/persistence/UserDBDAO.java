@@ -3,6 +3,7 @@ package persistence;
 import persistence.persistenceExceptions.DBGeneralException;
 import persistence.persistenceExceptions.FileNotFound;
 import persistence.persistenceExceptions.PersistenceException;
+import presentation.views.PopUpView;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 public class UserDBDAO implements UserDAO{
     /**
      * Constructor of the class.
+     * @throws PersistenceException if the Singleton connection cannot be initialized.
      */
     public UserDBDAO() throws PersistenceException {
         Singleton.getInstance().getConn();
@@ -23,9 +25,9 @@ public class UserDBDAO implements UserDAO{
      * This method removes an user and all of its information.
      * @param email String with the User Mail.
      * @return Returns a boolean that will tell if everything went okey.
+     * @throws DBGeneralException if any of the delete operations fail or return an invalid result.
      */
     public boolean removeUserAndData(String email) throws DBGeneralException {
-        System.out.println("Remove user");
         String queryPartidaGenerador = "DELETE FROM partida_generador WHERE IdPartida IN (SELECT IdPartida FROM partida WHERE correo = ?)";
         ArrayList<String> values = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
@@ -62,7 +64,7 @@ public class UserDBDAO implements UserDAO{
 
         result = SQL_CRUD.CUD(queryUsers, values, types);
         if (result <= 0) {
-            System.out.println("error user");
+            throw new DBGeneralException();
         }
         return result > 0;
     }
@@ -73,6 +75,8 @@ public class UserDBDAO implements UserDAO{
      * @param email String with the User Mail.
      * @param password String with the User Password.
      * @return Returns a boolean that will tell if everything went okey.
+     * @throws FileNotFound if the database configuration file is not found.
+     * @throws DBGeneralException if the insert operation fails or the user already exists.
      */
     public boolean registerUser(String username, String email, String password) throws FileNotFound, DBGeneralException {
         if (checkUserExists(username)) return false;
@@ -93,6 +97,8 @@ public class UserDBDAO implements UserDAO{
      * This method checks if a user exists searching it by the User Name.
      * @param username String with the User Name that will be used in the search.
      * @return Returns a boolean that will tell if it exists or not.
+     * @throws FileNotFound if the database configuration file is not found.
+     * @throws DBGeneralException if a database error occurs during the select query.
      */
     public boolean checkUserExists(String username) throws FileNotFound, DBGeneralException {
         String query = "SELECT * FROM users WHERE Nombre = ?";
@@ -114,6 +120,8 @@ public class UserDBDAO implements UserDAO{
      * This method checks if a User Mail exists.
      * @param email String with the User Mail.
      * @return Returns a Boolean that will tell if the User Mail exists or not.
+     * @throws FileNotFound if the database configuration file is not found.
+     * @throws DBGeneralException if a database error occurs during the select query.
      */
     public boolean checkEmailExists(String email) throws FileNotFound, DBGeneralException {
         String query = "SELECT COUNT(*) FROM users WHERE Correo = ?";
@@ -137,6 +145,8 @@ public class UserDBDAO implements UserDAO{
      * @param userOrEmail String with the User Name or User Mail.
      * @param password String with the User Password.
      * @return Returns a String with the User Mail.
+     * @throws FileNotFound if the database configuration file is not found.
+     * @throws DBGeneralException if a database error occurs during the login check.
      */
     public String getCorreoFromLogin(String userOrEmail, String password) throws FileNotFound, DBGeneralException {
         String query = "SELECT Correo FROM users WHERE (Nombre = ? OR Correo = ?) AND Contrasena = ?";

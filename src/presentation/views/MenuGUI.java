@@ -26,7 +26,7 @@ public class MenuGUI extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // --- Panel Principal (Contenedor de todo) ---
+        // --- Panel Principal ---
         JPanel mainPanel = new JPanel(new BorderLayout(0, 0));
         mainPanel.setBackground(Color.WHITE);
 
@@ -265,7 +265,7 @@ public class MenuGUI extends JFrame {
         setVisible(true);
     }
 
-    // Ya no hay método configureButtonWithImages
+    // Ya no hay metodo configureButtonWithImages
 
     // Setters para Listeners
 

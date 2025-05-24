@@ -100,7 +100,7 @@ public class NewGameView extends BaseForm {
                 cancelImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal cancel (NewGameView) " + cancelNormalPath + ": " + e.getMessage());
+            new PopUpView("There was an error loading the image");
         }
 
         if (cancelRolloverPath != null) {
@@ -115,7 +115,7 @@ public class NewGameView extends BaseForm {
                     cancelButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover cancel (NewGameView) " + cancelRolloverPath + ": " + e.getMessage());
+                new PopUpView("There was an error loading the image");
             }
         }
 
@@ -159,7 +159,7 @@ public class NewGameView extends BaseForm {
                 newGameImageLoaded = true;
             }
         } catch (Exception e) {
-            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal start " + newGameNormalPath + ": " + e.getMessage());
+            new PopUpView("There was en error loading/finding the image.");
         }
 
         if (newGameRolloverPath != null) {
@@ -174,7 +174,7 @@ public class NewGameView extends BaseForm {
                     newGameButton.setRolloverEnabled(true);
                 }
             } catch (Exception e) {
-                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover start " + newGameRolloverPath + ": " + e.getMessage());
+                new PopUpView("There was an error loading the image");
             }
         }
 

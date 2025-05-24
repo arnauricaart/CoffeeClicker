@@ -23,6 +23,8 @@ public class SQL_CRUD {
      * @param values ArrayList with strings of the values used in the query.
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a ResultSet object that lets the user retrive the information that the query gave.
+     * @throws FileNotFound if the database connection file is not found.
+     * @throws DBGeneralException if a general database error occurs.
      */
     public static ResultSet Select(String query, ArrayList<String> values, ArrayList<String> tipos) throws FileNotFound, DBGeneralException {
         PreparedStatement pst;
@@ -50,7 +52,6 @@ public class SQL_CRUD {
                 }
             }
             res = pst.executeQuery();
-            System.out.println(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,12 +65,13 @@ public class SQL_CRUD {
      * @param tipos ArrayList with the data types of the values.
      * @param isInsert Boolean that lets the user know if the petition is an insert.
      * @return Returns a PreparedStatement object.
+     * @throws FileNotFound if the database connection file is not found.
+     * @throws DBGeneralException if a general database error occurs.
      */
     private static PreparedStatement CUDpreparedStament(String query, ArrayList<String> values, ArrayList<String> tipos, boolean isInsert) throws FileNotFound, DBGeneralException {
         PreparedStatement pst;
         Singleton s1 = Singleton.getInstance();
         try {
-            System.out.println(query);
             if (isInsert) {
                 pst = s1.getConn().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             } else {
@@ -110,6 +112,7 @@ public class SQL_CRUD {
      * @param values ArrayList with strings of the values used in the query.
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a number with the status of the petition.
+     * @throws DBGeneralException if a general database error occurs.
      */
     public static int CUD(String query, ArrayList<String> values, ArrayList<String> tipos) throws DBGeneralException {
         int res;
@@ -130,6 +133,7 @@ public class SQL_CRUD {
      * @param values ArrayList with strings of the values used in the query.
      * @param tipos ArrayList with the data types of the values.
      * @return Returns a number with the id of the new register generated.
+     * @throws PersistenceException if a persistence-level error occurs.
      */
     public static int CUDReturningNextval(String query, ArrayList<String> values, ArrayList<String> tipos) throws PersistenceException {
         try {

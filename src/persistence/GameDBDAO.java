@@ -25,6 +25,8 @@ public class GameDBDAO implements GameDAO{
     /**
      * This method gets a list of games finished with their user from the database.
      * @return Returns a List object with the finished games.
+     * @throws FileNotFound If the configuration file cannot be found.
+     * @throws DBGeneralException If there is a general database error.
      */
     public List<Game> getGamesFinishedForStats() throws FileNotFound, DBGeneralException {// throws StatsNotFound {
         List<Game> games = new ArrayList<>();
@@ -53,18 +55,20 @@ public class GameDBDAO implements GameDAO{
     /**
      * This method gets a list of the games finished by a user name or game name from the database.
      * @param userNameSearch Name of the user that will be used in the search.
-     * @param gameNameSearch Name of the game tha will be used in the search.
+     * @param gameNameSearch Name of the game that will be used in the search.
      * @return Returns a List object with the finished games.
+     * @throws FileNotFound If the configuration file cannot be found.
+     * @throws DBGeneralException If there is a general database error.
      */
     public List<Game> searchGamesFinished(String userNameSearch, String gameNameSearch) throws FileNotFound, DBGeneralException {// throws GameNotFound {
         List<Game> games = new ArrayList<>();
 
         String query = "SELECT p.*, u.Nombre as UserName FROM partida p " +
-                      "JOIN users u ON p.Correo = u.Correo " +
-                      "WHERE p.Terminada = 1 " +
-                      "AND (u.Nombre LIKE ? OR ? IS NULL) " +
-                      "AND (p.Nombre LIKE ? OR ? IS NULL)";
-                      
+                "JOIN users u ON p.Correo = u.Correo " +
+                "WHERE p.Terminada = 1 " +
+                "AND (u.Nombre LIKE ? OR ? IS NULL) " +
+                "AND (p.Nombre LIKE ? OR ? IS NULL)";
+
         ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> tipos = new ArrayList<String>();
 
@@ -72,7 +76,7 @@ public class GameDBDAO implements GameDAO{
         values.add(userNameSearch == null || userNameSearch.isEmpty() ? null : "%" + userNameSearch + "%");
         values.add(gameNameSearch == null || gameNameSearch.isEmpty() ? null : "%" + gameNameSearch + "%");
         values.add(gameNameSearch == null || gameNameSearch.isEmpty() ? null : "%" + gameNameSearch + "%");
-        
+
         tipos.add("String");
         tipos.add("String");
         tipos.add("String");
@@ -98,6 +102,8 @@ public class GameDBDAO implements GameDAO{
      * This method gets a Game instance of the started game from a user.
      * @param correo String with the User Mail that will be used in the search.
      * @return Returns a Game instance.
+     * @throws FileNotFound If the configuration file cannot be found.
+     * @throws DBGeneralException If there is a general database error.
      */
     @Override
     public Game getStartedGame(String correo) throws FileNotFound, DBGeneralException { //throws GameNotFound
@@ -112,17 +118,17 @@ public class GameDBDAO implements GameDAO{
         try {
             if(rs.next()) {
                 return new Game(
-                    rs.getInt("IdPartida"),
-                    rs.getString("Nombre"),
-                    rs.getDouble("Cafes"),
-                    rs.getString("UltimoAcceso"),
-                    rs.getInt("numCoffeeMachine"),
-                    rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
-                    rs.getInt("numUpgradeCoffeeMachine"),
-                    rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe"),
-                    rs.getInt("minDuration")
+                        rs.getInt("IdPartida"),
+                        rs.getString("Nombre"),
+                        rs.getDouble("Cafes"),
+                        rs.getString("UltimoAcceso"),
+                        rs.getInt("numCoffeeMachine"),
+                        rs.getInt("numBarista"),
+                        rs.getInt("numCafe"),
+                        rs.getInt("numUpgradeCoffeeMachine"),
+                        rs.getInt("numUpgradeBarista"),
+                        rs.getInt("numUpgradeCafe"),
+                        rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
@@ -135,6 +141,8 @@ public class GameDBDAO implements GameDAO{
      * This method gets a Game instance with its Game Id.
      * @param gameID Number of the Game Id that will be used in the search.
      * @return Returns a Game instance.
+     * @throws FileNotFound If the configuration file cannot be found.
+     * @throws DBGeneralException If there is a general database error.
      */
     @Override
     public Game getGameById(int gameID) throws FileNotFound, DBGeneralException {// throws GameNotFound {
@@ -149,17 +157,17 @@ public class GameDBDAO implements GameDAO{
         try {
             if(rs.next()) {
                 return new Game(
-                    rs.getInt("IdPartida"),
-                    rs.getString("Nombre"),
-                    rs.getDouble("Cafes"),
-                    rs.getString("UltimoAcceso"),
-                    rs.getInt("numCoffeeMachine"),
-                    rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
-                    rs.getInt("numUpgradeCoffeeMachine"),
-                    rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe"),
-                    rs.getInt("minDuration")
+                        rs.getInt("IdPartida"),
+                        rs.getString("Nombre"),
+                        rs.getDouble("Cafes"),
+                        rs.getString("UltimoAcceso"),
+                        rs.getInt("numCoffeeMachine"),
+                        rs.getInt("numBarista"),
+                        rs.getInt("numCafe"),
+                        rs.getInt("numUpgradeCoffeeMachine"),
+                        rs.getInt("numUpgradeBarista"),
+                        rs.getInt("numUpgradeCafe"),
+                        rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
@@ -173,9 +181,11 @@ public class GameDBDAO implements GameDAO{
      * @param gameName String of the Game Name that will be used in the search.
      * @param userId String of the User Id that will be used in the search.
      * @return Returns a Game instance.
+     * @throws FileNotFound If the configuration file cannot be found.
+     * @throws DBGeneralException If there is a general database error.
      */
     @Override
-    public Game getGameByNameAndGame(String gameName, String userId) throws FileNotFound, DBGeneralException {// throws GameNotFound {
+    public Game getGameByNameAndGame(String gameName, String userId) throws FileNotFound, DBGeneralException {
         String query = "SELECT * FROM partida WHERE NombrePartida=? AND Nombre=?";
         ArrayList<String> values = new ArrayList<String>();
         values.add(gameName);
@@ -188,17 +198,17 @@ public class GameDBDAO implements GameDAO{
         try {
             if(rs.next()) {
                 return new Game(
-                    rs.getInt("IdPartida"),
-                    rs.getString("Nombre"),
-                    rs.getDouble("Cafes"),
-                    rs.getString("UltimoAcceso"),
-                    rs.getInt("numCoffeeMachine"),
-                    rs.getInt("numBarista"),
-                    rs.getInt("numCafe"),
-                    rs.getInt("numUpgradeCoffeeMachine"),
-                    rs.getInt("numUpgradeBarista"),
-                    rs.getInt("numUpgradeCafe"),
-                    rs.getInt("minDuration")
+                        rs.getInt("IdPartida"),
+                        rs.getString("Nombre"),
+                        rs.getDouble("Cafes"),
+                        rs.getString("UltimoAcceso"),
+                        rs.getInt("numCoffeeMachine"),
+                        rs.getInt("numBarista"),
+                        rs.getInt("numCafe"),
+                        rs.getInt("numUpgradeCoffeeMachine"),
+                        rs.getInt("numUpgradeBarista"),
+                        rs.getInt("numUpgradeCafe"),
+                        rs.getInt("minDuration")
                 );
             }
         } catch (SQLException e) {
@@ -210,8 +220,9 @@ public class GameDBDAO implements GameDAO{
     /**
      * This method makes a register in the database to make a new game with a Game Name and the Users Mail.
      * @param gameName String of the Game Name that will be used in the register to the database.
-     * @param correo Stirng of the User Mail that will be used in the register to the database.
+     * @param correo String of the User Mail that will be used in the register to the database.
      * @return Returns a number with the Game Id generated by the database.
+     * @throws DBGeneralException If there is a general database error.
      */
     public int insertGame(String gameName, String correo) throws DBGeneralException {
         try {
@@ -234,8 +245,9 @@ public class GameDBDAO implements GameDAO{
     }
 
     /**
-     * This methos updates the game state.
+     * This method updates the game state.
      * @param game Instance of the game that will be updated.
+     * @throws DBGeneralException If there is a general database error.
      */
     public void updateGameState(Game game) throws DBGeneralException {
         String query = "UPDATE partida SET " +
@@ -273,4 +285,3 @@ public class GameDBDAO implements GameDAO{
 
     }
 }
-
