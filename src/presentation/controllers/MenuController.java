@@ -234,6 +234,7 @@ public class MenuController implements MenuNavigator{
      * @return the newly created Game object, or null if creation failed
      */
     private Game newGame() {
+        //ToDo: Quitar los comentarios de debug y comprobar esta logica
         String gameName = newGameView.getNewGameName();
         if (gameName == null || gameName.isEmpty()) {
             // Usando tu MessageDialogs centralizado

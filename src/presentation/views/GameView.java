@@ -573,7 +573,6 @@ public class GameView extends JFrame {
                         "Gameplay Basics:\n" +
                         "--------------------\n" +
                         "- Manual Clicks: Click the large coffee cup icon on the left to manually produce 1 coffee per click.\n" +
-                        "  This can be upgraded later.\n" +
                         "- Coffee Counter: Your current coffee total is displayed at the top-left. \n" +
                         "  Below it, you'll see your 'coffees per second' rate from automatic generators.\n\n" +
                         "The Shop (Right Panel):\n" +
@@ -613,7 +612,7 @@ public class GameView extends JFrame {
                         "- End Game: Finishes your current game. All game data (coffees, duration) is saved \n" +
                         "  for the statistics screen (accessible from the main menu).\n" +
                         "  After ending, you'll need to start a new game from scratch if you wish to play again.\n\n" +
-                        "The game has no predefined end; play as long as you like!";
+                        "The game has no predefined end, play as long as you like!";
 
         JTextArea textArea = new JTextArea(instructionsMessage);
         textArea.setEditable(false);
