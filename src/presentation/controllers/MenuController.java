@@ -90,7 +90,7 @@ public class MenuController implements MenuNavigator{
             try {
                 startNewGame();
             } catch (GameNotFound ex) {
-                throw new RuntimeException(ex);
+                new PopUpView(ex.getExceptionMessage());
             }
         });
         this.menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
@@ -111,7 +111,7 @@ public class MenuController implements MenuNavigator{
                 try {
                     startNewGame();
                 } catch (GameNotFound ex) {
-                    throw new RuntimeException(ex);
+                    new PopUpView(ex.getExceptionMessage());
                 }
             });
             menuView.setStatisticsButtonListener(e -> selectGameToShowStats());
@@ -304,7 +304,6 @@ public class MenuController implements MenuNavigator{
                 removeAccountView.dispose();
                 menuView.dispose();
                 LoginController loginController = new LoginController();
-                loginController.start();
             } else {
                 removeAccountView.showRemoveUserMessage(false);
             }
