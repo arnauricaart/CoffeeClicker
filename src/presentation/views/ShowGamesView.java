@@ -80,12 +80,10 @@ public class ShowGamesView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Create left panel for game list
+        // Create left
         JPanel leftPanel = new JPanel(new BorderLayout());
 
-        // --- Nuevo botón "Volver al menú" ---
         returnButton = new JButton("Volver al menú");
-        // Añade tu lógica aquí
 
 
         // Search panel
@@ -104,7 +102,6 @@ public class ShowGamesView extends JFrame {
         searchPanel.add(gameSearchField);
         searchPanel.add(searchButton);
 
-// --- Contenedor para botón + panel de búsqueda ---
         JPanel topLeftPanel = new JPanel();
         topLeftPanel.setLayout(new BorderLayout());
         topLeftPanel.add(returnButton, BorderLayout.NORTH);
@@ -123,7 +120,7 @@ public class ShowGamesView extends JFrame {
             
             @Override
             public Class<?> getColumnClass(int column) {
-                if (column == 0 || column == 3) { // IdPartida and Coffees columns
+                if (column == 0 || column == 3) {
                     return Integer.class;
                 }
                 return String.class;
@@ -174,7 +171,7 @@ public class ShowGamesView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(gameTable);
         leftPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Create right panel for stats
+        // Create right panel
         statsPanel = new JPanel(new BorderLayout());
         statsPanel.setBackground(Color.WHITE);
         JLabel placeholderLabel = new JLabel("Select a game to view statistics", SwingConstants.CENTER);

@@ -46,43 +46,38 @@ public class RegisterView extends JFrame {
     public RegisterView() {
         setTitle("Register");
         setSize(1280, 720);
-        // setLayout(null); // No en el contentPane directamente si usamos JLayeredPane
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        // getContentPane().setBackground(Color.decode("#FFFFFF")); // El contentPane será transparente
 
-        // Obtenemos el JLayeredPane
         JLayeredPane layeredPane = getLayeredPane();
-        layeredPane.setLayout(null); // El layeredPane sí puede tener layout null
+        layeredPane.setLayout(null);
 
-        // --- Configuración de la imagen de fondo ---
-        String backgroundRegisterPath = "res/register.jpg"; // Ruta de tu imagen de fondo
+        // Background IMAGE
+        String backgroundRegisterPath = "res/register.jpg";
         try {
             ImageIcon backgroundImgIcon = new ImageIcon(backgroundRegisterPath);
             if (backgroundImgIcon.getIconWidth() > 0) {
                 backgroundLabel = new JLabel(backgroundImgIcon);
                 backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
-                layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // Capa más profunda
+                layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE));
             }
         } catch (Exception e) {
             new PopUpView("There was an error loading the image");        }
 
-        // Hacemos el contentPane transparente y con layout null
         ((JPanel)getContentPane()).setOpaque(false);
         getContentPane().setLayout(null);
 
-
         JLabel title = new JLabel("REGISTER", SwingConstants.CENTER);
-        title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled" si quieres
+        title.setFont(new Font("Pixeled", Font.BOLD, 25));
         title.setBounds(440, 60, 400, 50);
-        title.setForeground(Color.decode("#000000")); // Asegura contraste
+        title.setForeground(Color.decode("#000000"));
         getContentPane().add(title);
 
         JLabel userLabel = new JLabel("Username:");
         userLabel.setBounds(440, 120, 400, 30);
         userLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        userLabel.setForeground(Color.decode("#000000")); // Asegura contraste
+        userLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(userLabel);
 
         usernameField = new JTextField();
@@ -93,7 +88,7 @@ public class RegisterView extends JFrame {
         JLabel emailLabel = new JLabel("Email:");
         emailLabel.setBounds(440, 200, 400, 30);
         emailLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        emailLabel.setForeground(Color.decode("#000000")); // Asegura contraste
+        emailLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(emailLabel);
 
         emailField = new JTextField();
@@ -104,7 +99,7 @@ public class RegisterView extends JFrame {
         JLabel passLabel = new JLabel("Password:");
         passLabel.setBounds(440, 280, 400, 30);
         passLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        passLabel.setForeground(Color.decode("#000000")); // Asegura contraste
+        passLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(passLabel);
 
         passwordField = new JPasswordField();
@@ -115,7 +110,7 @@ public class RegisterView extends JFrame {
         JLabel repassLabel = new JLabel("Confirm Password:");
         repassLabel.setBounds(440, 360, 400, 30);
         repassLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        repassLabel.setForeground(Color.decode("#000000")); // Asegura contraste
+        repassLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(repassLabel);
 
         repasswordField = new JPasswordField();
@@ -123,13 +118,13 @@ public class RegisterView extends JFrame {
         repasswordField.setBackground(Color.decode("#D9D9D9"));
         getContentPane().add(repasswordField);
 
-        // --- Configuración del registerButton con imágenes ---
+        // Button IMAGE
         registerButton = new JButton();
-        Dimension registerButtonSize = new Dimension(300, 50); // Tamaño original del botón
+        Dimension registerButtonSize = new Dimension(300, 50);
         registerButton.setPreferredSize(registerButtonSize);
         registerButton.setMinimumSize(registerButtonSize);
         registerButton.setMaximumSize(registerButtonSize);
-        registerButton.setBounds(490, 450, registerButtonSize.width, registerButtonSize.height); // Posición original
+        registerButton.setBounds(490, 450, registerButtonSize.width, registerButtonSize.height);
 
         String registerNormalPath = "res/button_register.png";
         String registerRolloverPath = "res/button_register2.png";
@@ -162,9 +157,8 @@ public class RegisterView extends JFrame {
             registerButton.setContentAreaFilled(false);
             registerButton.setOpaque(false);
         } else {
-            // Fallback si la imagen normal no se cargó
             registerButton.setText("Register (Error)");
-            registerButton.setBackground(Color.decode("#9E6B57")); // Color original de fallback
+            registerButton.setBackground(Color.decode("#9E6B57"));
             registerButton.setForeground(Color.WHITE);
             registerButton.setOpaque(true);
             registerButton.setContentAreaFilled(true);
@@ -172,12 +166,12 @@ public class RegisterView extends JFrame {
         }
         registerButton.setFocusPainted(false);
         registerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        getContentPane().add(registerButton); // Añadir el botón al contentPane
+        getContentPane().add(registerButton);
 
 
         goToLogin = new JLabel("Already registered? Click here", SwingConstants.CENTER);
         goToLogin.setBounds(515, 510, 250, 30);
-        goToLogin.setForeground(Color.decode("#000000")); // Asegura contraste
+        goToLogin.setForeground(Color.decode("#000000"));
         goToLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         getContentPane().add(goToLogin);
     }
@@ -211,7 +205,7 @@ public class RegisterView extends JFrame {
      * @param al Action Listener that tells the button what to do when pressed.
      */
     public void setRegisterButtonListener(ActionListener al) {
-        if (registerButton != null) { // Buena práctica verificar
+        if (registerButton != null) {
             registerButton.addActionListener(al);
         }
     }
@@ -234,13 +228,8 @@ public class RegisterView extends JFrame {
      * @param b Boolean that will tell this method if the register went succesfully or not.
      */
     public void showRegisterResultMessage(boolean b) {
-        // Podrías querer mostrar un JOptionPane aquí también para el éxito.
-        // Por ejemplo:
         if (b) {
             JOptionPane.showMessageDialog(this, "Registration successful! You can now login.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            // El error ya se muestra con showErrorMessage, así que este else podría no ser necesario
-            // o podrías tener un mensaje de error genérico aquí si showErrorMessage no fue llamado antes.
         }
     }
 }

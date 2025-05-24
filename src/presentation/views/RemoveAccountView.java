@@ -8,28 +8,27 @@ import java.awt.event.ActionListener;
  * This class extends from BaseForm. This class implements a view to let the user remove his account.
  */
 public class RemoveAccountView extends BaseForm {
-    // Estas constantes de color ya no se usarán para los botones si tienen imágenes,
-    // pero las dejamos por si el título o el fondo del passwordField las necesitan
-    // o para los botones de fallback si las imágenes no cargan.
+
     /**
      * Instance of the Color class that will set the text color.
      */
     private static final Color TEXT_COLOR = Color.decode("#000000");
+
     /**
      * Instance of the Color class that will set the secondary Color.
      */
-    private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9"); // Usado para el fondo del passwordField
-    // private static final Color BUTTON_COLOR = Color.decode("#9E6B57"); // No se usa para removeButton con imagen
-    // private static final Color PRIMARY_COLOR = Color.WHITE; // No se usa para el texto de removeButton con imagen
+    private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9");
 
     /**
      * JButton that will remove the account.
      */
     private JButton removeButton;
+
     /**
      * JButton that will cancel the account removing.
      */
     private JButton cancelButton;
+
     /**
      * JPasswordField where the user will have to put his password to be able to delete the account.
      */
@@ -39,7 +38,7 @@ public class RemoveAccountView extends BaseForm {
      * Constructor of the class. It sets the view's title and initiates the components of the view.
      */
     public RemoveAccountView() {
-        super("Remove Account"); // Llama al constructor de BaseForm
+        super("Remove Account");
         initComponents();
     }
 
@@ -47,39 +46,38 @@ public class RemoveAccountView extends BaseForm {
      * This method will initiate the components of the view.
      */
     private void initComponents() {
-        // Las dimensiones y posiciones se mantienen como las tenías
+
         int formWidth = 400;
         int fieldWidth = 400;
         int fieldHeight = 40;
         int buttonWidth = 120;
         int buttonHeight = 50;
-        int centerX = (1280 - fieldWidth) / 2; // Asumiendo que BaseForm tiene 1280 de ancho
+        int centerX = (1280 - fieldWidth) / 2;
         int topY = 120;
 
+        // Title REMOVE ACCOUNT
         JLabel title = new JLabel("REMOVE ACCOUNT", SwingConstants.CENTER);
-        title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled"
+        title.setFont(new Font("Pixeled", Font.BOLD, 25));
         title.setBounds(centerX, topY, formWidth, 50);
         title.setForeground(TEXT_COLOR);
         add(title);
 
         JLabel userLabel = new JLabel("Password:");
         userLabel.setBounds(centerX, topY + 70, formWidth, 30);
-        userLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        userLabel.setFont(new Font("Arial", Font.BOLD, 16));
         add(userLabel);
 
         passwordField = new JPasswordField();
         passwordField.setBounds(centerX, topY + 110, fieldWidth, fieldHeight);
-        passwordField.setBackground(SECONDARY_COLOR); // Fondo original para el campo de contraseña
+        passwordField.setBackground(SECONDARY_COLOR);
         add(passwordField);
 
         int buttonY = topY + 170;
         int spacing = 20;
-        int buttonsStartX = centerX + (fieldWidth - (buttonWidth * 2 + spacing)) / 2; // Para centrar el par de botones
+        int buttonsStartX = centerX + (fieldWidth - (buttonWidth * 2 + spacing)) / 2;
 
-        // --- Configuración del cancelButton con imágenes ---
         cancelButton = new JButton();
         Dimension cancelBtnSize = new Dimension(buttonWidth, buttonHeight);
-        // No establecemos setPreferredSize/setMin/setMax aquí porque usamos setBounds
         cancelButton.setBounds(buttonsStartX, buttonY, cancelBtnSize.width, cancelBtnSize.height);
 
         String cancelNormalPath = "res/button_cancel.png";
@@ -89,11 +87,6 @@ public class RemoveAccountView extends BaseForm {
         try {
             ImageIcon icon = new ImageIcon(cancelNormalPath);
             if (icon.getIconWidth() > 0) {
-                // Si las imágenes no son exactamente buttonWidth x buttonHeight, descomenta y ajusta el escalado:
-                // if (icon.getIconWidth() != cancelBtnSize.width || icon.getIconHeight() != cancelBtnSize.height) {
-                //    Image scaledImg = icon.getImage().getScaledInstance(cancelBtnSize.width, cancelBtnSize.height, Image.SCALE_SMOOTH);
-                //    icon = new ImageIcon(scaledImg);
-                // }
                 cancelButton.setIcon(icon);
                 cancelImageLoaded = true;
             }
@@ -104,10 +97,6 @@ public class RemoveAccountView extends BaseForm {
             try {
                 ImageIcon rIcon = new ImageIcon(cancelRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
-                    // if (rIcon.getIconWidth() != cancelBtnSize.width || rIcon.getIconHeight() != cancelBtnSize.height) {
-                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(cancelBtnSize.width, cancelBtnSize.height, Image.SCALE_SMOOTH);
-                    //    rIcon = new ImageIcon(scaledRollover);
-                    // }
                     cancelButton.setRolloverIcon(rIcon);
                     cancelButton.setRolloverEnabled(true);
                 }
@@ -120,18 +109,10 @@ public class RemoveAccountView extends BaseForm {
             cancelButton.setBorderPainted(false);
             cancelButton.setContentAreaFilled(false);
             cancelButton.setOpaque(false);
-            // Si el texto "Cancel" está en la imagen, no necesitas button.setText("Cancel");
-            // Si quieres texto SOBRE la imagen:
-            // cancelButton.setText("Cancel");
-            // cancelButton.setFont(new Font("Pixeled", Font.BOLD, 12)); // Ajusta fuente y tamaño
-            // cancelButton.setForeground(Color.BLACK_OR_WHITE); // Ajusta color
-            // cancelButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            // cancelButton.setVerticalTextPosition(SwingConstants.CENTER);
         } else {
-            // Fallback si la imagen normal no se cargó
             cancelButton.setText("Cancel (Error)");
-            cancelButton.setBackground(SECONDARY_COLOR); // Color original de fallback
-            cancelButton.setForeground(TEXT_COLOR);      // Color de texto original
+            cancelButton.setBackground(SECONDARY_COLOR);
+            cancelButton.setForeground(TEXT_COLOR);
             cancelButton.setOpaque(true);
             cancelButton.setContentAreaFilled(true);
             cancelButton.setBorder(BorderFactory.createEtchedBorder());
@@ -141,7 +122,7 @@ public class RemoveAccountView extends BaseForm {
         add(cancelButton);
 
 
-        // --- Configuración del removeButton con imágenes ---
+        // Button IMAGES
         removeButton = new JButton();
         Dimension removeBtnSize = new Dimension(buttonWidth, buttonHeight);
         removeButton.setBounds(cancelButton.getX() + buttonWidth + spacing, buttonY, removeBtnSize.width, removeBtnSize.height);
@@ -153,10 +134,6 @@ public class RemoveAccountView extends BaseForm {
         try {
             ImageIcon icon = new ImageIcon(removeNormalPath);
             if (icon.getIconWidth() > 0) {
-                // if (icon.getIconWidth() != removeBtnSize.width || icon.getIconHeight() != removeBtnSize.height) {
-                //    Image scaledImg = icon.getImage().getScaledInstance(removeBtnSize.width, removeBtnSize.height, Image.SCALE_SMOOTH);
-                //    icon = new ImageIcon(scaledImg);
-                // }
                 removeButton.setIcon(icon);
                 removeImageLoaded = true;
             }
@@ -167,10 +144,6 @@ public class RemoveAccountView extends BaseForm {
             try {
                 ImageIcon rIcon = new ImageIcon(removeRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
-                    // if (rIcon.getIconWidth() != removeBtnSize.width || rIcon.getIconHeight() != removeBtnSize.height) {
-                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(removeBtnSize.width, removeBtnSize.height, Image.SCALE_SMOOTH);
-                    //    rIcon = new ImageIcon(scaledRollover);
-                    // }
                     removeButton.setRolloverIcon(rIcon);
                     removeButton.setRolloverEnabled(true);
                 }
@@ -183,12 +156,8 @@ public class RemoveAccountView extends BaseForm {
             removeButton.setBorderPainted(false);
             removeButton.setContentAreaFilled(false);
             removeButton.setOpaque(false);
-            // Si el texto "Remove" está en la imagen, no necesitas button.setText("Remove");
         } else {
-            // Fallback si la imagen normal no se cargó
             removeButton.setText("Remove (Error)");
-            //removeButton.setBackground(BUTTON_COLOR);    // Color original de fallback
-            //removeButton.setForeground(PRIMARY_COLOR); // Color de texto original
             removeButton.setOpaque(true);
             removeButton.setContentAreaFilled(true);
             removeButton.setBorder(BorderFactory.createEtchedBorder());

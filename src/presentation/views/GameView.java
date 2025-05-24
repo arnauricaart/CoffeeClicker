@@ -1,4 +1,4 @@
-// Archivo: presentation/views/GameView.java
+
 package presentation.views;
 
 import javax.swing.*;
@@ -17,30 +17,30 @@ import java.io.File;
  */
 public class GameView extends JFrame {
 
-    // UI components used in different parts of the interface
+    // UI components used
     private JLabel counterLabel, perSecLabel;
     private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton;
     private JButton coffeeMachineUpgradeButton, baristaUpgradeButton, cafeUpgradeButton;
     private JButton pauseButton, endGameButton;
-    private JTextArea messageText; // JTextArea to display contextual messages to the user
+    private JTextArea messageText;
 
-    // Fonts used for various UI elements
+    // Fonts used
     private Font titleFont, subtitleFont, mainTextFont, smallTextFont, buttonShopFont, tableHeaderFont, tableContentFont;
 
-    // Table and related components to show generator statistics
+    // Table
     private JTable generatorStatsTable;
     private DefaultTableModel generatorStatsTableModel;
     private JScrollPane generatorStatsScrollPane;
-    private final String[] generatorTableColumns = { // Column names for the generator statistics table
-            "Name", "Qty", "Unit Prod", "Total Prod", "% Overall"
-    };
-    // Labels for titles and sections
-    private JLabel generatorTableTitleLabel; // Title label for the generator statistics table
-    private JLabel coffeeMakersTitleLabel, upgradesTitleLabel; // Sub-titles for shop sections
-    private JLabel shopMainTitleLabel; // Main title for the shop panel
-    private JLabel itemDetailsTitleLabel; // Title for the item details/message area
+    private final String[] generatorTableColumns = {"Name", "Qty", "Unit Prod", "Total Prod", "% Overall"};
 
-    private JButton instructionsButton; // NUEVA DECLARACIÓN DEL BOTÓN DE INSTRUCCIONES
+    // Titles
+    private JLabel generatorTableTitleLabel;
+    private JLabel coffeeMakersTitleLabel, upgradesTitleLabel;
+    private JLabel shopMainTitleLabel;
+    private JLabel itemDetailsTitleLabel;
+
+    // Instrucition Button
+    private JButton instructionsButton;
 
 
     /**
@@ -74,7 +74,6 @@ public class GameView extends JFrame {
         mainTextFont = new Font("Pixeled", Font.PLAIN, 22);
         smallTextFont = new Font("Pixeled", Font.PLAIN, 13);
         buttonShopFont = new Font("Pixeled", Font.BOLD, 12);
-
         tableHeaderFont = new Font("SansSerif", Font.BOLD, 12);
         tableContentFont = new Font("SansSerif", Font.PLAIN, 11);
     }
@@ -90,7 +89,7 @@ public class GameView extends JFrame {
         this.getContentPane().setBackground(Color.white);
         this.setLayout(null);
         this.setResizable(false);
-        this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
+        this.setLocationRelativeTo(null);
 
         // Main panels for layout
         JPanel leftPanel = new JPanel(null);
@@ -111,7 +110,7 @@ public class GameView extends JFrame {
         rightPanel.setOpaque(true);
         this.add(rightPanel);
 
-        // Left Panel: Coffee counter, per second, and main coffee button
+        // Coffee counter, per second, and main coffee button.
         counterLabel = new JLabel("0 coffees");
         counterLabel.setForeground(Color.black);
         counterLabel.setFont(mainTextFont);
@@ -124,87 +123,50 @@ public class GameView extends JFrame {
         perSecLabel.setBounds(20, 70, 360, 30);
         leftPanel.add(perSecLabel);
 
-        ImageIcon originalIcon = new ImageIcon("res/coffee.png");
-        if (originalIcon.getIconWidth() == -1) {
-            coffeeButton = new JButton("Click Coffee");
-            coffeeButton.setFont(mainTextFont);
-        } else {
-            Image scaledImage = originalIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-            coffeeButton = new JButton(new ImageIcon(scaledImage));
-        }
+        coffeeButton = new JButton();
         coffeeButton.setBounds(50, 180, 300, 300);
-        coffeeButton.setOpaque(false);
-        coffeeButton.setContentAreaFilled(false);
-        coffeeButton.setBorderPainted(false);
-        coffeeButton.setBorder(null); // Eliminado borde por defecto
+        coffeeButton.setOpaque(true);
+        coffeeButton.setContentAreaFilled(true);
+        coffeeButton.setBorderPainted(true);
 
-        Color brownBorderColor = Color.decode("#9E6B57"); // Borde marrón para el botón de café
-        int borderThickness = 3;
-        coffeeButton.setBorder(BorderFactory.createLineBorder(brownBorderColor, borderThickness));
+        try {
+            ImageIcon normalCoffeeIcon = new ImageIcon("res/click_coffee.png");
+            ImageIcon rolloverCoffeeIcon = new ImageIcon("res/click_coffee2.png");
 
+            if (normalCoffeeIcon.getIconWidth() > 0) {
+                coffeeButton.setIcon(normalCoffeeIcon);
+                if (rolloverCoffeeIcon.getIconWidth() > 0) {
+                    coffeeButton.setRolloverIcon(rolloverCoffeeIcon);
+                    coffeeButton.setRolloverEnabled(true);
+                }
+                coffeeButton.setText("");
+                coffeeButton.setOpaque(false);
+                coffeeButton.setContentAreaFilled(false);
+                coffeeButton.setBorderPainted(false);
+                coffeeButton.setBorder(null);
+            } else {
+                new PopUpView("Error: Main coffee image could not be loaded.");
+            }
+        } catch (Exception e) {
+            new PopUpView("Exception loading main coffee image.");
+        }
         leftPanel.add(coffeeButton);
 
-        // --- INICIO: CÓDIGO AÑADIDO PARA EL BOTÓN DE INSTRUCCIONES ---
         instructionsButton = new JButton("Instructions");
         instructionsButton.setFont(this.buttonShopFont);
         instructionsButton.setFocusPainted(false);
         instructionsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        Dimension instructionsButtonDim = new Dimension(150, 36);
-        instructionsButton.setPreferredSize(instructionsButtonDim);
-        instructionsButton.setMinimumSize(instructionsButtonDim);
-        instructionsButton.setMaximumSize(instructionsButtonDim);
-        instructionsButton.setBounds(20, leftPanel.getHeight() - instructionsButtonDim.height - 20, instructionsButtonDim.width, instructionsButtonDim.height);
+        instructionsButton.setBounds(20, 595, 169, 36);
+        instructionsButton.setBackground(Color.LIGHT_GRAY);
+        instructionsButton.setForeground(Color.BLACK);
+        instructionsButton.setOpaque(true);
+        instructionsButton.setContentAreaFilled(true);
+        instructionsButton.setBorderPainted(true);
 
-        String instructionsNormalPath = "res/button_instructions.png";
-        String instructionsRolloverPath = "res/button_instructions2.png";
-        boolean instructionImagesLoaded = false;
-        try {
-            ImageIcon iconNormalIns = new ImageIcon(instructionsNormalPath);
-            ImageIcon iconRolloverIns = null;
-            if (new File(instructionsRolloverPath).exists()) {
-                iconRolloverIns = new ImageIcon(instructionsRolloverPath);
-            }
-
-            if (iconNormalIns.getIconWidth() > 0) {
-                instructionsButton.setIcon(iconNormalIns);
-                if (iconRolloverIns != null && iconRolloverIns.getIconWidth() > 0) {
-                    instructionsButton.setRolloverIcon(iconRolloverIns);
-                    instructionsButton.setRolloverEnabled(true);
-                }
-                instructionsButton.setText("");
-                instructionsButton.setBorder(null);
-                instructionsButton.setBorderPainted(false);
-                instructionsButton.setContentAreaFilled(false);
-                instructionsButton.setOpaque(false);
-                instructionImagesLoaded = true;
-            }
-        } catch (Exception e) {
-            // No se imprime error si la imagen es opcional o se prefiere manejarlo silenciosamente.
-        }
-
-        if (!instructionImagesLoaded) {
-            instructionsButton.setText("Instructions");
-            instructionsButton.setBackground(new Color(210, 210, 225));
-            instructionsButton.setForeground(Color.BLACK);
-            instructionsButton.setOpaque(true);
-            instructionsButton.setContentAreaFilled(true);
-            instructionsButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
-            final Color originalBgIns = instructionsButton.getBackground();
-            instructionsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    if (instructionsButton.isEnabled()) instructionsButton.setBackground(originalBgIns.brighter());
-                }
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    if (instructionsButton.isEnabled()) instructionsButton.setBackground(originalBgIns);
-                }
-            });
-        }
         instructionsButton.addActionListener(e -> showInstructionsPopup());
         leftPanel.add(instructionsButton);
-        // --- FIN: CÓDIGO AÑADIDO PARA EL BOTÓN DE INSTRUCCIONES ---
 
-        // Center Panel: Item Details, Message Area, Generator Table
+        //Item Details, Message Area, Generator Table
         itemDetailsTitleLabel = new JLabel("ITEM DETAILS");
         itemDetailsTitleLabel.setFont(titleFont);
         itemDetailsTitleLabel.setForeground(Color.black);
@@ -214,29 +176,25 @@ public class GameView extends JFrame {
         itemDetailsTitleLabel.setBounds(5, itemDetailsTitleY, 410, itemDetailsTitleHeight);
         centerPanel.add(itemDetailsTitleLabel);
 
-        int messageScrollPaneY = itemDetailsTitleY + itemDetailsTitleHeight + 15; // Espaciado ajustado
-        int messageAreaHeight = 170; // Altura ajustada
+        int messageScrollPaneY = itemDetailsTitleY + itemDetailsTitleHeight + 15;
+        int messageAreaHeight = 170;
 
-        messageText = new JTextArea(); // Área para mostrar mensajes contextuales
+        messageText = new JTextArea();
         messageText.setForeground(Color.black);
         messageText.setBackground(new Color(235, 235, 235));
         messageText.setFont(smallTextFont);
         messageText.setLineWrap(true);
         messageText.setWrapStyleWord(true);
         messageText.setEditable(false);
-        messageText.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.lightGray, 1),
-                new EmptyBorder(5, 8, 5, 8)
-        ));
+
         JScrollPane messageScrollPane = new JScrollPane(messageText);
-        messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         messageScrollPane.setBorder(null);
         messageScrollPane.setBounds(5, messageScrollPaneY, 410, messageAreaHeight);
         centerPanel.add(messageScrollPane);
 
         generatorTableTitleLabel = new JLabel("GENERATOR TABLE");
         styleTitleLabel(generatorTableTitleLabel, titleFont);
-        generatorTableTitleLabel.setBorder(new EmptyBorder(5, 0, 5, 10)); // Padding izquierdo a 0 para este título
+        generatorTableTitleLabel.setBorder(new EmptyBorder(5, 0, 5, 10));
         generatorTableTitleLabel.setHorizontalAlignment(SwingConstants.LEFT);
         int generatorTitleY = messageScrollPaneY + messageAreaHeight + 25;
         generatorTableTitleLabel.setBounds(5, generatorTitleY, 410, 30);
@@ -244,26 +202,26 @@ public class GameView extends JFrame {
 
         // Generator Statistics Table
         generatorStatsTableModel = new DefaultTableModel(generatorTableColumns, 0) {
-            @Override public boolean isCellEditable(int row, int column) { return false; } // Celdas no editables
+            @Override public boolean isCellEditable(int row, int column) { return false; }
         };
         generatorStatsTable = new JTable(generatorStatsTableModel);
         generatorStatsTable.setFont(tableContentFont);
         generatorStatsTable.getTableHeader().setFont(tableHeaderFont);
         generatorStatsTable.setRowHeight(22);
-        generatorStatsTable.setFillsViewportHeight(true); // La tabla ocupa toda la altura del scrollpane
+        generatorStatsTable.setFillsViewportHeight(true);
         generatorStatsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        generatorStatsTable.getTableHeader().setReorderingAllowed(false); // No permitir reordenar columnas
+        generatorStatsTable.getTableHeader().setReorderingAllowed(false);
 
         TableColumnModel columnModel = generatorStatsTable.getColumnModel();
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
-            columnModel.getColumn(i).setResizable(false); // No permitir redimensionar columnas
+            columnModel.getColumn(i).setResizable(false);
         }
 
-        generatorStatsTable.setRowSelectionAllowed(false); // No permitir seleccionar filas
-        generatorStatsTable.setFocusable(false); // Que la tabla no obtenga el foco
+        generatorStatsTable.setRowSelectionAllowed(false);
+        generatorStatsTable.setFocusable(false);
 
 
-        // Paleta de colores marrón para la tabla
+        // Colors
         final Color brownRowDark = new Color(0x5D4037);
         final Color brownRowMiddleLight = new Color(0x795548);
         final Color tableHeaderBg = new Color(0x4E342E);
@@ -275,25 +233,19 @@ public class GameView extends JFrame {
         generatorStatsTable.getTableHeader().setBackground(tableHeaderBg);
         generatorStatsTable.getTableHeader().setForeground(tableFg);
         generatorStatsTable.setGridColor(tableGrid);
-        // Los siguientes no tendrán efecto visual si la selección está deshabilitada, pero se definen.
-        generatorStatsTable.setSelectionBackground(selectionBg);
-        generatorStatsTable.setSelectionForeground(selectionFg);
 
-        // Renderizadores como clases anónimas para colores de fila específicos
+
         DefaultTableCellRenderer themedLeftRenderer = new DefaultTableCellRenderer() {
             {
                 setOpaque(true);
                 setHorizontalAlignment(JLabel.LEFT);
             }
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
-                // isSelected y hasFocus se ignoran ya que la selección está deshabilitada
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, false, false, row, column);
-                if (row == 1) { // Fila del medio (Barista)
+                if (row == 1) {
                     setBackground(brownRowMiddleLight);
-                } else { // Filas exteriores (Coffee Machine y Cafe)
+                } else {
                     setBackground(brownRowDark);
                 }
                 setForeground(tableFg);
@@ -307,9 +259,7 @@ public class GameView extends JFrame {
                 setHorizontalAlignment(JLabel.CENTER);
             }
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, false, false, row, column);
                 if (row == 1) {
                     setBackground(brownRowMiddleLight);
@@ -326,7 +276,7 @@ public class GameView extends JFrame {
             generatorStatsTable.getColumnModel().getColumn(i).setCellRenderer(themedCenterRenderer);
         }
 
-        int numRowsInTable = 3; // Asumiendo 3 generadores fijos
+        int numRowsInTable = 3;
         int dataRowHeight = generatorStatsTable.getRowHeight();
         int headerHeight = generatorStatsTable.getTableHeader().getPreferredSize().height;
         int tableActualHeight = headerHeight + (numRowsInTable * dataRowHeight);
@@ -335,12 +285,12 @@ public class GameView extends JFrame {
         generatorStatsScrollPane.getViewport().setBackground(brownRowDark);
         generatorStatsScrollPane.setOpaque(true);
         generatorStatsScrollPane.setBorder(BorderFactory.createLineBorder(tableGrid));
-        generatorStatsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); // Sin scroll vertical
-        int tableY = generatorTitleY + 30 + 15; // Espaciado igual al de itemDetails
+        generatorStatsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        int tableY = generatorTitleY + 30 + 15;
         generatorStatsScrollPane.setBounds(5, tableY, 410, tableActualHeight + 2);
         centerPanel.add(generatorStatsScrollPane);
 
-        // Right Panel: Shop
+        // Title SHOP
         shopMainTitleLabel = new JLabel("SHOP");
         styleTitleLabel(shopMainTitleLabel, titleFont);
         shopMainTitleLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -361,18 +311,20 @@ public class GameView extends JFrame {
         shopItemsContainerPanel.add(coffeeMakersTitleLabel);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
+
+        //Button IMAGES
         coffeeMachineButton = new JButton();
-        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png", "COFFEE MACHINE");
+        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png");
         shopItemsContainerPanel.add(coffeeMachineButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         baristaButton = new JButton();
-        configureImageButton(baristaButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
+        configureImageButton(baristaButton, "res/button_interrogant.png", "res/button_interrogant2.png");
         shopItemsContainerPanel.add(baristaButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         cafeButton = new JButton();
-        configureImageButton(cafeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
+        configureImageButton(cafeButton, "res/button_interrogant.png", "res/button_interrogant2.png");
         shopItemsContainerPanel.add(cafeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
@@ -383,33 +335,33 @@ public class GameView extends JFrame {
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
         coffeeMachineUpgradeButton = new JButton();
-        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png", "QUICK CLEAN");
+        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png");
         shopItemsContainerPanel.add(coffeeMachineUpgradeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         baristaUpgradeButton = new JButton();
-        configureImageButton(baristaUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
+        configureImageButton(baristaUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png");
         shopItemsContainerPanel.add(baristaUpgradeButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         cafeUpgradeButton = new JButton();
-        configureImageButton(cafeUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png", "???");
+        configureImageButton(cafeUpgradeButton, "res/button_interrogant.png", "res/button_interrogant2.png");
         shopItemsContainerPanel.add(cafeUpgradeButton);
 
-        shopItemsContainerPanel.add(Box.createVerticalGlue()); // Empuja los botones de pausa/fin hacia abajo
+        shopItemsContainerPanel.add(Box.createVerticalGlue());
 
         pauseButton = new JButton();
-        configureImageButton(pauseButton, "res/button_pause.png", "res/button_pause2.png", "Pause Game");
+        configureImageButton(pauseButton, "res/button_pause.png", "res/button_pause2.png");
         shopItemsContainerPanel.add(pauseButton);
         shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,8)));
 
         endGameButton = new JButton();
-        configureImageButton(endGameButton, "res/button_end.png", "res/button_end2.png", "End Game");
+        configureImageButton(endGameButton, "res/button_end.png", "res/button_end2.png");
         shopItemsContainerPanel.add(endGameButton);
 
-        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,10))); // Pequeño margen inferior
+        shopItemsContainerPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
-        // Action Commands para identificación en el controller
+        // Action Commands
         coffeeButton.setActionCommand("COFFEEBUTTON");
         coffeeMachineButton.setActionCommand("COFFEEMACHINEBUTTON");
         baristaButton.setActionCommand("BARISTABUTTON");
@@ -420,7 +372,7 @@ public class GameView extends JFrame {
         pauseButton.setActionCommand("PAUSEBUTTON");
         endGameButton.setActionCommand("ENDGAMEBUTTON");
 
-        // Nombres para identificación en eventos de ratón (MouseListener)
+        // MouseListener
         coffeeMachineButton.setName("COFFEEMACHINEBUTTON");
         baristaButton.setName("BARISTABUTTON");
         cafeButton.setName("CAFEBUTTON");
@@ -440,28 +392,29 @@ public class GameView extends JFrame {
         label.setForeground(Color.black);
         label.setBackground(Color.white);
         label.setOpaque(true);
-        label.setBorder(new EmptyBorder(5,10,5,10)); // Padding por defecto para títulos
+        label.setBorder(new EmptyBorder(5,10,5,10));
     }
 
     /**
-     * Configures a button with image icons and fallback text.
+     * Configures a button with image icons.
      * If images are loaded, Java-rendered text is cleared.
      *
      * @param button        The JButton to configure.
      * @param normalPath    The path to the normal icon image.
      * @param rolloverPath  The path to the rollover (hover) icon image.
-     * @param fallbackText  Text to display if the icon is missing or fails to load.
      */
-    private void configureImageButton(JButton button, String normalPath, String rolloverPath, String fallbackText) {
+    private void configureImageButton(JButton button, String normalPath, String rolloverPath) {
         button.setFont(this.buttonShopFont);
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Dimension buttonDim = new Dimension(300, 36);
-
         button.setPreferredSize(buttonDim);
         button.setMinimumSize(buttonDim);
         button.setMaximumSize(buttonDim);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(true);
 
         try {
             ImageIcon iconNormal = null;
@@ -484,74 +437,19 @@ public class GameView extends JFrame {
                     button.setRolloverIcon(iconRollover);
                     button.setRolloverEnabled(true);
                 }
-                button.setText(""); // No mostrar texto de Java si la imagen se carga (texto está en la imagen)
+                button.setText("");
                 button.setBorder(null);
                 button.setBorderPainted(false);
                 button.setContentAreaFilled(false);
                 button.setOpaque(false);
             } else {
-                button.setText(fallbackText); // Mostrar texto de fallback si la imagen no se carga
-                //  CORREGIDO: El segundo parámetro de configureShopButtonLookAndFeel determina si es un item de tienda o de acción
-                //  Antes se pasaba 'true' indiscriminadamente, ahora se ajusta.
-                configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
+                new PopUpView("Error: Image could not be loaded for button.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            button.setText(fallbackText); // Asegurar texto en caso de error
-            configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
+            new PopUpView("Exception loading image for button.");
         }
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-
-
-    /**
-     * Configures the look and feel of shop-related buttons when images are not used (fallback).
-     *
-     * @param button The JButton to configure.
-     * @param isShopItem Determines the button's style: true for regular shop item, false for action buttons like Pause/End.
-     */
-    private void configureShopButtonLookAndFeel(JButton button, boolean isShopItem) {
-        button.setFont(this.buttonShopFont);
-        button.setFocusPainted(false);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        button.setVerticalTextPosition(SwingConstants.CENTER);
-
-        //  CORREGIDO: Se asegura que el tamaño sea el correcto (300x36) para los botones de texto de fallback
-        //  ya que configureImageButton ya lo establece, pero es bueno ser explícito o consistente.
-        Dimension buttonDim = new Dimension(300, 36);
-        button.setPreferredSize(buttonDim);
-        button.setMinimumSize(buttonDim);
-        button.setMaximumSize(buttonDim);
-
-        // Define colores de fallback para los botones de texto
-        if (isShopItem) { // Para botones de compra/mejora de la tienda
-            button.setBackground(new Color(50, 50, 50)); // Un gris oscuro
-            button.setForeground(Color.white);
-            button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 1));
-        } else { // Para botones de acción como Pausa, Fin de Juego
-            button.setBackground(new Color(100, 30, 30)); // Un rojo oscuro
-            button.setForeground(Color.white);
-            button.setBorder(BorderFactory.createLineBorder(new Color(70,10,10), 1));
-        }
-        button.setOpaque(true); // Asegurar que el fondo se pinte para botones de texto
-
-        // Efecto hover simple para botones de texto
-        Color originalBg = button.getBackground();
-        // Remueve listeners previos para evitar duplicados si este metodo es llamado múltiples veces.
-        for(MouseListener ml : button.getMouseListeners()){
-            if(ml.getClass().isAnonymousClass() && ml instanceof java.awt.event.MouseAdapter){
-                button.removeMouseListener(ml);
-            }
-        }
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if(button.isEnabled()) button.setBackground(originalBg.brighter());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if(button.isEnabled()) button.setBackground(originalBg);
-            }
-        });
     }
 
     /**
@@ -561,7 +459,7 @@ public class GameView extends JFrame {
     private void showInstructionsPopup() {
         String instructionsTitle = "How to Play Coffee Clicker";
         String instructionsMessage =
-                "Welcome to Coffee Clicker!\n\n" +
+                        "Welcome to Coffee Clicker!\n\n" +
                         "The main goal is to produce as many coffees as you can, as quickly as possible! \n" +
                         "The game saves your progress automatically every minute.\n\n" +
                         "Gameplay Basics:\n" +
@@ -643,52 +541,48 @@ public class GameView extends JFrame {
 
     /** Updates the appearance of the Coffee Machine button. */
     public void updateCoffeeMachineButtonAppearance() {
-        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png", "COFFEE MACHINE");
+        configureImageButton(coffeeMachineButton, "res/button_coffee.machine.png", "res/button_coffee.machine2.png");
     }
 
     /** Updates the appearance of the Coffee Machine upgrade button. */
     public void updateCoffeeMachineUpgradeButtonAppearance() {
-        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png", "QUICK CLEAN");
+        configureImageButton(coffeeMachineUpgradeButton, "res/button_u1.png", "res/button_u1.2.png");
     }
 
     /** Updates the appearance of the Barista button based on its unlocked state.
      * @param unlocked True if the barista is unlocked, false otherwise.
      */
     public void updateBaristaButtonAppearance(boolean unlocked) {
-        String nameIfNoImage = unlocked ? "BARISTA" : "???";
         String normalIcon = unlocked ? "res/button_barista.png" : "res/button_interrogant.png";
         String rolloverIcon = unlocked ? "res/button_barista2.png" : "res/button_interrogant2.png";
-        configureImageButton(baristaButton, normalIcon, rolloverIcon, nameIfNoImage);
+        configureImageButton(baristaButton, normalIcon, rolloverIcon);
     }
 
     /** Updates the appearance of the Cafe button based on its unlocked state.
      * @param unlocked True if the cafe is unlocked, false otherwise.
      */
     public void updateCafeButtonAppearance(boolean unlocked) {
-        String nameIfNoImage = unlocked ? "CAFE" : "???";
         String normalIcon = unlocked ? "res/button_cafe.png" : "res/button_interrogant.png";
         String rolloverIcon = unlocked ? "res/button_cafe2.png" : "res/button_interrogant2.png";
-        configureImageButton(cafeButton, normalIcon, rolloverIcon, nameIfNoImage);
+        configureImageButton(cafeButton, normalIcon, rolloverIcon);
     }
 
     /** Updates the appearance of the Barista upgrade button based on its unlocked state.
      * @param unlocked True if the barista upgrade is unlocked, false otherwise.
      */
     public void updateBaristaUpgradeButtonAppearance(boolean unlocked) {
-        String nameIfNoImage = unlocked ? "SWIFT HANDS" : "???";
         String normalIcon = unlocked ? "res/button_u2.png" : "res/button_interrogant.png";
         String rolloverIcon = unlocked ? "res/button_u2.2.png" : "res/button_interrogant2.png";
-        configureImageButton(baristaUpgradeButton, normalIcon, rolloverIcon, nameIfNoImage);
+        configureImageButton(baristaUpgradeButton, normalIcon, rolloverIcon);
     }
 
     /** Updates the appearance of the Cafe upgrade button based on its unlocked state.
      * @param unlocked True if the cafe upgrade is unlocked, false otherwise.
      */
     public void updateCafeUpgradeButtonAppearance(boolean unlocked) {
-        String nameIfNoImage = unlocked ? "HAPPY HOUR" : "???";
         String normalIcon = unlocked ? "res/button_u3.png" : "res/button_interrogant.png";
         String rolloverIcon = unlocked ? "res/button_u3.2.png" : "res/button_interrogant2.png";
-        configureImageButton(cafeUpgradeButton, normalIcon, rolloverIcon, nameIfNoImage);
+        configureImageButton(cafeUpgradeButton, normalIcon, rolloverIcon);
     }
 
     /**
@@ -698,10 +592,10 @@ public class GameView extends JFrame {
      */
     public void updateGeneratorStatsTable(Object[][] data) {
         SwingUtilities.invokeLater(() -> {
-            generatorStatsTableModel.setRowCount(0); // Limpia filas existentes
+            generatorStatsTableModel.setRowCount(0);
             if (data != null) {
                 for (Object[] rowData : data) {
-                    generatorStatsTableModel.addRow(rowData); // Añade nuevas filas
+                    generatorStatsTableModel.addRow(rowData);
                 }
             }
         });

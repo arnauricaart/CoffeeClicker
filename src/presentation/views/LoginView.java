@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-// No se necesita ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
-// y asumimos que tienen el tamaño correcto o no necesitamos verificarlo antes.
 
 /**
  * Represents the login window of the application.
@@ -45,82 +43,70 @@ public class LoginView extends JFrame {
     public LoginView() {
         setTitle("Login");
         setSize(1280, 720);
-        // setLayout(null); // Ya no lo necesitamos en el contentPane directamente si usamos JLayeredPane para el fondo
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Obtenemos el JLayeredPane
         JLayeredPane layeredPane = getLayeredPane();
-        layeredPane.setLayout(null); // El layeredPane sí puede tener layout null para posicionar absoluto
+        layeredPane.setLayout(null);
 
-        // --- Configuración de la imagen de fondo ---
-        String backgroundLoginPath = "res/login.jpg"; // Ruta de tu imagen de fondo
+        // Background image
+        String backgroundLoginPath = "res/login.jpg";
         try {
             ImageIcon backgroundImgIcon = new ImageIcon(backgroundLoginPath);
 
             if (backgroundImgIcon.getIconWidth() > 0) {
                 backgroundLabel = new JLabel(backgroundImgIcon);
                 backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
-                // Añadir la etiqueta de fondo a una capa inferior del JLayeredPane
-                layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // O JLayeredPane.FRAME_CONTENT_LAYER - 10
+                layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE));
             } else {
-                // Fallback: si la imagen no carga, usar el color de fondo blanco en el contentPane
                 getContentPane().setBackground(Color.decode("#FFFFFF"));
             }
         } catch (Exception e) {
-            // Fallback: si hay excepción, usar el color de fondo blanco en el contentPane
             getContentPane().setBackground(Color.decode("#FFFFFF"));
         }
 
-        // Hacemos el contentPane transparente para que se vea el fondo del JLayeredPane
         ((JPanel)getContentPane()).setOpaque(false);
-        // Y el contentPane también necesita layout null para posicionar los componentes encima del fondo
         getContentPane().setLayout(null);
 
-
+        // Title LOGIN
         JLabel title = new JLabel("LOGIN", SwingConstants.CENTER);
-        title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled" si quieres consistencia
+        title.setFont(new Font("Pixeled", Font.BOLD, 25));
         title.setBounds(440, 100, 400, 50);
-        title.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste con tu fondo
-        // add(title); // Se añade al contentPane
+        title.setForeground(Color.decode("#000000"));
         getContentPane().add(title);
-
 
         JLabel userLabel = new JLabel("Username or Email:");
         userLabel.setBounds(440, 170, 400, 30);
         userLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        userLabel.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
-        // add(userLabel);
+        userLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(userLabel);
 
         usernameField = new JTextField();
         usernameField.setBounds(440, 200, 400, 40);
         usernameField.setBackground(Color.decode("#D9D9D9"));
-        // add(usernameField);
         getContentPane().add(usernameField);
 
         JLabel passLabel = new JLabel("Password:");
         passLabel.setBounds(440, 250, 400, 30);
-        passLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        passLabel.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
-        // add(passLabel);
+        passLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        passLabel.setForeground(Color.decode("#000000"));
         getContentPane().add(passLabel);
 
         passwordField = new JPasswordField();
         passwordField.setBounds(440, 280, 400, 40);
         passwordField.setBackground(Color.decode("#D9D9D9"));
-        // add(passwordField);
         getContentPane().add(passwordField);
 
-        // --- Configuración del loginButton con imágenes ---
+        // button LOGIN
         loginButton = new JButton();
-        Dimension loginButtonSize = new Dimension(300, 50); // Tamaño original del botón
+        Dimension loginButtonSize = new Dimension(300, 50);
         loginButton.setPreferredSize(loginButtonSize);
         loginButton.setMinimumSize(loginButtonSize);
         loginButton.setMaximumSize(loginButtonSize);
-        loginButton.setBounds(490, 340, loginButtonSize.width, loginButtonSize.height); // Posición original
+        loginButton.setBounds(490, 340, loginButtonSize.width, loginButtonSize.height);
 
+        // Path image
         String loginNormalPath = "res/button_login.png";
         String loginRolloverPath = "res/button_login2.png";
         boolean loginImageLoaded = false;
@@ -162,17 +148,13 @@ public class LoginView extends JFrame {
         }
         loginButton.setFocusPainted(false);
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // add(loginButton);
         getContentPane().add(loginButton);
-
 
         goToRegister = new JLabel("Not a user? Register Here", SwingConstants.CENTER);
         goToRegister.setBounds(515, 400, 250, 30);
-        goToRegister.setForeground(Color.decode("#000000")); // Asegúrate que este color contraste
+        goToRegister.setForeground(Color.decode("#000000"));
         goToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // add(goToRegister);
         getContentPane().add(goToRegister);
-
 
         ActionListener enterKeyListener = e -> {
             if (loginActionListener != null) {
@@ -205,7 +187,7 @@ public class LoginView extends JFrame {
      */
     public void setLoginButtonListener(ActionListener al) {
         loginActionListener = al;
-        if (loginButton != null) { // Buena práctica verificar
+        if (loginButton != null) {
             loginButton.addActionListener(al);
         }
     }

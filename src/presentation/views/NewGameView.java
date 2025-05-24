@@ -11,19 +11,14 @@ import java.awt.event.ActionListener;
  * NewGameView class extends from BaseForm class. This class will generate a view where the user will be capable of introducing the new game's name.
  */
 public class NewGameView extends BaseForm {
-    // Estas constantes de color ya no se usarán para los botones si tienen imágenes,
-    // pero las dejamos por si otros elementos las necesitan o para el fallback.
     /**
      * Color used by the JLabels.
      */
-    private static final Color TEXT_COLOR = Color.decode("#000000"); // Usado por JLabels
+    private static final Color TEXT_COLOR = Color.decode("#000000");
     /**
      * Secondary color.
      */
-    private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9"); // Usado por newGameName
-    // private static final Color BUTTON_COLOR = Color.decode("#9E6B57"); // No se usa para newGameButton con imagen
-    // private static final Color PRIMARY_COLOR = Color.WHITE; // No se usa para texto de newGameButton con imagen
-
+    private static final Color SECONDARY_COLOR = Color.decode("#D9D9D9");
     /**
      * Text Field where the user will put the game's name.
      */
@@ -31,17 +26,17 @@ public class NewGameView extends BaseForm {
     /**
      * Button that will create the new game.
      */
-    private JButton newGameButton;  // Usará imágenes
+    private JButton newGameButton;
     /**
      * Button that will cancel the creation of the new game.
      */
-    private JButton cancelButton;   // Usará imágenes
+    private JButton cancelButton;
 
     /**
      * Class constructor. Sets the view's title and initiates the components.
      */
     public NewGameView() {
-        super("New Game"); // Llama al constructor de BaseForm
+        super("New Game");
         initComponents();
     }
 
@@ -50,15 +45,17 @@ public class NewGameView extends BaseForm {
      */
     private void initComponents() {
         int formWidth = 400;
+
         int fieldWidth = 400;
         int fieldHeight = 40;
-        int buttonWidth = 120;  // Ancho para las imágenes de los botones
-        int buttonHeight = 50; // Alto para las imágenes de los botones
-        int centerX = (1280 - fieldWidth) / 2; // Asumiendo que BaseForm es 1280 de ancho
+        int buttonWidth = 120;
+        int buttonHeight = 50;
+        int centerX = (1280 - fieldWidth) / 2;
         int topY = 120;
 
+        // Title NEW GAME
         JLabel title = new JLabel("NEW GAME", SwingConstants.CENTER);
-        title.setFont(new Font("Pixeled", Font.BOLD, 25)); // Puedes cambiar a "Pixeled" si quieres
+        title.setFont(new Font("Pixeled", Font.BOLD, 25));
         title.setBounds(centerX, topY, formWidth, 50);
         title.setForeground(TEXT_COLOR);
         add(title);
@@ -76,26 +73,20 @@ public class NewGameView extends BaseForm {
         int buttonY = topY + 180;
         int spacing = 20;
         int totalButtonsWidth = buttonWidth * 2 + spacing;
-        int buttonsStartX = centerX + (fieldWidth - totalButtonsWidth) / 2; // Para centrar el par de botones
+        int buttonsStartX = centerX + (fieldWidth - totalButtonsWidth) / 2;
 
-        // --- Configuración del cancelButton con imágenes ---
         cancelButton = new JButton();
         Dimension cancelBtnSize = new Dimension(buttonWidth, buttonHeight);
-        // No establecemos setPreferredSize/setMin/setMax aquí porque usamos setBounds
         cancelButton.setBounds(buttonsStartX, buttonY, cancelBtnSize.width, cancelBtnSize.height);
 
-        String cancelNormalPath = "res/button_cancel.png"; // Nombre específico para esta vista
+        // Path
+        String cancelNormalPath = "res/button_cancel.png";
         String cancelRolloverPath = "res/button_cancel2.png";
         boolean cancelImageLoaded = false;
 
         try {
             ImageIcon icon = new ImageIcon(cancelNormalPath);
             if (icon.getIconWidth() > 0) {
-                // Si las imágenes no son exactamente buttonWidth x buttonHeight, descomenta y ajusta el escalado:
-                // if (icon.getIconWidth() != cancelBtnSize.width || icon.getIconHeight() != cancelBtnSize.height) {
-                //    Image scaledImg = icon.getImage().getScaledInstance(cancelBtnSize.width, cancelBtnSize.height, Image.SCALE_SMOOTH);
-                //    icon = new ImageIcon(scaledImg);
-                // }
                 cancelButton.setIcon(icon);
                 cancelImageLoaded = true;
             }
@@ -107,10 +98,6 @@ public class NewGameView extends BaseForm {
             try {
                 ImageIcon rIcon = new ImageIcon(cancelRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
-                    // if (rIcon.getIconWidth() != cancelBtnSize.width || rIcon.getIconHeight() != cancelBtnSize.height) {
-                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(cancelBtnSize.width, cancelBtnSize.height, Image.SCALE_SMOOTH);
-                    //    rIcon = new ImageIcon(scaledRollover);
-                    // }
                     cancelButton.setRolloverIcon(rIcon);
                     cancelButton.setRolloverEnabled(true);
                 }
@@ -121,18 +108,10 @@ public class NewGameView extends BaseForm {
 
         if (cancelImageLoaded) {
             makeButtonLookLikeImage(cancelButton);
-            // Si el texto "Cancel" está en la imagen, no necesitas lo siguiente.
-            // Si quieres texto SOBRE la imagen:
-            // cancelButton.setText("Cancel");
-            // cancelButton.setFont(new Font("Pixeled", Font.BOLD, 12));
-            // cancelButton.setForeground(Color.BLACK_OR_WHITE);
-            // cancelButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            // cancelButton.setVerticalTextPosition(SwingConstants.CENTER);
         } else {
-            // Fallback si la imagen normal no se cargó
             cancelButton.setText("Cancel (Error)");
-            cancelButton.setBackground(SECONDARY_COLOR); // Color original de fallback
-            cancelButton.setForeground(TEXT_COLOR);      // Color de texto original
+            cancelButton.setBackground(SECONDARY_COLOR);
+            cancelButton.setForeground(TEXT_COLOR);
             applyTextButtonStyles(cancelButton);
         }
         commonButtonViewSetup(cancelButton);

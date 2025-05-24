@@ -50,27 +50,25 @@ public class CafeStatsChart extends JPanel {
      * @param g2 The Graphics2D context used to render the chart.
      */
     private void drawChart(Graphics2D g2) {
-        //Cojo el tamaño del panel
         int width = getWidth();
         int height = getHeight();
 
-        //Marco un margen para la gráfica
+        // Chart margins
         int leftMargin = 60;
         int rightMargin = 30;
         int topMargin = 40;
         int bottomMargin = 60;
 
-        //Ejes del gráfico
+        // Draw axes
         g2.setColor(Color.BLACK);
         g2.drawLine(leftMargin, height - bottomMargin, width - rightMargin, height - bottomMargin);
         g2.drawLine(leftMargin, topMargin, leftMargin, height - bottomMargin);
 
-        //Tamaño máximo del gráfico (ejes dinamicos)
         int maxY = data.stream().max(Integer::compare).orElse(1);
         int stepX = (width - leftMargin - rightMargin) / Math.max(1, data.size() - 1);
         int graphHeight = height - topMargin - bottomMargin;
 
-        //Linea de la grafica que representa los cafés
+        // Plot data line
         g2.setColor(Color.BLUE);
         for (int i = 0; i < data.size() - 1; i++) {
             int x1 = leftMargin + i * stepX;
@@ -80,7 +78,7 @@ public class CafeStatsChart extends JPanel {
             g2.drawLine(x1, y1, x2, y2);
         }
 
-        //minutos en el eje X
+        // X-axis labels
         g2.setColor(Color.BLACK);
         for (int i = 0; i < data.size(); i++) {
             int x = leftMargin + i * stepX;
@@ -88,7 +86,7 @@ public class CafeStatsChart extends JPanel {
             g2.drawString(label, x - 10, height - bottomMargin + 20);
         }
 
-        //Valores en el eje Y
+        // Y-axis labels & grid
         for (int i = 0; i <= 5; i++) {
             int value = maxY * i / 5;
             int y = height - bottomMargin - (value * graphHeight / maxY);
@@ -98,7 +96,7 @@ public class CafeStatsChart extends JPanel {
             g2.setColor(Color.BLACK);
         }
 
-        //Titulo
+        // Chart title
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16f));
         g2.drawString("Coffees per minute", width / 2 - 80, topMargin - 10);
     }

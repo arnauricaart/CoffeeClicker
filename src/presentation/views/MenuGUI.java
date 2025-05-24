@@ -3,14 +3,14 @@ package presentation.views;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-// No se necesitan ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
+
 
 /**
  * Class that extends from JFrame, this class will be used to make the Menu view.
  */
 public class MenuGUI extends JFrame {
 
-    // --- Componentes UI ---
+    // UI components
     private JButton newGameButton, statisticsButton, logoutButton, deleteAccountButton;
     private final Color TITLE_TEXT_COLOR = Color.BLACK;
 
@@ -19,18 +19,16 @@ public class MenuGUI extends JFrame {
      * It configures the principal menu screen. The component initialization and load of images is made here.
      */
     public MenuGUI() {
-        // --- Configuración General de la Ventana (JFrame) ---
+
         setTitle("Coffee Clicker - Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // --- Panel Principal ---
         JPanel mainPanel = new JPanel(new BorderLayout(0, 0));
         mainPanel.setBackground(Color.WHITE);
 
-        // --- Panel para el Título ---
         JPanel titleHoldingPanel = new JPanel(new GridBagLayout());
         titleHoldingPanel.setOpaque(false);
         int titlePanelHeight = 200;
@@ -43,26 +41,23 @@ public class MenuGUI extends JFrame {
         titleLabel.setForeground(TITLE_TEXT_COLOR);
         titleHoldingPanel.add(titleLabel);
 
-        // --- Panel para el Contenido Debajo del Título ---
+        // Title Panel
         JPanel contentBelowTitlePanel = new JPanel();
         contentBelowTitlePanel.setLayout(null);
         contentBelowTitlePanel.setOpaque(false);
         int contentBelowTitlePanelHeight = 720 - titlePanelHeight;
         contentBelowTitlePanel.setPreferredSize(new Dimension(1280, contentBelowTitlePanelHeight));
 
-        // --- Carga de Imágenes Decorativas ---
+        // Background IMAGES
         JLabel leftCoffee = null;
         String leftCoffeePath = "res/coffee1.png";
         try {
             ImageIcon coffee1Icon = new ImageIcon(leftCoffeePath);
             if (coffee1Icon.getIconWidth() > 0) {
                 leftCoffee = new JLabel(coffee1Icon);
-                // Si necesitas escalar:
-                // Image scaledImg = coffee1Icon.getImage().getScaledInstance(345, 345, Image.SCALE_SMOOTH);
-                // leftCoffee.setIcon(new ImageIcon(scaledImg));
             }
         } catch (Exception e) {
-            // Error silencioso, leftCoffee permanecerá null
+            new PopUpView("Exception loading image.");
         }
 
         JLabel rightCoffee = null;
@@ -71,21 +66,17 @@ public class MenuGUI extends JFrame {
             ImageIcon coffee2Icon = new ImageIcon(rightCoffeePath);
             if (coffee2Icon.getIconWidth() > 0) {
                 rightCoffee = new JLabel(coffee2Icon);
-                // Si necesitas escalar:
-                // Image scaledImg = coffee2Icon.getImage().getScaledInstance(434, 434, Image.SCALE_SMOOTH);
-                // rightCoffee.setIcon(new ImageIcon(scaledImg));
             }
         } catch (Exception e) {
-            // Error silencioso, rightCoffee permanecerá null
+            new PopUpView("Exception loading image.");
         }
 
-        // --- Definición de Dimensiones para los Botones ---
+        // Button SIZE
         Dimension mainButtonSize = new Dimension(300, 38);
         Dimension deleteButtonSize = new Dimension(200, 38);
 
-        // --- Creación y Configuración de los Botones del Menú (directamente) ---
 
-        // 1. Botón New Game
+        // Button New Game
         newGameButton = new JButton();
         newGameButton.setPreferredSize(mainButtonSize);
         newGameButton.setMinimumSize(mainButtonSize);
@@ -97,20 +88,16 @@ public class MenuGUI extends JFrame {
         try {
             ImageIcon ngIcon = new ImageIcon("res/button_ng.png");
             if (ngIcon.getIconWidth() > 0) {
-                // Asumimos que la imagen ya tiene el tamaño. Si no, escalar:
-                // Image scaled = ngIcon.getImage().getScaledInstance(mainButtonSize.width, mainButtonSize.height, Image.SCALE_SMOOTH);
-                // ngIcon = new ImageIcon(scaled);
                 newGameButton.setIcon(ngIcon);
                 ngImageLoaded = true;
             }
             ImageIcon ngIcon2 = new ImageIcon("res/button_ng2.png");
             if (ngIcon2.getIconWidth() > 0) {
-                // Image scaled2 = ngIcon2.getImage().getScaledInstance(mainButtonSize.width, mainButtonSize.height, Image.SCALE_SMOOTH);
-                // ngIcon2 = new ImageIcon(scaled2);
                 newGameButton.setRolloverIcon(ngIcon2);
                 newGameButton.setRolloverEnabled(true);
             }
-        } catch (Exception e) { /* Error silencioso */ }
+        } catch (Exception e) { new PopUpView("Exception loading image.");}
+
         if (ngImageLoaded) {
             newGameButton.setBorder(null);
             newGameButton.setBorderPainted(false);
@@ -124,7 +111,7 @@ public class MenuGUI extends JFrame {
             newGameButton.setContentAreaFilled(true);
         }
 
-        // 2. Botón Statistics
+        // Button Statistics
         statisticsButton = new JButton();
         statisticsButton.setPreferredSize(mainButtonSize);
         statisticsButton.setMinimumSize(mainButtonSize);
@@ -144,7 +131,7 @@ public class MenuGUI extends JFrame {
                 statisticsButton.setRolloverIcon(statIcon2);
                 statisticsButton.setRolloverEnabled(true);
             }
-        } catch (Exception e) { /* Error silencioso */ }
+        } catch (Exception e) {new PopUpView("Exception loading image."); }
         if (statImageLoaded) {
             statisticsButton.setBorder(null);
             statisticsButton.setBorderPainted(false);
@@ -158,7 +145,7 @@ public class MenuGUI extends JFrame {
             statisticsButton.setContentAreaFilled(true);
         }
 
-        // 3. Botón Logout
+        // Button Logout
         logoutButton = new JButton();
         logoutButton.setPreferredSize(mainButtonSize);
         logoutButton.setMinimumSize(mainButtonSize);
@@ -178,7 +165,7 @@ public class MenuGUI extends JFrame {
                 logoutButton.setRolloverIcon(logoutIcon2);
                 logoutButton.setRolloverEnabled(true);
             }
-        } catch (Exception e) { /* Error silencioso */ }
+        } catch (Exception e) { new PopUpView("Exception loading image."); }
         if (logoutImageLoaded) {
             logoutButton.setBorder(null);
             logoutButton.setBorderPainted(false);
@@ -192,14 +179,14 @@ public class MenuGUI extends JFrame {
             logoutButton.setContentAreaFilled(true);
         }
 
-        // 4. Botón Delete Account
+        // Button Delete Account
         deleteAccountButton = new JButton();
         deleteAccountButton.setPreferredSize(deleteButtonSize);
         deleteAccountButton.setMinimumSize(deleteButtonSize);
         deleteAccountButton.setMaximumSize(deleteButtonSize);
         deleteAccountButton.setFocusPainted(false);
         deleteAccountButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // No necesita setAlignmentX porque se posiciona con setBounds
+
         boolean delImageLoaded = false;
         try {
             ImageIcon delIcon = new ImageIcon("res/button_delete.png");
@@ -207,12 +194,12 @@ public class MenuGUI extends JFrame {
                 deleteAccountButton.setIcon(delIcon);
                 delImageLoaded = true;
             }
-            ImageIcon delIcon2 = new ImageIcon("res/button_delete2.png"); // o button_delete1.png
+            ImageIcon delIcon2 = new ImageIcon("res/button_delete2.png");
             if (delIcon2.getIconWidth() > 0) {
                 deleteAccountButton.setRolloverIcon(delIcon2);
                 deleteAccountButton.setRolloverEnabled(true);
             }
-        } catch (Exception e) { /* Error silencioso */ }
+        } catch (Exception e) { new PopUpView("Exception loading image."); }
         if (delImageLoaded) {
             deleteAccountButton.setBorder(null);
             deleteAccountButton.setBorderPainted(false);
@@ -226,7 +213,6 @@ public class MenuGUI extends JFrame {
             deleteAccountButton.setContentAreaFilled(true);
         }
 
-        // --- Panel para Agrupar los Botones Principales ---
         JPanel mainButtonsPanel = new JPanel();
         mainButtonsPanel.setOpaque(false);
         mainButtonsPanel.setLayout(new BoxLayout(mainButtonsPanel, BoxLayout.Y_AXIS));
@@ -238,7 +224,7 @@ public class MenuGUI extends JFrame {
         int mainButtonsPanelHeight = (3 * mainButtonSize.height) + 16 + 50;
         mainButtonsPanel.setSize(new Dimension(mainButtonSize.width, mainButtonsPanelHeight));
 
-        // --- Posicionamiento Manual de Elementos ---
+
         if (leftCoffee != null) {
             leftCoffee.setBounds(10, 0, 345, 345);
             contentBelowTitlePanel.add(leftCoffee);
@@ -258,16 +244,11 @@ public class MenuGUI extends JFrame {
         );
         contentBelowTitlePanel.add(deleteAccountButton);
 
-        // --- Ensamblaje Final ---
         mainPanel.add(titleHoldingPanel, BorderLayout.NORTH);
         mainPanel.add(contentBelowTitlePanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
         setVisible(true);
     }
-
-    // Ya no hay metodo configureButtonWithImages
-
-    // Setters para Listeners
 
     /**
      * This method sets an action listener in the New Game button of the view.
