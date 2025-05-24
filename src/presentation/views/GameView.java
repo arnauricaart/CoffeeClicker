@@ -126,7 +126,6 @@ public class GameView extends JFrame {
 
         ImageIcon originalIcon = new ImageIcon("res/coffee.png");
         if (originalIcon.getIconWidth() == -1) {
-            System.err.println("Error: Imagen 'res/coffee.png' no encontrada.");
             coffeeButton = new JButton("Click Coffee");
             coffeeButton.setFont(mainTextFont);
         } else {
@@ -469,8 +468,6 @@ public class GameView extends JFrame {
             File normalFile = new File(normalPath);
             if (normalFile.exists()) {
                 iconNormal = new ImageIcon(normalPath);
-            } else {
-                System.err.println("Imagen no encontrada (normal): " + normalPath + " (Abs: " + normalFile.getAbsolutePath() + ")");
             }
 
             ImageIcon iconRollover = null;
@@ -478,8 +475,6 @@ public class GameView extends JFrame {
                 File rolloverFile = new File(rolloverPath);
                 if (rolloverFile.exists()) {
                     iconRollover = new ImageIcon(rolloverPath);
-                } else {
-                    System.err.println("Imagen no encontrada (rollover): " + rolloverPath + " (Abs: " + rolloverFile.getAbsolutePath() + ")");
                 }
             }
 
@@ -501,7 +496,6 @@ public class GameView extends JFrame {
                 configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
             }
         } catch (Exception e) {
-            System.err.println("Error cargando imágenes para botón (" + fallbackText + "): " + e.getMessage());
             e.printStackTrace();
             button.setText(fallbackText); // Asegurar texto en caso de error
             configureShopButtonLookAndFeel(button, !(fallbackText.equals("Pause Game") || fallbackText.equals("End Game")));
@@ -544,7 +538,7 @@ public class GameView extends JFrame {
 
         // Efecto hover simple para botones de texto
         Color originalBg = button.getBackground();
-        // Remueve listeners previos para evitar duplicados si este método es llamado múltiples veces.
+        // Remueve listeners previos para evitar duplicados si este metodo es llamado múltiples veces.
         for(MouseListener ml : button.getMouseListeners()){
             if(ml.getClass().isAnonymousClass() && ml instanceof java.awt.event.MouseAdapter){
                 button.removeMouseListener(ml);

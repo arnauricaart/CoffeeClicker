@@ -89,7 +89,6 @@ public class NewGameView extends BaseForm {
         boolean cancelImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal cancel (NewGameView): " + new java.io.File(cancelNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(cancelNormalPath);
             if (icon.getIconWidth() > 0) {
                 // Si las imágenes no son exactamente buttonWidth x buttonHeight, descomenta y ajusta el escalado:
@@ -99,17 +98,13 @@ public class NewGameView extends BaseForm {
                 // }
                 cancelButton.setIcon(icon);
                 cancelImageLoaded = true;
-                System.out.println("Imagen normal cancel (NewGameView) cargada OK: " + cancelNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal cancel (NewGameView) (ancho <=0): " + cancelNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal cancel (NewGameView) " + cancelNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal cancel (NewGameView) " + cancelNormalPath + ": " + e.getMessage());
         }
 
         if (cancelRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover cancel (NewGameView): " + new java.io.File(cancelRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(cancelRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     // if (rIcon.getIconWidth() != cancelBtnSize.width || rIcon.getIconHeight() != cancelBtnSize.height) {
@@ -118,12 +113,9 @@ public class NewGameView extends BaseForm {
                     // }
                     cancelButton.setRolloverIcon(rIcon);
                     cancelButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover cancel (NewGameView) cargada OK: " + cancelRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover cancel (NewGameView) (ancho <=0): " + cancelRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover cancel (NewGameView) " + cancelRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover cancel (NewGameView) " + cancelRolloverPath + ": " + e.getMessage());
             }
         }
 
@@ -157,7 +149,6 @@ public class NewGameView extends BaseForm {
         boolean newGameImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal start: " + new java.io.File(newGameNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(newGameNormalPath);
             if (icon.getIconWidth() > 0) {
                 // if (icon.getIconWidth() != newGameBtnSize.width || icon.getIconHeight() != newGameBtnSize.height) {
@@ -166,17 +157,13 @@ public class NewGameView extends BaseForm {
                 // }
                 newGameButton.setIcon(icon);
                 newGameImageLoaded = true;
-                System.out.println("Imagen normal start cargada OK: " + newGameNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal start (ancho <=0): " + newGameNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal start " + newGameNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal start " + newGameNormalPath + ": " + e.getMessage());
         }
 
         if (newGameRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover start: " + new java.io.File(newGameRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(newGameRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     // if (rIcon.getIconWidth() != newGameBtnSize.width || rIcon.getIconHeight() != newGameBtnSize.height) {
@@ -185,12 +172,9 @@ public class NewGameView extends BaseForm {
                     // }
                     newGameButton.setRolloverIcon(rIcon);
                     newGameButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover start cargada OK: " + newGameRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover start (ancho <=0): " + newGameRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover start " + newGameRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover start " + newGameRolloverPath + ": " + e.getMessage());
             }
         }
 

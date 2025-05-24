@@ -568,17 +568,17 @@ public class GameManager implements Runnable {
     public String getButtonDescription(String buttonName) {
         switch (buttonName) {
             case "COFFEEMACHINEBUTTON":
-                return String.format("Coffee Machine\n[price: %d]\nAutoclicks once every 10 seconds.", getCoffeeMachinePrice());
+                return String.format("Coffee Machine\n[price: %d]\nAutoclicks once every 5 seconds.", getCoffeeMachinePrice());
             case "BARISTABUTTON":
                 if (!isBaristaUnlocked()) {
                     return "This item is currently locked!";
                 }
-                return String.format("Barista\n[price: %d]\nProduces 1 coffee every 2 seconds.", getBaristaPrice());
+                return String.format("Barista\n[price: %d]\nProduces 1 coffee every second.", getBaristaPrice());
             case "CAFEBUTTON":
                 if (!isCafeUnlocked()) {
                     return "This item is currently locked!";
                 }
-                return String.format("Cafe\n[price: %d]\nProduces 1 coffee every second.", getCafePrice());
+                return String.format("Cafe\n[price: %d]\nProduces 5 coffees every second.", getCafePrice());
             case "COFFEEMACHINEUPGRADEBUTTON":
                 return String.format("Coffee Machine Upgrade\n[price: %d]\nIncreases CoffeeMachine production by %d.", getCoffeeMachineUpgradePrice(), getCoffeeMachineUpgradeNumber() + 1);
             case "BARISTAUPGRADEBUTTON":

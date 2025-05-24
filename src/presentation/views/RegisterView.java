@@ -64,13 +64,10 @@ public class RegisterView extends JFrame {
                 backgroundLabel = new JLabel(backgroundImgIcon);
                 backgroundLabel.setBounds(0, 0, getWidth(), getHeight()); // Cubre todo el frame
                 layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // Capa más profunda
-                System.out.println("Imagen de fondo register cargada OK: " + new java.io.File(backgroundRegisterPath).getAbsolutePath());
             } else {
-                System.err.println("ERROR AL CARGAR imagen de fondo register (ancho <=0): " + new java.io.File(backgroundRegisterPath).getAbsolutePath());
-                getContentPane().setBackground(Color.decode("#FFFFFF")); // Fallback
+                getContentPane().setBackground(Color.decode("#FFFFFF")); // ToDo: Poner esto en los otros toDos
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen de fondo register " + backgroundRegisterPath + ": " + e.getMessage());
             getContentPane().setBackground(Color.decode("#FFFFFF")); // Fallback
         }
 
@@ -142,32 +139,24 @@ public class RegisterView extends JFrame {
         boolean registerImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal register: " + new java.io.File(registerNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(registerNormalPath);
             if (icon.getIconWidth() > 0) {
                 registerButton.setIcon(icon);
                 registerImageLoaded = true;
-                System.out.println("Imagen normal register cargada OK: " + registerNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal register (ancho <=0): " + registerNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal register " + registerNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal register " + registerNormalPath + ": " + e.getMessage());
         }
 
         if (registerRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover register: " + new java.io.File(registerRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(registerRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     registerButton.setRolloverIcon(rIcon);
                     registerButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover register cargada OK: " + registerRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover register (ancho <=0): " + registerRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover register " + registerRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover register " + registerRolloverPath + ": " + e.getMessage());
             }
         }
 

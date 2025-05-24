@@ -64,14 +64,11 @@ public class LoginView extends JFrame {
                 backgroundLabel.setBounds(0, 0, getWidth(), getHeight()); // Cubre todo el frame
                 // Añadir la etiqueta de fondo a una capa inferior del JLayeredPane
                 layeredPane.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE)); // O JLayeredPane.FRAME_CONTENT_LAYER - 10
-                System.out.println("Imagen de fondo login cargada OK: " + new java.io.File(backgroundLoginPath).getAbsolutePath());
             } else {
-                System.err.println("ERROR AL CARGAR imagen de fondo login (ancho <=0): " + new java.io.File(backgroundLoginPath).getAbsolutePath());
                 // Fallback: si la imagen no carga, usar el color de fondo blanco en el contentPane
                 getContentPane().setBackground(Color.decode("#FFFFFF"));
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen de fondo login " + backgroundLoginPath + ": " + e.getMessage());
             // Fallback: si hay excepción, usar el color de fondo blanco en el contentPane
             getContentPane().setBackground(Color.decode("#FFFFFF"));
         }
@@ -129,32 +126,24 @@ public class LoginView extends JFrame {
         boolean loginImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal login: " + new java.io.File(loginNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(loginNormalPath);
             if (icon.getIconWidth() > 0) {
                 loginButton.setIcon(icon);
                 loginImageLoaded = true;
-                System.out.println("Imagen normal login cargada OK: " + loginNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal login (ancho <=0): " + loginNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal login " + loginNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal login " + loginNormalPath + ": " + e.getMessage());
         }
 
         if (loginRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover login: " + new java.io.File(loginRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(loginRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     loginButton.setRolloverIcon(rIcon);
                     loginButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover login cargada OK: " + loginRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover login (ancho <=0): " + loginRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover login " + loginRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover login " + loginRolloverPath + ": " + e.getMessage());
             }
         }
 

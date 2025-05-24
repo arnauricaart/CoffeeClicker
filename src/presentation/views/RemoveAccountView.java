@@ -87,7 +87,6 @@ public class RemoveAccountView extends BaseForm {
         boolean cancelImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal cancel: " + new java.io.File(cancelNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(cancelNormalPath);
             if (icon.getIconWidth() > 0) {
                 // Si las imágenes no son exactamente buttonWidth x buttonHeight, descomenta y ajusta el escalado:
@@ -97,17 +96,13 @@ public class RemoveAccountView extends BaseForm {
                 // }
                 cancelButton.setIcon(icon);
                 cancelImageLoaded = true;
-                System.out.println("Imagen normal cancel cargada OK: " + cancelNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal cancel (ancho <=0): " + cancelNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal cancel " + cancelNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal cancel " + cancelNormalPath + ": " + e.getMessage());
         }
 
         if (cancelRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover cancel: " + new java.io.File(cancelRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(cancelRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     // if (rIcon.getIconWidth() != cancelBtnSize.width || rIcon.getIconHeight() != cancelBtnSize.height) {
@@ -116,12 +111,9 @@ public class RemoveAccountView extends BaseForm {
                     // }
                     cancelButton.setRolloverIcon(rIcon);
                     cancelButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover cancel cargada OK: " + cancelRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover cancel (ancho <=0): " + cancelRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover cancel " + cancelRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover cancel " + cancelRolloverPath + ": " + e.getMessage());
             }
         }
 
@@ -161,7 +153,6 @@ public class RemoveAccountView extends BaseForm {
         boolean removeImageLoaded = false;
 
         try {
-            System.out.println("Intentando cargar imagen normal remove: " + new java.io.File(removeNormalPath).getAbsolutePath());
             ImageIcon icon = new ImageIcon(removeNormalPath);
             if (icon.getIconWidth() > 0) {
                 // if (icon.getIconWidth() != removeBtnSize.width || icon.getIconHeight() != removeBtnSize.height) {
@@ -170,17 +161,13 @@ public class RemoveAccountView extends BaseForm {
                 // }
                 removeButton.setIcon(icon);
                 removeImageLoaded = true;
-                System.out.println("Imagen normal remove cargada OK: " + removeNormalPath);
-            } else {
-                System.err.println("ERROR AL CARGAR imagen normal remove (ancho <=0): " + removeNormalPath);
             }
         } catch (Exception e) {
-            System.err.println("Excepción al cargar imagen normal remove " + removeNormalPath + ": " + e.getMessage());
+            // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen normal remove " + removeNormalPath + ": " + e.getMessage());
         }
 
         if (removeRolloverPath != null) {
             try {
-                System.out.println("Intentando cargar imagen rollover remove: " + new java.io.File(removeRolloverPath).getAbsolutePath());
                 ImageIcon rIcon = new ImageIcon(removeRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
                     // if (rIcon.getIconWidth() != removeBtnSize.width || rIcon.getIconHeight() != removeBtnSize.height) {
@@ -189,12 +176,9 @@ public class RemoveAccountView extends BaseForm {
                     // }
                     removeButton.setRolloverIcon(rIcon);
                     removeButton.setRolloverEnabled(true);
-                    System.out.println("Imagen rollover remove cargada OK: " + removeRolloverPath);
-                } else {
-                    System.err.println("ERROR AL CARGAR imagen rollover remove (ancho <=0): " + removeRolloverPath);
                 }
             } catch (Exception e) {
-                System.err.println("Excepción al cargar imagen rollover remove " + removeRolloverPath + ": " + e.getMessage());
+                // ToDo: Tirar una excepcion o algo. System.err.println("Excepción al cargar imagen rollover remove " + removeRolloverPath + ": " + e.getMessage());
             }
         }
 
