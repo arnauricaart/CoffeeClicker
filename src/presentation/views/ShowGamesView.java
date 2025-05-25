@@ -87,7 +87,7 @@ public class ShowGamesView extends JFrame {
         // Create left
         JPanel leftPanel = new JPanel(new BorderLayout());
 
-        returnButton = new JButton("Volver al menú");
+        returnButton = new JButton("Return to menu");
 
 
         // Search panel
