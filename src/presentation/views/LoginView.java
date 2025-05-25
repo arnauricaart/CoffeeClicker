@@ -34,7 +34,7 @@ public class LoginView extends JFrame {
     /**
      * Label to hold the background image.
      */
-    private JLabel backgroundLabel; // Sigue siendo un JLabel
+    private JLabel backgroundLabel;
 
 
     /**

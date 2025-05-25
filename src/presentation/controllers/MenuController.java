@@ -74,18 +74,13 @@ public class MenuController implements MenuNavigator{
 
     @Override
     public void returnToMenu() {
-        // 1. Eliminar la instancia anterior de menuView si existe y es visible/mostrable.
-        // Esto es crucial para evitar que la ventana anterior permanezca.
+
         if (this.menuView != null && this.menuView.isDisplayable()) {
             this.menuView.dispose();
         }
 
-        // 2. Crear la nueva instancia de MenuGUI (como en tu código original).
-        // Esta se convertirá en la menuView activa gestionada por este controlador.
         this.menuView = new MenuGUI();
-        // El constructor de MenuGUI ya la hace visible con setVisible(true). [cite: 4]
 
-        // 3. (Re)asignar todos los listeners necesarios a ESTA NUEVA instancia de menuView.
         this.menuView.setNewGameButtonListener(e -> {
             try {
                 startNewGame();
@@ -97,9 +92,6 @@ public class MenuController implements MenuNavigator{
         this.menuView.setLogoutButtonListener(e -> logout());
         this.menuView.setDeleteAccountButtonListener(e -> deleteAccount());
 
-        // Nota: No necesitas llamar a menuView.setVisible(true) explícitamente aquí
-        // si el constructor de MenuGUI ya lo hace, pero ser explícito no daña.
-        // this.menuView.setVisible(true); // Opcional si el constructor ya lo maneja.
     }
 
     /**
@@ -136,9 +128,7 @@ public class MenuController implements MenuNavigator{
             if (partida == null) {
                 menuView.setVisible(false);
                 newGameView = new NewGameView();
-                //newGameView.setNewGameButtonListener(e -> newGame());
 
-                //Parece que el error de la primera partida se encuetra aqui
                 newGameView.setNewGameButtonListener(e -> {
                     Game nuevaPartida = newGame();
                     if (nuevaPartida != null) {
@@ -149,7 +139,6 @@ public class MenuController implements MenuNavigator{
                 newGameView.setCancelButtonListener(e -> {newGameView.dispose(); menuView.setVisible(true);});
                 newGameView.setVisible(true);
             } else {
-                //AQUI YA EXISTE
                 menuView.showGameExists();
                 gameController.playGame(partida);
                 menuView.dispose();
@@ -210,22 +199,14 @@ public class MenuController implements MenuNavigator{
      * Logs the user out by closing the menu and launching the login screen.
      */
     private void logout() {
-        // Lógica para cerrar sesión
-
-            // tancar la finestra actual
             menuView.dispose();
-
-            // obrir la pantalla de login
-
             LoginController loginController = new LoginController();
-
     }
 
     /**
      * Initiates the process of account deletion by opening a confirmation view.
      */
     private void deleteAccount() {
-        // Lógica para eliminar la cuenta
         removeAccountView = new RemoveAccountView();
         menuView.setVisible(false);
         removeAccountView.setRemoveAccButtonListener(e -> removeAccountFromDatabase());
@@ -242,7 +223,6 @@ public class MenuController implements MenuNavigator{
     private Game newGame() {
         String gameName = newGameView.getNewGameName();
         if (gameName == null || gameName.isEmpty()) {
-            // Usando tu MessageDialogs centralizado
             newGameView.showEmptyGameMessage();
             return null;
         }
@@ -251,14 +231,13 @@ public class MenuController implements MenuNavigator{
         try {
             int gameId = partidaManager.insertGame(gameName, correo);
 
-            if (gameId <= 0) { // Validar si el gameId es positivo
+            if (gameId <= 0) {
                 return null;
             }
 
             game = partidaManager.getGameById(gameId);
 
             if (game != null) {
-                // Creación exitosa
                 if (newGameView != null) {
                     newGameView.dispose();
                 }
@@ -270,12 +249,10 @@ public class MenuController implements MenuNavigator{
         } catch (BusinessException e) {
             newGameView.showDuplicateGameMessage();
             if (e.getMessage() != null && e.getMessage().contains("partida_nombre_usuario_uk")) {
-                // Esto es para cuando EL MISMO usuario intenta crear una partida con un nombre que YA TIENE.
-                //newGameView.showDuplicateGameMessage();
             } else {
 
             }
-            game = null; // Importante: asegurar que game sea null si hay excepción
+            game = null;
         }
         return game;
     }
@@ -296,7 +273,6 @@ public class MenuController implements MenuNavigator{
             } else {
                 removeAccountView.showRemoveUserMessage(false);
             }
-
             return;
         }catch(BusinessException e) {
             new PopUpView(e.getExceptionMessage());

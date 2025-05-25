@@ -186,6 +186,7 @@ public class GameView extends JFrame {
         messageText.setLineWrap(true);
         messageText.setWrapStyleWord(true);
         messageText.setEditable(false);
+        messageText.setFocusable(false);
 
         JScrollPane messageScrollPane = new JScrollPane(messageText);
         messageScrollPane.setBorder(null);
@@ -459,62 +460,34 @@ public class GameView extends JFrame {
     private void showInstructionsPopup() {
         String instructionsTitle = "How to Play Coffee Clicker";
         String instructionsMessage =
-                        "Welcome to Coffee Clicker!\n\n" +
-                        "The main goal is to produce as many coffees as you can, as quickly as possible! \n" +
-                        "The game saves your progress automatically every minute.\n\n" +
-                        "Gameplay Basics:\n" +
-                        "--------------------\n" +
-                        "- Manual Clicks: Click the large coffee cup icon on the left to manually produce 1 coffee per click.\n" +
-                        "- Coffee Counter: Your current coffee total is displayed at the top-left. \n" +
-                        "  Below it, you'll see your 'coffees per second' rate from automatic generators.\n\n" +
-                        "The Shop (Right Panel):\n" +
-                        "--------------------------\n" +
-                        "Use your coffees to buy items from the shop. Hover over an item to see its details \n" +
-                        "(cost, production) in the 'ITEM DETAILS' area (center panel).\n\n" +
-                        "Coffee Makers (Generators):\n" +
-                        "These items automatically produce coffee for you over time.\n" +
-                        "- Coffee Machine: Base cost 10 coffees, produces 0.2 c/s. Cost increases by 1.07x each.\n" +
-                        "- Barista: Base cost 150 coffees, produces 1.0 c/s. Cost increases by 1.15x each.\n" +
-                        "  Unlocks when affordable.\n" +
-                        "- Cafe: Base cost 2000 coffees, produces 15 c/s. Cost increases by 1.12x each.\n" +
-                        "  Unlocks when affordable.\n" +
-                        "The cost for the next generator of a type increases with each purchase according to the formula: \n" +
-                        "cost_next_generator = base_cost * increment_cost^number_generators_type.\n\n" +
-                        "Upgrades:\n" +
-                        "These enhance the production of your Coffee Makers. Upgrades affect both existing and \n" +
-                        "future generators of that type.\n" +
-                        "- Quick Clean (Coffee Machine Upgrade): Doubles Coffee Machine production.\n" +
-                        "  Cost is (Base CM Price) * (Upgrades Owned + 1).\n" +
-                        "- Swift Hands (Barista Upgrade): Doubles Barista production.\n" +
-                        "  Cost is (Base Barista Price) * (Upgrades Owned + 1). Unlocks with Barista.\n" +
-                        "- Happy Hour (Cafe Upgrade): Doubles Cafe production.\n" +
-                        "  Cost is (Base Cafe Price) * (Upgrades Owned + 1). Unlocks with Cafe.\n\n" +
-                        "Generator Table (Center Panel):\n" +
-                        "----------------------------------\n" +
-                        "This table shows real-time statistics about your purchased generators:\n" +
-                        "- Name: Type of generator.\n" +
-                        "- Qty: How many of that type you own.\n" +
-                        "- Unit Prod: Coffees per second from one generator of this type (including upgrades).\n" +
-                        "- Total Prod: Coffees per second from all generators of this type.\n" +
-                        "- % Overall: This type's contribution to your total coffees per second.\n\n" +
-                        "Game Controls (Bottom Right of Shop):\n" +
-                        "------------------------------------------\n" +
-                        "- Pause Game: Saves your current game progress and returns you to the main menu.\n" +
-                        "  You can resume your game by selecting 'Start Game' again from the menu.\n" +
-                        "- End Game: Finishes your current game. All game data (coffees, duration) is saved \n" +
-                        "  for the statistics screen (accessible from the main menu).\n" +
-                        "  After ending, you'll need to start a new game from scratch if you wish to play again.\n\n" +
-                        "The game has no predefined end, play as long as you like!";
+                        "\n 1. Make Coffees!\n" +
+                        "   - Click the BIG COFFEE cup to earn coffees.\n\n" +
+                        " 2. Buy to Grow!\n" +
+                        "   - Use your coffees in the SHOP:\n" +
+                        "     - Generators: They produce coffee for you automatically!\n" +
+                        "     - Upgrades: Make your generators more powerful.\n" +
+                        "   - Hint: Hover over a shop item to see its cost and details in ITEM DETAILS.\n\n" +
+                        " 3. Check Your Empire!\n" +
+                        "   - Your coffee count is at the top-left.\n" +
+                        "   - The Generator Table shows what you own and its production.\n\n" +
+                        " 4. Continue or Finish?\n" +
+                        "   - Pause Game: Saves your current game and returns you to the main menu.\n" +
+                        "   - End Game: Finishes your current game and saves your statistics.\n" +
+                        " \n                                           ENJOY MAKING COFFEES!\n";
+
 
         JTextArea textArea = new JTextArea(instructionsMessage);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        textArea.setFont(new Font("Arial", Font.PLAIN, 12));
         textArea.setBackground(UIManager.getColor("Panel.background"));
+        textArea.setBorder(null);
+        textArea.setFocusable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(550, 450));
+        scrollPane.setPreferredSize(new Dimension(450, 285));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         JOptionPane.showMessageDialog(this, scrollPane, instructionsTitle, JOptionPane.INFORMATION_MESSAGE);
     }
@@ -535,9 +508,6 @@ public class GameView extends JFrame {
      */
     public void setPerSecLabelText(String message) { SwingUtilities.invokeLater(() -> this.perSecLabel.setText(message)); }
 
-    // --- Métodos para actualizar la apariencia completa de los botones de la tienda ---
-    // Estos métodos son llamados por GameController para cambiar icono y texto (o fallback)
-    // basados en el estado del juego (ej. bloqueado/desbloqueado).
 
     /** Updates the appearance of the Coffee Machine button. */
     public void updateCoffeeMachineButtonAppearance() {
@@ -601,7 +571,6 @@ public class GameView extends JFrame {
         });
     }
 
-    //  Methods to add Action Listeners
     /** Adds an ActionListener to the main coffee button. @param listener The action listener. */
     public void addCoffeeButtonListener(ActionListener listener) { coffeeButton.addActionListener(listener); }
     /** Adds an ActionListener to the coffee machine purchase button. @param listener The action listener. */
@@ -621,7 +590,6 @@ public class GameView extends JFrame {
     /** Adds an ActionListener to the café upgrade button. @param listener The action listener. */
     public void addCafeUpgradeButtonListener(ActionListener listener) { cafeUpgradeButton.addActionListener(listener); }
 
-    //  Methods to add Mouse Listeners for contextual help
     /** Adds a MouseListener to the coffee machine purchase button. @param mouseListener The mouse listener. */
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener) { coffeeMachineButton.addMouseListener(mouseListener); }
     /** Adds a MouseListener to the barista purchase button. @param mouseListener The mouse listener. */

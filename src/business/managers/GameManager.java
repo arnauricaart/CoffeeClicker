@@ -28,7 +28,7 @@ public class GameManager implements Runnable {
     private final double COFFEEMACHINE_PERSECOND = 0.2;
     private final double BARISTA_PERSECOND = 1.0;
     private final double CAFE_PERSECOND = 5.0;
-    private static final long AUTO_SAVE_INTERVAL = 60000; // To auto-save every minute
+    private static final long AUTO_SAVE_INTERVAL = 60000;
 
     private boolean baristaUnlocked;
     private boolean baristaUpgradeUnlocked;
@@ -211,8 +211,9 @@ public class GameManager implements Runnable {
      * Purchases the coffee machine upgrade and increases its level.
      */
     public void buyCoffeeMachineUpgrade() {
-        game.subtractCoffee(getCoffeeMachineUpgradePrice()); // Revertido
-        game.increaseUpgradeCoffeeMachine();                 // Revertido
+        game.subtractCoffee(getCoffeeMachineUpgradePrice());
+        game.increaseUpgradeCoffeeMachine();
+
     }
 
     /**
@@ -221,7 +222,6 @@ public class GameManager implements Runnable {
      * @return the upgrade price
      */
     public int getCoffeeMachineUpgradePrice() {
-        // REVERTIDO a la fórmula original sin el '* 5'
         return COFFEE_MACHINE_PRICE_BASE * (game.getNumUpgradeCoffeeMachine() + 1);
     }
 
@@ -231,15 +231,15 @@ public class GameManager implements Runnable {
      * @return true if affordable, false otherwise
      */
     public boolean canBuyBaristaUpgrade() {
-        return game.getNumCoffees() >= getBaristaUpgradePrice(); // Revertido
+        return game.getNumCoffees() >= getBaristaUpgradePrice();
     }
 
     /**
      * Purchases the barista upgrade and increases its level.
      */
     public void buyBaristaUpgrade(){
-        game.subtractCoffee(getBaristaUpgradePrice()); // Revertido
-        game.increaseUpgradeBarista();                 // Revertido
+        game.subtractCoffee(getBaristaUpgradePrice());
+        game.increaseUpgradeBarista();
     }
 
     /**
@@ -248,7 +248,6 @@ public class GameManager implements Runnable {
      * @return the upgrade price
      */
     public int getBaristaUpgradePrice(){
-        // REVERTIDO a la fórmula original sin el '* 5'
         return BARISTA_PRICE_BASE * (game.getNumUpgradeBarista() + 1);
     }
 
@@ -258,15 +257,15 @@ public class GameManager implements Runnable {
      * @return true if affordable, false otherwise
      */
     public boolean canBuyCafeUpgrade() {
-        return game.getNumCoffees() >= getCafeUpgradePrice(); // Revertido
-    }
+        return game.getNumCoffees() >= getCafeUpgradePrice();
+}
 
     /**
      * Purchases the cafe upgrade and increases its level.
      */
     public void buyCafeUpgrade() {
-        game.subtractCoffee(getCafeUpgradePrice()); // Revertido
-        game.increaseUpgradeCafe();                 // Revertido
+        game.subtractCoffee(getCafeUpgradePrice());
+        game.increaseUpgradeCafe();
     }
 
     /**
@@ -275,7 +274,6 @@ public class GameManager implements Runnable {
      * @return the upgrade price
      */
     public int getCafeUpgradePrice() {
-        // REVERTIDO a la fórmula original sin el '* 5'
         return CAFE_PRICE_BASE * (game.getNumUpgradeCafe() + 1);
     }
 
@@ -285,7 +283,7 @@ public class GameManager implements Runnable {
      * @return true if requirements are met, false otherwise
      */
     public boolean canUnlockBarista() {
-        return game.getNumCoffees() >= BARISTA_PRICE_BASE && !baristaUnlocked; // Revertido
+        return game.getNumCoffees() >= BARISTA_PRICE_BASE && !baristaUnlocked;
     }
 
     /**
@@ -308,7 +306,7 @@ public class GameManager implements Runnable {
      * @return true if unlockable, false otherwise
      */
     public boolean canUnlockCafe() {
-        return game.getNumCoffees() >= CAFE_PRICE_BASE && !cafeUnlocked; // Revertido
+        return game.getNumCoffees() >= CAFE_PRICE_BASE && !cafeUnlocked;
     }
 
     /**
@@ -335,20 +333,19 @@ public class GameManager implements Runnable {
      * Updates the per-second coffee generation rate based on owned generators and upgrades.
      */
     public void updatePerSecond() {
-        // Revertido a acceso directo, asumiendo 'game' no será null
         perSecond = (double)(game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
                 (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
                 (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
 
-    public double getCoffeeCounter() { return game.getNumCoffees(); } // Revertido
+    public double getCoffeeCounter() { return game.getNumCoffees(); }
     public double getPerSecond() { return perSecond; }
-    public int getCoffeeMachineNumber() { return game.getNumCoffeeMachine(); } // Revertido
-    public int getBaristaNumber() { return game.getNumBarista(); }             // Revertido
-    public int getCafeNumber() { return game.getNumCafe(); }                   // Revertido
-    public int getCoffeeMachineUpgradeNumber() { return game.getNumUpgradeCoffeeMachine(); } // Revertido
-    public int getBaristaUpgradeNumber() { return game.getNumUpgradeBarista(); }             // Revertido
-    public int getCafeUpgradeNumber(){ return game.getNumUpgradeCafe(); }                     // Revertido
+    public int getCoffeeMachineNumber() { return game.getNumCoffeeMachine(); }
+    public int getBaristaNumber() { return game.getNumBarista(); }
+    public int getCafeNumber() { return game.getNumCafe(); }
+    public int getCoffeeMachineUpgradeNumber() { return game.getNumUpgradeCoffeeMachine(); }
+    public int getBaristaUpgradeNumber() { return game.getNumUpgradeBarista(); }
+    public int getCafeUpgradeNumber(){ return game.getNumUpgradeCafe(); }
 
     /**
      * Prepares statistical data on generators for display in a table.
@@ -356,9 +353,6 @@ public class GameManager implements Runnable {
      * @return a 3x5 Object array
      */
     public Object[][] getGeneratorStatsData() {
-        // Revertido a la lógica que asume 'game' no es null aquí.
-        // Si 'game' pudiera ser null y esto causara un error, necesitarías
-        // la verificación o asegurar que no se llame en ese estado.
 
         Object[][] data = new Object[3][5];
         DecimalFormat dfRate = new DecimalFormat("0.0");
@@ -372,7 +366,6 @@ public class GameManager implements Runnable {
         double[] unitProductions = new double[3];
         double[] totalProductionsByType = new double[3];
 
-        // Recalcular el total aquí para asegurar la precisión del porcentaje en este instante.
         double currentTotalPerSecond = (game.getNumCoffeeMachine() * COFFEEMACHINE_PERSECOND * (game.getNumUpgradeCoffeeMachine() + 1)) +
                 (game.getNumBarista() * BARISTA_PERSECOND * (game.getNumUpgradeBarista() + 1)) +
                 (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
@@ -523,14 +516,8 @@ public class GameManager implements Runnable {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    // Revertido a como estaba originalmente
                     e.printStackTrace();
-                    // Si el hilo se interrumpe, el bucle podría continuar si 'running' sigue true.
-                    // La interrupción por sí sola no detiene el bucle 'while(running)'.
-                    // Se dependerá de que 'running' se ponga a 'false' desde fuera (ej. endGame, pauseGame).
                 }
-
-                // Se asume que 'game' no será null dentro de este bucle si 'running' es true
                 updatePerSecond();
                 addCoffee(getPerSecond());
 

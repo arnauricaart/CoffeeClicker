@@ -8,8 +8,6 @@ import java.sql.*;
  * This class makes impossible to make more than one connection instance to the database.
  */
 public final class Singleton {
-    // The field must be declared volatile so that double check lock would work
-    // correctly.
     /**
      * Instance of the class that will be given any time is needed.
      */

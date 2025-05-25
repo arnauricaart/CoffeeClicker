@@ -118,22 +118,17 @@ public class NewGameView extends BaseForm {
         add(cancelButton);
 
 
-        // --- Configuración del newGameButton ("Start") con imágenes ---
         newGameButton = new JButton();
         Dimension newGameBtnSize = new Dimension(buttonWidth, buttonHeight);
         newGameButton.setBounds(buttonsStartX + buttonWidth + spacing, buttonY, newGameBtnSize.width, newGameBtnSize.height);
 
-        String newGameNormalPath = "res/button_start.png"; // Asumiendo estos nombres
+        String newGameNormalPath = "res/button_start.png";
         String newGameRolloverPath = "res/button_start2.png";
         boolean newGameImageLoaded = false;
 
         try {
             ImageIcon icon = new ImageIcon(newGameNormalPath);
             if (icon.getIconWidth() > 0) {
-                // if (icon.getIconWidth() != newGameBtnSize.width || icon.getIconHeight() != newGameBtnSize.height) {
-                //    Image scaledImg = icon.getImage().getScaledInstance(newGameBtnSize.width, newGameBtnSize.height, Image.SCALE_SMOOTH);
-                //    icon = new ImageIcon(scaledImg);
-                // }
                 newGameButton.setIcon(icon);
                 newGameImageLoaded = true;
             }
@@ -145,10 +140,6 @@ public class NewGameView extends BaseForm {
             try {
                 ImageIcon rIcon = new ImageIcon(newGameRolloverPath);
                 if (rIcon.getIconWidth() > 0) {
-                    // if (rIcon.getIconWidth() != newGameBtnSize.width || rIcon.getIconHeight() != newGameBtnSize.height) {
-                    //    Image scaledRollover = rIcon.getImage().getScaledInstance(newGameBtnSize.width, newGameBtnSize.height, Image.SCALE_SMOOTH);
-                    //    rIcon = new ImageIcon(scaledRollover);
-                    // }
                     newGameButton.setRolloverIcon(rIcon);
                     newGameButton.setRolloverEnabled(true);
                 }
@@ -159,12 +150,8 @@ public class NewGameView extends BaseForm {
 
         if (newGameImageLoaded) {
             makeButtonLookLikeImage(newGameButton);
-            // Si el texto "Start" está en la imagen, no necesitas lo siguiente.
         } else {
-            // Fallback si la imagen normal no se cargó
             newGameButton.setText("Start (Error)");
-            //newGameButton.setBackground(BUTTON_COLOR);    // Color original de fallback
-            //newGameButton.setForeground(PRIMARY_COLOR); // Color de texto original
             applyTextButtonStyles(newGameButton);
         }
         commonButtonViewSetup(newGameButton);
@@ -196,7 +183,7 @@ public class NewGameView extends BaseForm {
     private void commonButtonViewSetup(JButton button) {
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // No se necesita setAlignmentX para botones posicionados con setBounds.
+
     }
 
     /**

@@ -232,8 +232,6 @@ public class ShowGamesView extends JFrame {
      */
     public void setSearchActionListener(ActionListener l) {
         searchButton.addActionListener(l);
-        
-        // Also add action listeners to text fields for "Enter" key
         ActionListener al = e -> l.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
         userSearchField.addActionListener(al);
         gameSearchField.addActionListener(al);

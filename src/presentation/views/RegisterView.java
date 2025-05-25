@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-// No se necesita ImageIO ni URL si las imágenes se cargan directamente con ImageIcon
-// y asumimos que tienen el tamaño correcto.
 
 /**
  * This class extends from JFrame, this class implements a view that will let the user register.
@@ -30,7 +28,7 @@ public class RegisterView extends JFrame {
     /**
      * Button that will let the user register himself.
      */
-    private JButton registerButton; // Ahora usará imágenes
+    private JButton registerButton;
     /**
      * Pressable label that will let the user go back to the login view.
      */
@@ -38,7 +36,7 @@ public class RegisterView extends JFrame {
     /**
      * Label that will have the background image.
      */
-    private JLabel backgroundLabel; // Para la imagen de fondo
+    private JLabel backgroundLabel;
 
     /**
      * Constructor of the class. Sets everything in the view, from the title to the background image.

@@ -50,9 +50,8 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      * Initializes the view, registers listeners, and prepares the UI.
      */
     private void createView(){
-        view = new GameView(); // Crea la instancia de la vista
+        view = new GameView();
 
-        // Registra este controlador como listener para los botones de la vista
         view.addCoffeeButtonListener(this);
         view.addCoffeeMachineButtonListener(this);
         view.addBaristaButtonListener(this);
@@ -62,7 +61,6 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         view.addBaristaUpgradeButtonListener(this);
         view.addCafeUpgradeButtonListener(this);
 
-        // Registra este controlador como MouseListener para mensajes contextuales
         view.addCoffeeMachineButtonMouseListener(this);
         view.addBaristaButtonMouseListener(this);
         view.addCafeButtonMouseListener(this);
@@ -70,14 +68,12 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         view.addBaristaUpgradeButtonMouseListener(this);
         view.addCafeUpgradeButtonMouseListener(this);
 
-        // Listeners para Pausa y Fin de Juego
         view.addPauseButtonListener(e -> togglePause());
         view.addEndGameButtonListener(e -> endGame());
 
-        // Registra este controlador para escuchar actualizaciones del modelo (GameManager)
         model.setGameUpdateListener(this);
 
-        updateLabels(); // Actualiza las etiquetas/botones inicialmente
+        updateLabels();
     }
 
     /**
@@ -87,11 +83,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     public void playGame(Game game){
         try {
-            model.playGame(game); // Le dice al modelo que inicie el juego
-            createView(); // Crea la interfaz gráfica del juego
-            view.open(); // Hace visible la ventana del juego
+            model.playGame(game);
+            createView();
+            view.open();
 
-            onGameUpdated(); // Llama a onGameUpdated para asegurar que la UI esté sincronizada desde el inicio
+            onGameUpdated();
         }catch(BusinessException e){
             new PopUpView(e.getExceptionMessage());
         }
@@ -102,9 +98,9 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     public void endGame(){
         try {
-            model.endGame(); // Le dice al modelo que termine el juego (guardar, etc.)
-            view.close(); // Cierra la ventana del juego
-            menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+            model.endGame();
+            view.close();
+            menuNavigator.returnToMenu();
         }catch(BusinessException e){
             new PopUpView(e.getExceptionMessage());
         }
@@ -117,9 +113,9 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     public void togglePause() {
         try {
-            model.pauseGame(); // Le dice al modelo que pause el juego (guardar estado)
-            view.close(); // Cierra la ventana del juego
-            menuNavigator.returnToMenu(); // Navega de vuelta al menú principal
+            model.pauseGame();
+            view.close();
+            menuNavigator.returnToMenu();
         } catch (BusinessException e){
             new PopUpView(e.getExceptionMessage());
         }
@@ -130,12 +126,10 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      * Este metodo es llamado por onGameUpdated o cuando se necesita refrescar la UI.
      */
     private void updateLabels() {
-        SwingUtilities.invokeLater(() -> { // Asegura que las actualizaciones de UI se hagan en el Event Dispatch Thread
-            // Actualiza el contador de cafés y cafés por segundo
+        SwingUtilities.invokeLater(() -> {
             view.setCounterLableText((int) model.getCoffeeCounter() + " coffees");
             view.setPerSecLabelText("per second: " + String.format("%.1f", model.getPerSecond()));
 
-            // Actualiza la apariencia de los botones de la tienda
             view.updateCoffeeMachineButtonAppearance();
             view.updateCoffeeMachineUpgradeButtonAppearance();
 
@@ -161,7 +155,7 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
             clip.open(audioStream);
             clip.start();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace(); // Manejo básico de errores de sonido
+            e.printStackTrace();
         }
     }
 
@@ -178,13 +172,25 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
         if (result.getMessage() != null && !result.getMessage().isEmpty()) {
             view.setMessageText(result.getMessage());
         }
-        
-        if (result.shouldPlayErrorSound()) {
-            playSound("res/error.wav");
-        } else if (result.isSuccess()) {
-            playSound("res/ding.wav");
+
+        if (command.equals("COFFEEBUTTON")) {
+            if (result.isSuccess()) {
+                playSound("res/clickcoffe.wav");
+            }
+        } else {
+            if (result.shouldPlayErrorSound()) {
+                playSound("res/error.wav");
+            } else if (result.isSuccess()) {
+
+                playSound("res/ding.wav");
+
+                String updatedDescription = model.getButtonDescription(command);
+                if (updatedDescription != null && !updatedDescription.isEmpty()) {
+                    view.setMessageText(updatedDescription);
+                }
+
+            }
         }
-        
         updateLabels();
     }
 
@@ -207,7 +213,6 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
     @Override
     public void mouseExited(MouseEvent e) {view.setMessageText("");}
 
-    // Unused MouseListener methods (Métodos no utilizados de MouseListener, pero deben estar por la interfaz)
     @Override public void mouseClicked(MouseEvent e) {}
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
@@ -219,13 +224,11 @@ public class GameController implements ActionListener, MouseListener, GameUpdate
      */
     @Override
     public void onGameUpdated() {
-        updateLabels(); // Actualiza todos los textos y apariencias de botones
+        updateLabels();
 
-        // Comnetar, para que se actialize la tabla (Comentario original mantenido)
-        // Actualiza la tabla de generadores
-        Object[][] statsData = model.getGeneratorStatsData(); // Obtiene los datos del modelo
-        if (view != null) { // Verifica que la vista exista
-            view.updateGeneratorStatsTable(statsData); // Le dice a la vista que actualice la tabla
+        Object[][] statsData = model.getGeneratorStatsData();
+        if (view != null) {
+            view.updateGeneratorStatsTable(statsData);
         }
     }
 }
