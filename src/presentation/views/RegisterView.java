@@ -175,28 +175,58 @@ public class RegisterView extends JFrame {
     }
 
     /**
-     * Getter of the user name.
+     * Getter of the user name, if it is superior to 150, we inform the user that it is capped.
      * @return String with the user name.
      */
-    public String getUsername() { return usernameField.getText(); }
+    public String getUsername() {
+        String text = usernameField.getText();
+        if(text.length() > 150){
+            new PopUpView("The username can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
+    }
 
     /**
-     * Getter of the user mail.
+     * Getter of the user mail, if it is superior to 150, we inform the user that it is capped.
      * @return String with the user mail.
      */
-    public String getEmail() { return emailField.getText(); }
+    public String getEmail() {
+        String text = emailField.getText();
+        if(text.length() > 150){
+            new PopUpView("The email can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
+    }
 
     /**
-     * Getter of the user's password.
+     * Getter of the user's password, if it is superior to 150, we inform the user that it is capped.
      * @return String with the user's password.
      */
-    public String getPassword() { return new String(passwordField.getPassword()); }
+    public String getPassword() {
+        char[] passwordChars = passwordField.getPassword();
+        if (passwordChars.length > 150) {
+            passwordChars = java.util.Arrays.copyOf(passwordChars, 150);
+            new PopUpView("The password can only accept a maximum of 150characters.");
+        }
+        return new String(passwordChars);
+    }
 
     /**
-     * Getter of the user's repassword.
+     * Getter of the user's repassword, if it is superior to 150, we inform the user that it is capped.
      * @return String with the user's repassword.
      */
-    public String getRepassword() { return new String(repasswordField.getPassword()); }
+    public String getRepassword() {
+        char[] passwordChars = repasswordField.getPassword();
+        if (passwordChars.length > 150) {
+            passwordChars = java.util.Arrays.copyOf(passwordChars, 150);
+            new PopUpView("The conpassword can only accept a maximum of 150characters.");
+        }
+        return new String(passwordChars);
+    }
 
     /**
      * This method sets an action listener to the register button.
@@ -207,9 +237,10 @@ public class RegisterView extends JFrame {
             registerButton.addActionListener(al);
         }
     }
+
     /**
-     * This method sets an action listener to the login label.
-     * @param al Action Listener that tells the login label what to do when pressed.
+     * This method sets an action listener to the login button.
+     * @param ma Action Listener that tells the button what to do when pressed.
      */
     public void setLoginLabelListener(MouseAdapter ma) { goToLogin.addMouseListener(ma); }
 

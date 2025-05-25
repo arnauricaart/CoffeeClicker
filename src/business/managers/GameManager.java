@@ -43,6 +43,10 @@ public class GameManager implements Runnable {
     private GameUpdateListener listener;
     private Timer autoSaveTimer;
 
+    /**
+     * GameManager constructor.
+     * Initializes DAOs, game state variables, and the auto-save timer.
+     */
     public GameManager() {
         gameDAO = new GameDBDAO();
         statDAO = new StatsDBDAO();
@@ -54,6 +58,11 @@ public class GameManager implements Runnable {
         autoSaveTimer = new Timer(true);
     }
 
+    /**
+     * Sets the listener that will be notified of game updates.
+     * The listener is typically the GameController.
+     * @param listener The listener to be notified of game updates.
+     */
     public void setGameUpdateListener(GameUpdateListener listener) {
         this.listener = listener;
     }
@@ -160,49 +169,95 @@ public class GameManager implements Runnable {
         saveGameState();
     }
 
+    /**
+     * Adds a specified amount of coffee to the current game's coffee count.
+     * This method updates the coffee total within the active Game instance.
+     *
+     * @param amount The quantity of coffee to be added to the current total.
+     */
     public void addCoffee(double amount) {
         game.addCoffee(amount);
     }
 
+    /**
+     * Checks if the player has enough coffee to buy a Coffee Machine.
+     * @return true if affordable, false otherwise.
+     */
     public boolean canBuyCoffeeMachine() {
         return game.getNumCoffees() >= getCoffeeMachinePrice();
     }
 
+    /**
+     * Purchases a Coffee Machine generator.
+     * Deducts cost and increments the number of owned Coffee Machines.
+     */
     public void buyCoffeeMachine() {
         game.subtractCoffee(getCoffeeMachinePrice());
         game.increaseGeneratorCoffeeMachine();
     }
 
+    /**
+     * Calculates the current price for the next Coffee Machine generator.
+     * @return The price of the next Coffee Machine.
+     */
     public int getCoffeeMachinePrice() {
         return (int) Math.round(COFFEE_MACHINE_PRICE_BASE * Math.pow(1.07, game.getNumCoffeeMachine()));
     }
 
+    /**
+     * Checks if the player has enough coffee to buy a Barista.
+     * @return true if affordable, false otherwise.
+     */
     public boolean canBuyBarista() {
         return game.getNumCoffees() >= getBaristaPrice();
     }
 
+    /**
+     * Purchases a Barista generator.
+     * Deducts cost and increments the number of owned Baristas.
+     */
     public void buyBarista() {
         game.subtractCoffee(getBaristaPrice());
         game.increaseGeneratorBarista();
     }
 
+    /**
+     * Calculates the current price for the next Barista generator.
+     * @return The price of the next Barista.
+     */
     public int getBaristaPrice() {
         return (int) Math.round(BARISTA_PRICE_BASE * Math.pow(1.15, game.getNumBarista()));
     }
 
+    /**
+     * Checks if the player has enough coffee to buy a Cafe.
+     * @return true if affordable, false otherwise.
+     */
     public boolean canBuyCafe() {
         return game.getNumCoffees() >= getCafePrice();
     }
 
+    /**
+     * Purchases a Cafe generator.
+     * Deducts cost and increments the number of owned Cafes.
+     */
     public void buyCafe() {
         game.subtractCoffee(getCafePrice());
         game.increaseGeneratorCafe();
     }
 
+    /**
+     * Calculates the current price for the next Cafe generator.
+     * @return The price of the next Cafe.
+     */
     public int getCafePrice() {
         return (int) Math.round(CAFE_PRICE_BASE * Math.pow(1.07, game.getNumCafe()));
     }
 
+    /**
+     * Checks if the player has enough coffee to buy a Coffee Machine.
+     * @return true if affordable, false otherwise.
+     */
     public boolean canBuyCoffeeMachineUpgrade() {
         return game.getNumCoffees() >= getCoffeeMachineUpgradePrice();
     }
@@ -323,9 +378,28 @@ public class GameManager implements Runnable {
         cafeUpgradeUnlocked = true;
     }
 
+    /**
+     * Checks if Barista generators are unlocked for purchase.
+     * @return true if Baristas are unlocked, false otherwise.
+     */
     public boolean isBaristaUnlocked() { return baristaUnlocked; }
+
+    /**
+     * Checks if Barista upgrades are unlocked for purchase.
+     * @return true if Barista upgrades are unlocked, false otherwise.
+     */
     public boolean isBaristaUpgradeUnlocked(){ return baristaUpgradeUnlocked; }
+
+    /**
+     * Checks if Cafe generators are unlocked for purchase.
+     * @return true if Cafes are unlocked, false otherwise.
+     */
     public boolean isCafeUnlocked() { return cafeUnlocked; }
+
+    /**
+     * Checks if Cafe upgrades are unlocked for purchase.
+     * @return true if Cafe upgrades are unlocked, false otherwise.
+     */
     public boolean isCafeUpgradeUnlocked(){ return cafeUpgradeUnlocked; }
 
 
@@ -338,13 +412,54 @@ public class GameManager implements Runnable {
                 (game.getNumCafe() * CAFE_PERSECOND * (game.getNumUpgradeCafe() + 1));
     }
 
+    /**
+     * Gets the current total number of coffees the player has.
+     * @return The current coffee count.
+     */
     public double getCoffeeCounter() { return game.getNumCoffees(); }
+
+    /**
+     * Gets the current rate of coffees generated automatically per second.
+     * @return The coffees per second rate.
+     */
     public double getPerSecond() { return perSecond; }
+
+    /**
+     * Gets the current number of Coffee Machine generators owned.
+     * @return The number of Coffee Machines.
+     */
     public int getCoffeeMachineNumber() { return game.getNumCoffeeMachine(); }
+
+
+    /**
+     * Gets the current number of Barista generators owned.
+     * @return The number of Baristas.
+     */
     public int getBaristaNumber() { return game.getNumBarista(); }
+
+
+    /**
+     * Gets the current number of Cafe generators owned.
+     * @return The number of Cafes.
+     */
     public int getCafeNumber() { return game.getNumCafe(); }
+
+    /**
+     * Gets the current upgrade level for Coffee Machine generators.
+     * @return The Coffee Machine upgrade level.
+     */
     public int getCoffeeMachineUpgradeNumber() { return game.getNumUpgradeCoffeeMachine(); }
+
+    /**
+     * Gets the current upgrade level for Barista generators.
+     * @return The Barista upgrade level.
+     */
     public int getBaristaUpgradeNumber() { return game.getNumUpgradeBarista(); }
+
+    /**
+     * Gets the current upgrade level for Cafe generators.
+     * @return The Cafe upgrade level.
+     */
     public int getCafeUpgradeNumber(){ return game.getNumUpgradeCafe(); }
 
     /**
@@ -391,6 +506,11 @@ public class GameManager implements Runnable {
         return data;
     }
 
+    /**
+     * Gets the command clicked and handles it appropiately.
+     * @param buttonCommand The command gotten from the action result
+     * @return ButtonActionResult the action result of the button
+     */
     public ButtonActionResult handleButtonAction(String buttonCommand) {
         switch (buttonCommand) {
             case "COFFEEBUTTON":
@@ -456,6 +576,12 @@ public class GameManager implements Runnable {
         }
     }
 
+    /**
+     * Gets the descriptive text for a game shop button.
+     * Used to display item details like price and effect.
+     * @param buttonName The identifier of the button.
+     * @return A string description for the button.
+     */
     public String getButtonDescription(String buttonName) {
         switch (buttonName) {
             case "COFFEEMACHINEBUTTON":

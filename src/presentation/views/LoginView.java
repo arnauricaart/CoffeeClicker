@@ -167,18 +167,33 @@ public class LoginView extends JFrame {
     }
 
     /**
-     * Returns the text currently entered in the username field.
+     * Returns the text currently entered in the username field, if it is superior to 150, we inform the user that it is capped.
      *
      * @return the username or email input by the user
      */
-    public String getUsername() { return usernameField.getText(); }
+    public String getUsername() {
+        String text = usernameField.getText();
+        if(text.length() > 150){
+            new PopUpView("The username can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
+    }
 
     /**
-     * Returns the password currently entered in the password field.
+     * Returns the password currently entered in the password field,if it is superior to 150, we inform the user that it is capped.
      *
      * @return the password as a String
      */
-    public String getPassword() { return new String(passwordField.getPassword()); }
+    public String getPassword() {
+        char[] passwordChars = passwordField.getPassword();
+        if (passwordChars.length > 150) {
+            passwordChars = java.util.Arrays.copyOf(passwordChars, 150);
+            new PopUpView("The password can only accept a maximum of 150characters.");
+        }
+        return new String(passwordChars);
+    }
 
     /**
      * Sets the ActionListener for the login button and Enter key on input fields.

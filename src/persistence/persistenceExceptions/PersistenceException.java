@@ -4,6 +4,9 @@ package persistence.persistenceExceptions;
  * Represents all the Persistence Exceptions that may occur when running the code. It is abstract.
  */
 public abstract class PersistenceException extends Exception {
+    /**
+     * String that contains the message that will be shown when the exception gets activated.
+     */
     private static String message;
 
     /**

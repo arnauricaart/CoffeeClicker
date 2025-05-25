@@ -49,7 +49,7 @@ public class CafeStatsPanel extends JPanel {
         int height = getHeight();
 
         // Chart margins
-        int leftMargin = 60;
+        int leftMargin = 75;
         int rightMargin = 30;
         int topMargin = 40;
         int bottomMargin = 60;

@@ -1,8 +1,5 @@
 package presentation.views;
 
-import presentation.presentationExceptions.EmptyNameException;
-import presentation.presentationExceptions.PresentationException;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -187,11 +184,17 @@ public class NewGameView extends BaseForm {
     }
 
     /**
-     * Getter method of the Game Name.
+     * Getter method of the Game Name, if it is superior to 150, we inform the user that it is capped.
      * @return Returns a String with the Game Name.
      */
     public String getNewGameName() {
-        return newGameName.getText();
+        String text = newGameName.getText();
+        if(text.length() > 150){
+            new PopUpView("The game name can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
     }
 
     /**
@@ -210,10 +213,16 @@ public class NewGameView extends BaseForm {
         if (cancelButton != null) cancelButton.addActionListener(al);
     }
 
+    /**
+     * Shows the duplicated game message.
+     */
     public void showDuplicateGameMessage() {
         JOptionPane.showMessageDialog(this, "This game already exists.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Shows the empty game message.
+     */
     public void showEmptyGameMessage() {
         JOptionPane.showMessageDialog(this, "You must enter the name for the game.", "Error", JOptionPane.ERROR_MESSAGE);
     }

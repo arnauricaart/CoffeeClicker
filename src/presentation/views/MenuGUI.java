@@ -10,8 +10,26 @@ import java.awt.event.ActionListener;
  */
 public class MenuGUI extends JFrame {
 
-    // UI components
-    private JButton newGameButton, statisticsButton, logoutButton, deleteAccountButton;
+    /**
+     * JButton that lets us create a new game
+     */
+    private JButton newGameButton;
+    /**
+     * JButton that lets us show the statistics
+     */
+    private JButton statisticsButton;
+    /**
+     * JButton that lets us log out
+     */
+    private JButton logoutButton;
+    /**
+     * JButton that lets us delete the account
+     */
+    private JButton deleteAccountButton;
+
+    /**
+     * Color that sets the text color to black
+     */
     private final Color TITLE_TEXT_COLOR = Color.BLACK;
 
     /**

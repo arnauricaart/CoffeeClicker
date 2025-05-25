@@ -44,7 +44,7 @@ public class ShowGamesView extends JFrame {
      */
     private ActionListener showStatsActionListener;
     /**
-     * Actio Listener that will search the games.
+     * Action Listener that will search the games.
      */
     private ActionListener searchActionListener;
     /**
@@ -63,9 +63,13 @@ public class ShowGamesView extends JFrame {
      * JSplitPane that lets us divide the view in 2 parts, the search of the game and the stats.
      */
     private JSplitPane splitPane;
-
+    /**
+     * JButton that lets us go back to the previous screen.
+     */
     private JButton returnButton;
-
+    /**
+     * Action Listener that will return the to the previous screen.
+     */
     private ActionListener returnActionListener;
 
     /**
@@ -211,19 +215,31 @@ public class ShowGamesView extends JFrame {
     }
 
     /**
-     * This method gets the user search text.
+     * This method gets the user search text, if it is superior to 150, we inform the user that it is capped.
      * @return Returns a string with the user name.
      */
     public String getUserSearchText() {
-        return userSearchField.getText().trim();
+        String text = userSearchField.getText().trim();
+        if(text.length() > 150){
+            new PopUpView("The username can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
     }
 
     /**
-     * This method gets the game name for the search.
+     * This method gets the game name for the search, if it is superior to 150, we inform the user that it is capped.
      * @return Returns a string with the game name.
      */
     public String getGameSearchText() {
-        return gameSearchField.getText().trim();
+        String text = gameSearchField.getText().trim();
+        if(text.length() > 150){
+            new PopUpView("The game name can only accept a maximum of 150characters.");
+            return text.substring(0, 150);
+        }else{
+            return text;
+        }
     }
 
     /**

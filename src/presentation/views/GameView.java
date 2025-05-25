@@ -17,29 +17,129 @@ import java.io.File;
  */
 public class GameView extends JFrame {
 
-    // UI components used
-    private JLabel counterLabel, perSecLabel;
-    private JButton coffeeButton, coffeeMachineButton, baristaButton, cafeButton;
-    private JButton coffeeMachineUpgradeButton, baristaUpgradeButton, cafeUpgradeButton;
-    private JButton pauseButton, endGameButton;
+    /**
+     * JLabel pertaining to the perSecLabel
+     */
+    private JLabel perSecLabel;
+
+    /**
+     * Label that displays the current count of the player's coffees.
+     */
+    private JLabel counterLabel;
+    /**
+     * JButton that lets us buy a coffee
+     */
+    private JButton coffeeButton;
+    /**
+     * JButton that lets us buy a coffee machine
+     */
+    private JButton coffeeMachineButton;
+    /**
+     * JButton that lets us buy a barista
+     */
+    private JButton baristaButton;
+    /**
+     * JButton that lets us buy a cafe
+     */
+    private JButton cafeButton;
+    /**
+     * JButton that lets us buy a coffee machine upgrade
+     */
+    private JButton coffeeMachineUpgradeButton;
+    /**
+     * JButton that lets us buy a barista upgrade
+     */
+    private JButton baristaUpgradeButton;
+    /**
+     * JButton that lets us buy a cafe upgrade
+     */
+    private JButton cafeUpgradeButton;
+    /**
+     * JButton that lets us pause the game
+     */
+    private JButton pauseButton;
+    /**
+     * JButton that lets us end the game
+     */
+    private JButton endGameButton;
+    /**
+     * JTextArea that sets the message text
+     */
     private JTextArea messageText;
 
-    // Fonts used
-    private Font titleFont, subtitleFont, mainTextFont, smallTextFont, buttonShopFont, tableHeaderFont, tableContentFont;
-
+    // Fonts
+    /**
+     * JFont that sets the title font
+     */
+    private Font titleFont;
+    /**
+     * JFont that sets the subtitle font
+     */
+    private Font subtitleFont;
+    /**
+     * JFont that sets the main text font
+     */
+    private Font mainTextFont;
+    /**
+     * JFont that sets the small text font
+     */
+    private Font smallTextFont;
+    /**
+     * JFont that sets the button shop font
+     */
+    private Font buttonShopFont;
+    /**
+     * JFont that sets the table header font
+     */
+    private Font tableHeaderFont;
+    /**
+     * JFont that sets the table content font
+     */
+    private Font tableContentFont;
+    
     // Table
+    /**
+     * JTable that creates the generator stats table
+     */
     private JTable generatorStatsTable;
+    /**
+     * DefaultTableModel that sets the stats table model
+     */
     private DefaultTableModel generatorStatsTableModel;
+    /**
+     * JScrollPane that sets the stats table scroll
+     */
     private JScrollPane generatorStatsScrollPane;
+    /**
+     * String[] that creates the columns and sets them to: Name, Qty, Unit Prod, Total Prod and % Overall
+     */
     private final String[] generatorTableColumns = {"Name", "Qty", "Unit Prod", "Total Prod", "% Overall"};
 
     // Titles
+    /**
+     * JLabel pertaining to the generator table title
+     */
     private JLabel generatorTableTitleLabel;
-    private JLabel coffeeMakersTitleLabel, upgradesTitleLabel;
+    /**
+     * JLabel pertaining to the coffee maker title
+     */
+    private JLabel coffeeMakersTitleLabel;
+    /**
+     * JLabel pertaining to the upgrades title
+     */
+    private JLabel upgradesTitleLabel;
+    /**
+     * JLabel pertaining to the main title
+     */
     private JLabel shopMainTitleLabel;
+    /**
+     * JLabel pertaining to the item details title
+     */
     private JLabel itemDetailsTitleLabel;
 
-    // Instrucition Button
+    /**
+     * JButton that lets us view the game instructions
+     */
     private JButton instructionsButton;
 
 
@@ -571,36 +671,96 @@ public class GameView extends JFrame {
         });
     }
 
-    /** Adds an ActionListener to the main coffee button. @param listener The action listener. */
+    /**
+     * Adds an ActionListener to the main coffee button.
+     * @param listener The ActionListener to be added.
+     */
     public void addCoffeeButtonListener(ActionListener listener) { coffeeButton.addActionListener(listener); }
-    /** Adds an ActionListener to the coffee machine purchase button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the coffee machine purchase button.
+     * @param listener The ActionListener to be added.
+     */
     public void addCoffeeMachineButtonListener(ActionListener listener) { coffeeMachineButton.addActionListener(listener); }
-    /** Adds an ActionListener to the barista purchase button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the barista purchase button.
+     * @param listener The ActionListener to be added.
+     */
     public void addBaristaButtonListener(ActionListener listener) { baristaButton.addActionListener(listener); }
-    /** Adds an ActionListener to the café purchase button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the cafe purchase button.
+     * @param listener The ActionListener to be added.
+     */
     public void addCafeButtonListener(ActionListener listener) { cafeButton.addActionListener(listener); }
-    /** Adds an ActionListener to the pause button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the pause button.
+     * @param listener The ActionListener to be added.
+     */
     public void addPauseButtonListener(ActionListener listener) { pauseButton.addActionListener(listener); }
-    /** Adds an ActionListener to the end game button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the end game button.
+     * @param listener The ActionListener to be added.
+     */
     public void addEndGameButtonListener(ActionListener listener) { endGameButton.addActionListener(listener); }
-    /** Adds an ActionListener to the coffee machine upgrade button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the coffee machine upgrade button.
+     * @param listener The ActionListener to be added.
+     */
     public void addCoffeeMachineUpgradeButtonListener(ActionListener listener) { coffeeMachineUpgradeButton.addActionListener(listener); }
-    /** Adds an ActionListener to the barista upgrade button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the barista upgrade button.
+     * @param listener The ActionListener to be added.
+     */
     public void addBaristaUpgradeButtonListener(ActionListener listener) { baristaUpgradeButton.addActionListener(listener); }
-    /** Adds an ActionListener to the café upgrade button. @param listener The action listener. */
+
+    /**
+     * Adds an ActionListener to the cafe upgrade button.
+     * @param listener The ActionListener to be added.
+     */
     public void addCafeUpgradeButtonListener(ActionListener listener) { cafeUpgradeButton.addActionListener(listener); }
 
-    /** Adds a MouseListener to the coffee machine purchase button. @param mouseListener The mouse listener. */
+
+
+    /**
+     * Adds a MouseListener to the coffee machine purchase button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addCoffeeMachineButtonMouseListener(MouseListener mouseListener) { coffeeMachineButton.addMouseListener(mouseListener); }
-    /** Adds a MouseListener to the barista purchase button. @param mouseListener The mouse listener. */
+
+    /**
+     * Adds a MouseListener to the barista purchase button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addBaristaButtonMouseListener(MouseListener mouseListener) { baristaButton.addMouseListener(mouseListener); }
-    /** Adds a MouseListener to the café purchase button. @param mouseListener The mouse listener. */
+
+    /**
+     * Adds a MouseListener to the cafe purchase button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addCafeButtonMouseListener(MouseListener mouseListener) { cafeButton.addMouseListener(mouseListener); }
-    /** Adds a MouseListener to the coffee machine upgrade button. @param mouseListener The mouse listener. */
+
+    /**
+     * Adds a MouseListener to the coffee machine upgrade button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addCoffeeMachineUpgradeButtonMouseListener(MouseListener mouseListener) { coffeeMachineUpgradeButton.addMouseListener(mouseListener); }
-    /** Adds a MouseListener to the barista upgrade button. @param mouseListener The mouse listener. */
+
+    /**
+     * Adds a MouseListener to the barista upgrade button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addBaristaUpgradeButtonMouseListener(MouseListener mouseListener) { baristaUpgradeButton.addMouseListener(mouseListener); }
-    /** Adds a MouseListener to the café upgrade button. @param mouseListener The mouse listener. */
+
+    /**
+     * Adds a MouseListener to the cafe upgrade button.
+     * @param mouseListener The MouseListener to be added.
+     */
     public void addCafeUpgradeButtonMouseListener(MouseListener mouseListener) { cafeUpgradeButton.addMouseListener(mouseListener); }
 
 }

@@ -183,11 +183,16 @@ public class RemoveAccountView extends BaseForm {
     }
 
     /**
-     * Getter of the user's password.
+     * Getter of the user's password, if it is superior to 150, we inform the user that it is capped.
      * @return String with the user's password.
      */
     public String getPassword() {
-        return new String(passwordField.getPassword());
+        char[] passwordChars = passwordField.getPassword();
+        if (passwordChars.length > 150) {
+            passwordChars = java.util.Arrays.copyOf(passwordChars, 150);
+            new PopUpView("The password can only accept a maximum of 150characters.");
+        }
+        return new String(passwordChars);
     }
 
     /**
