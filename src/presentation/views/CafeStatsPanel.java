@@ -2,6 +2,7 @@ package presentation.views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class CafeStatsPanel extends JPanel {
      * @param cafesPorMinuto List of integers, each representing the number of coffees served in a minute.
      */
     public CafeStatsPanel(List<Integer> cafesPorMinuto) {
-        this.data = cafesPorMinuto;
+        this.data = new ArrayList<>(cafesPorMinuto);
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(600, 500));
     }

@@ -21,7 +21,6 @@ public class LoginView extends JFrame {
     private JPasswordField passwordField;
     /**
      * Button to trigger the login process. NOW USES IMAGES.
-     */
     private JButton loginButton;
     /**
      * Label acting as a clickable link to navigate to the registration screen.
@@ -35,6 +34,11 @@ public class LoginView extends JFrame {
      * Label to hold the background image.
      */
     private JLabel backgroundLabel;
+
+    /**
+     * JButton that allows us lo log in.
+     */
+    private JButton loginButton;
 
 
     /**

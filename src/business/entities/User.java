@@ -1,5 +1,7 @@
 package business.entities;
 
+import java.util.Arrays;
+
 /**
  * Represents a user in the business domain.
  * This class stores information about a user's name, email, password, and associated game IDs,
@@ -96,7 +98,7 @@ public class User {
      * @return the user's game IDs
      */
     public int[] getGamesID() {
-        return gamesID;
+        return Arrays.copyOf(gamesID, gamesID.length);
     }
 
     /**

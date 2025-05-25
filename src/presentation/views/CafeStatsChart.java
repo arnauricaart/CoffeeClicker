@@ -2,6 +2,7 @@ package presentation.views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class CafeStatsChart extends JPanel {
      * @param cafesPorMinuto List of integers, each representing the number of coffees served in a minute.
      */
     public CafeStatsChart(List<Integer> cafesPorMinuto) {
-        this.data = cafesPorMinuto;
+        this.data = new ArrayList<>(cafesPorMinuto);
 
         setBackground(Color.WHITE);
         JFrame frame = new JFrame("Game Statistics");
