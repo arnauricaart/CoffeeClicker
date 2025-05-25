@@ -51,7 +51,8 @@ STEP 3: Set Up the MySQL Database
    USE cofeeclicker_schema;
    SOURCE C:/DPO_P2_CoffeeClicker/sql/Dump20250514ultimaversion.sql;
 
-   NOTE: Update the path to the .sql file if your location differs.
+   NOTE: Update the path to the .sql file if your location differs inside of the folder named Database 
+         and swap the "/" for "\".
 
 -----------------------------------------------------------------------
 STEP 4: Configure Database Access
